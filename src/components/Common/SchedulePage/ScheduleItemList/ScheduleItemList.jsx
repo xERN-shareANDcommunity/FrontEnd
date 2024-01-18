@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import ScheduleItem from "@/components/ScheduleItemList/ScheduleItem/ScheduleItem";
+import ScheduleItem from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItem/ScheduleItem";
 import { ScheduleAddIcon } from "@/constants/iconConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
 import {

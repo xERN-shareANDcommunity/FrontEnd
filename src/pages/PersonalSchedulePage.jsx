@@ -1,13 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import CalendarContainer from "@/components/Common/CalendarContainer/CalendarContainer";
 import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal";
-import ScheduleItemList from "@/components/ScheduleItemList/ScheduleItemList";
+import CalendarContainer from "@/components/Common/SchedulePage/CalendarContainer/CalendarContainer";
+import ScheduleItemList from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItemList";
+import { LayoutMain } from "@/components/Common/SchedulePage/SchedulePageLayout.styles";
 import { SCHEDULE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
-
-import { LayoutMain } from "./PersonalSchedulePage.styles";
 
 const PersonalSchedulePage = () => {
 	const openedModal = useSelector(({ ui }) => ui.openedModal);

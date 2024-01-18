@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import moment from "moment";
 
-import { SCHEDULE_TYPE } from "@/constants/calendarConstants";
 import { getSchedulesSummary } from "@/features/schedule/schedule-service";
 import {
 	resetCurrentDate,
@@ -19,19 +18,14 @@ import {
 
 import { CalendarContainerDiv } from "./CalendarContainer.styles";
 import CustomCalendar from "./CustomCalendar/CustomCalendar";
-import InviteUser from "../../SharePage/InviteUser";
 
 const CalendarContainer = ({ type }) => {
+	console.log(type);
 	const dispatch = useDispatch();
 
 	const calendarRef = useRef(null);
 
 	const { calendarSchedules } = useSelector((state) => state.schedule);
-
-	const [selectedGroup, setSelectedGroup] = useState(null);
-	const [anchorEl, setAnchorEl] = useState(null);
-	const [inviteInput, setInviteInput] = useState("");
-	const [invitationLink, setInvitationLink] = useState("");
 
 	const schedulesToInjectIntoCalendar = calendarSchedules.map((schedule) =>
 		schedule.recurrence
@@ -106,20 +100,6 @@ const CalendarContainer = ({ type }) => {
 		updateDateState(year, month, week);
 	};
 
-	const handleInviteButtonClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleCloseMenu = () => {
-		setAnchorEl(null);
-		setInviteInput("");
-	};
-
-	const handleSendInvite = () => {
-		setAnchorEl(null);
-		setInviteInput("");
-	};
-
 	useEffect(() => {
 		dispatch(getSchedulesSummary({ isGroup: false }));
 
@@ -128,20 +108,6 @@ const CalendarContainer = ({ type }) => {
 
 	return (
 		<CalendarContainerDiv>
-			{type === SCHEDULE_TYPE.SHARED && (
-				<InviteUser
-					selectedGroup={selectedGroup}
-					setSelectedGroup={setSelectedGroup}
-					handleInviteButtonClick={handleInviteButtonClick}
-					anchorEl={anchorEl}
-					handleCloseMenu={handleCloseMenu}
-					inviteInput={inviteInput}
-					setInviteInput={setInviteInput}
-					handleSendInvite={handleSendInvite}
-					invitationLink={invitationLink}
-					setInvitationLink={setInvitationLink}
-				/>
-			)}
 			<CustomCalendar
 				ref={calendarRef}
 				fullCalendarEvents={schedulesToInjectIntoCalendar}
