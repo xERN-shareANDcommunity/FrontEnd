@@ -88,6 +88,11 @@ export const TodoBodyHeader = styled.header`
 	& > div {
 		min-height: 43px;
 	}
+
+	& > .buttons {
+		display: flex;
+		gap: 14px;
+	}
 `;
 
 export const TodoH2 = styled.h2`
@@ -121,10 +126,11 @@ export const TodoH3 = styled.h3`
 `;
 
 export const TodoBodyHeaderButton = styled.button`
+	width: 47px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	font-size: ${({
 		theme: {
 			typography: { size },

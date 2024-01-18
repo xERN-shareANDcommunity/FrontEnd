@@ -7,6 +7,7 @@ import CommentListIcon from "@/assets/icon/ic-comment-list.svg";
 import CrownIcon from "@/assets/icon/ic-crown.svg";
 import DeleteScheduleIcon from "@/assets/icon/ic-delete-schedule.svg";
 import DocumentIcon from "@/assets/icon/ic-document.svg";
+import DottedCalendarIcon from "@/assets/icon/ic-dotted-calendar.svg";
 import DownArrowIcon from "@/assets/icon/ic-down-arrow.svg";
 import EditScheduleIcon from "@/assets/icon/ic-edit-schedule.svg";
 import EmptyFeedIcon from "@/assets/icon/ic-empty-feed.svg";
@@ -84,4 +85,5 @@ export {
 	EmptyGroupListIcon,
 	FeedImgIcon,
 	FeedImgCloseIcon,
+	DottedCalendarIcon,
 };

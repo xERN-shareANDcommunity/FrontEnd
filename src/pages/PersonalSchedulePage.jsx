@@ -26,7 +26,7 @@ const PersonalSchedulePage = () => {
 		<>
 			<LayoutMain isMonthly={currentCalendarView === VIEW_TYPE.DAY_GRID_MONTH}>
 				<CalendarContainer isPersonal={true} />
-				<ScheduleItemList />
+				<ScheduleItemList isPersonal={true} />
 			</LayoutMain>
 			{openedModal === UI_TYPE.PERSONAL_SCHEDULE && (
 				<ScheduleModal type={openedModal} />

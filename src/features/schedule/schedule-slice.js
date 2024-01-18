@@ -19,6 +19,7 @@ const initialOverlappedScheduleInfo = { title: "", schedules: [] };
 
 const initialState = {
 	calendarSchedules: [],
+	scheduleProposals: [],
 	todaySchedules: [],
 	schedulesForTheWeek: [],
 	overlappedScheduleInfo: initialOverlappedScheduleInfo,

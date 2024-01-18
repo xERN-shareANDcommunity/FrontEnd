@@ -22,7 +22,7 @@ const SharedSchedulePage = () => {
 	return (
 		<LayoutMain isMonthly={currentCalendarView === VIEW_TYPE.DAY_GRID_MONTH}>
 			<CalendarContainer isPersonal={false} />
-			<ScheduleItemList />
+			<ScheduleItemList isPersonal={false} />
 		</LayoutMain>
 	);
 };

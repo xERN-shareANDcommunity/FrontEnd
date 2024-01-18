@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ScheduleItem from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItem/ScheduleItem";
-import { ScheduleAddIcon } from "@/constants/iconConstants";
+import { DottedCalendarIcon, ScheduleAddIcon } from "@/constants/iconConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	getSchedulesForTheWeek,
@@ -24,9 +24,10 @@ import {
 	TodoTabButton,
 } from "./ScheduleItemList.styles";
 
-const ScheduleItemList = () => {
+const ScheduleItemList = ({ isPersonal }) => {
 	const dispatch = useDispatch();
 	const {
+		scheduleProposals,
 		todaySchedules,
 		schedulesForTheWeek,
 		overlappedScheduleInfo: {
@@ -34,9 +35,20 @@ const ScheduleItemList = () => {
 			schedules: overlappedSchedules,
 		},
 	} = useSelector((state) => state.schedule);
-	const [isTodayTab, setIsTodayTab] = useState(true);
+	const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
+	const isTodayTab =
+		(isPersonal && currentTabIndex === 0) ||
+		(!isPersonal && currentTabIndex === 1);
+
+	const isForTheWeekTab =
+		(isPersonal && currentTabIndex === 1) ||
+		(!isPersonal && currentTabIndex === 2);
+
+	const isProposalTab = !isPersonal && currentTabIndex === 0;
 
 	const isOverlappedSchedulesOn = overlappedSchedules.length > 0;
+
 	useEffect(() => {
 		dispatch(getTodaySchedules());
 		dispatch(getSchedulesForTheWeek());
@@ -84,18 +96,85 @@ const ScheduleItemList = () => {
 		);
 	}
 
+	if (isPersonal) {
+		return (
+			<ScheduleItemListLayoutAside data-testid="personal-todo-list">
+				<TodoHeader>
+					<TodoTabButton
+						selected={isTodayTab}
+						onClick={() => setCurrentTabIndex(0)}
+					>
+						오늘 일정
+					</TodoTabButton>
+					<TodoTabButton
+						selected={isForTheWeekTab}
+						onClick={() => setCurrentTabIndex(1)}
+					>
+						예정
+					</TodoTabButton>
+				</TodoHeader>
+				<TodoBody>
+					<TodoBodyHeader>
+						<div>
+							<TodoH2>{isTodayTab ? "오늘 일정" : "예정"}</TodoH2>
+							<TodoH3>
+								{isTodayTab
+									? "하루동안의 할 일을 관리합니다."
+									: "앞으로 7일간 예정된 일정을 확인합니다."}
+							</TodoH3>
+						</div>
+						<TodoBodyHeaderButton onClick={handleMenuOpen}>
+							<ScheduleAddIcon />
+							<span>일정 추가</span>
+						</TodoBodyHeaderButton>
+					</TodoBodyHeader>
+					{(isTodayTab && todaySchedules.length === 0) ||
+					(isForTheWeekTab && schedulesForTheWeek.length === 0) ? (
+						<TodoButton onClick={handleMenuOpen}>
+							아직 추가된 일정이 없습니다! <br />할 일을 추가하여 하루동안 할
+							일을 관리해보세요.
+						</TodoButton>
+					) : (
+						<TodoList>
+							{(isTodayTab ? todaySchedules : schedulesForTheWeek).map(
+								(schedule) => {
+									return (
+										<ScheduleItem
+											key={
+												schedule.recurrence
+													? schedule.startDateTime + schedule.id
+													: schedule.id
+											}
+											schedule={schedule}
+										/>
+									);
+								},
+							)}
+						</TodoList>
+					)}
+				</TodoBody>
+			</ScheduleItemListLayoutAside>
+		);
+	}
+
 	return (
 		<ScheduleItemListLayoutAside data-testid="personal-todo-list">
 			<TodoHeader>
 				<TodoTabButton
+					selected={isProposalTab}
+					onClick={() => setCurrentTabIndex(0)}
+				>
+					일정 후보
+				</TodoTabButton>
+				<TodoTabButton
 					selected={isTodayTab}
-					onClick={() => setIsTodayTab(true)}
+					onClick={() => setCurrentTabIndex(1)}
 				>
 					오늘 일정
 				</TodoTabButton>
 				<TodoTabButton
-					selected={!isTodayTab}
-					onClick={() => setIsTodayTab(false)}
+					selected={isForTheWeekTab}
+					onClick={() => setCurrentTabIndex(2)}
 				>
 					예정
 				</TodoTabButton>
@@ -103,40 +182,69 @@ const ScheduleItemList = () => {
 			<TodoBody>
 				<TodoBodyHeader>
 					<div>
-						<TodoH2>{isTodayTab ? "오늘 일정" : "예정"}</TodoH2>
+						<TodoH2>
+							{/* eslint-disable-next-line no-nested-ternary */}
+							{isProposalTab
+								? "일정 후보(최대 5개)"
+								: isTodayTab
+								? "오늘 일정"
+								: "예정"}
+						</TodoH2>
 						<TodoH3>
-							{isTodayTab
+							{/* eslint-disable-next-line no-nested-ternary */}
+							{isProposalTab
+								? "함꼐 일정을 조율합니다."
+								: isTodayTab
 								? "하루동안의 할 일을 관리합니다."
 								: "앞으로 7일간 예정된 일정을 확인합니다."}
 						</TodoH3>
 					</div>
-					<TodoBodyHeaderButton onClick={handleMenuOpen}>
-						<ScheduleAddIcon />
-						<span>일정 추가</span>
-					</TodoBodyHeaderButton>
+					<div className="buttons">
+						{isProposalTab && (
+							<TodoBodyHeaderButton onClick={() => {}}>
+								<DottedCalendarIcon />
+								<span>후보 선택</span>
+							</TodoBodyHeaderButton>
+						)}
+						<TodoBodyHeaderButton onClick={() => {}}>
+							<ScheduleAddIcon />
+							<span>후보 추가</span>
+						</TodoBodyHeaderButton>
+					</div>
 				</TodoBodyHeader>
-				{(isTodayTab && todaySchedules.length === 0) ||
-				(!isTodayTab && schedulesForTheWeek.length === 0) ? (
-					<TodoButton onClick={handleMenuOpen}>
+				{/* eslint-disable-next-line no-nested-ternary */}
+				{isProposalTab && scheduleProposals.length === 0 ? (
+					<TodoButton onClick={() => {}}>
+						공유한 사용자들에게 일정 후보를
+						<br />
+						먼저 제안해보세요!
+					</TodoButton>
+				) : (isTodayTab && todaySchedules.length === 0) ||
+				  (isForTheWeekTab && schedulesForTheWeek.length === 0) ? (
+					<TodoButton onClick={() => {}}>
 						아직 추가된 일정이 없습니다! <br />할 일을 추가하여 하루동안 할 일을
 						관리해보세요.
 					</TodoButton>
 				) : (
 					<TodoList>
-						{(isTodayTab ? todaySchedules : schedulesForTheWeek).map(
-							(schedule) => {
-								return (
-									<ScheduleItem
-										key={
-											schedule.recurrence
-												? schedule.startDateTime + schedule.id
-												: schedule.id
-										}
-										schedule={schedule}
-									/>
-								);
-							},
-						)}
+						{/* eslint-disable-next-line no-nested-ternary */}
+						{(isProposalTab
+							? scheduleProposals
+							: isTodayTab
+							? todaySchedules
+							: schedulesForTheWeek
+						).map((schedule) => {
+							return (
+								<ScheduleItem
+									key={
+										schedule.recurrence
+											? schedule.startDateTime + schedule.id
+											: schedule.id
+									}
+									schedule={schedule}
+								/>
+							);
+						})}
 					</TodoList>
 				)}
 			</TodoBody>
