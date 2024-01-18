@@ -7,32 +7,12 @@ import ReactDOM from "react-dom";
 import { userEvent } from "@storybook/testing-library";
 import { screen } from "@testing-library/react";
 
-import "@testing-library/jest-dom";
-
 import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal.jsx";
 import { SCHEDULE_MODAL_TYPE } from "@/constants/uiConstants";
 import PersonalSchedulePage from "@/pages/PersonalSchedulePage.jsx";
 import lightTheme from "@/styles/theme.js";
 
 import { render } from "../../jest.setup.js";
-
-// jest.mock("@fullcalendar/react", () => () => (
-// 	<div data-testid="mock-fullcalendar" />
-// ));
-// jest.mock("@fullcalendar/timegrid", () => ({}));
-// jest.mock("@fullcalendar/daygrid", () => ({}));
-// jest.mock("@fullcalendar/interaction", () => ({}));
-
-jest.mock(
-	"../../src/components/Common/SchedulePage/CalendarContainer/CustomCalendar/CustomCalendar.jsx",
-	() => {
-		const { forwardRef } = jest.requireActual("react");
-		return {
-			__esModule: true,
-			default: forwardRef(() => <div data-testid="calendar-container" />),
-		};
-	},
-);
 
 const TITLE_TEXT = "일정 1";
 const CONTENT_TEXT = "일정 상세 정보";

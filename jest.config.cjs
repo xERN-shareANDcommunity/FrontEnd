@@ -1,5 +1,8 @@
 module.exports = {
 	testEnvironment: "jsdom",
+	testEnvironmentOptions: {
+		customExportConditions: [], // don't load "browser" field
+	},
 	transform: {
 		"^.+\\.jsx?$": "babel-jest",
 		"^.+\\.svg$": "jest-transformer-svg",
