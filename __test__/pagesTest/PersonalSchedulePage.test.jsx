@@ -11,7 +11,7 @@ import "@testing-library/jest-dom";
 
 import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal.jsx";
 import { SCHEDULE_MODAL_TYPE } from "@/constants/uiConstants";
-import PersonalSchedulePage from "@/pages/PersonalSchedulePage/PersonalSchedulePage.jsx";
+import PersonalSchedulePage from "@/pages/PersonalSchedulePage.jsx";
 import lightTheme from "@/styles/theme.js";
 
 import { render } from "../../jest.setup.js";
@@ -24,7 +24,7 @@ import { render } from "../../jest.setup.js";
 // jest.mock("@fullcalendar/interaction", () => ({}));
 
 jest.mock(
-	"../../src/components/Common/CalendarContainer/CustomCalendar/CustomCalendar.jsx",
+	"../../src/components/Common/SchedulePage/CalendarContainer/CustomCalendar/CustomCalendar.jsx",
 	() => {
 		const { forwardRef } = jest.requireActual("react");
 		return {
