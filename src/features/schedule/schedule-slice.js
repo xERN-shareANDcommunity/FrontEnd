@@ -42,11 +42,6 @@ const scheduleSlice = createSlice({
 		setCurrentWeek: (state, { payload }) => {
 			state.currentWeek = payload;
 		},
-		resetCurrentDate: (state) => {
-			state.currentYear = new Date().getFullYear();
-			state.currentMonth = new Date().getMonth() + 1;
-			state.currentWeek = getCurrentWeek();
-		},
 		setCurrentCalenderView: (state, { payload }) => {
 			if (
 				payload !== VIEW_TYPE.DAY_GRID_MONTH &&
@@ -59,6 +54,9 @@ const scheduleSlice = createSlice({
 		},
 		resetOverlappedSchedules: (state) => {
 			state.overlappedScheduleInfo = initialOverlappedScheduleInfo;
+		},
+		resetSchedule: () => {
+			return initialState;
 		},
 	},
 
@@ -251,9 +249,9 @@ export const {
 	setCurrentYear,
 	setCurrentMonth,
 	setCurrentWeek,
-	resetCurrentDate,
 	setCurrentCalenderView,
 	resetOverlappedSchedules,
+	resetSchedule,
 } = scheduleSlice.actions;
 
 export default scheduleSlice.reducer;

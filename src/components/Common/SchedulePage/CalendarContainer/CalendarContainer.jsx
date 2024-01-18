@@ -5,7 +5,6 @@ import moment from "moment";
 
 import { getSchedulesSummary } from "@/features/schedule/schedule-service";
 import {
-	resetCurrentDate,
 	setCurrentMonth,
 	setCurrentWeek,
 	setCurrentYear,
@@ -19,8 +18,7 @@ import {
 import { CalendarContainerDiv } from "./CalendarContainer.styles";
 import CustomCalendar from "./CustomCalendar/CustomCalendar";
 
-const CalendarContainer = ({ type }) => {
-	console.log(type);
+const CalendarContainer = ({ isPersonal }) => {
 	const dispatch = useDispatch();
 
 	const calendarRef = useRef(null);
@@ -101,9 +99,12 @@ const CalendarContainer = ({ type }) => {
 	};
 
 	useEffect(() => {
-		dispatch(getSchedulesSummary({ isGroup: false }));
-
-		return () => dispatch(resetCurrentDate());
+		dispatch(
+			getSchedulesSummary({
+				isGroup: !isPersonal,
+				groupId: !isPersonal ? 1 : undefined,
+			}),
+		);
 	}, []);
 
 	return (

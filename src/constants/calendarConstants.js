@@ -1,8 +1,3 @@
-export const SCHEDULE_TYPE = {
-	SHARED: "SHARE_SCHEDULE",
-	PERSONAL: "PERSONAL_SCHEDULE",
-};
-
 export const VIEW_TYPE = {
 	// DAY_GRID_WEEK: "dayGridWeek",
 	DAY_GRID_WEEK: "timeGridWeek",
