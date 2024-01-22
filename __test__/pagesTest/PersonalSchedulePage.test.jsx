@@ -26,6 +26,9 @@ const getInitialScheduleState = ({ recurrence, isAllDay, isMine }) => {
 	}
 	return {
 		schedule: {
+			calendarSchedules: [],
+			currentGroupScheduleId: null,
+			scheduleProposals: [],
 			todaySchedules: [
 				{
 					id: 0,
@@ -37,7 +40,6 @@ const getInitialScheduleState = ({ recurrence, isAllDay, isMine }) => {
 					recurrence,
 				},
 			],
-			calendarSchedules: [],
 			schedulesForTheWeek: [],
 			overlappedScheduleInfo: {
 				title: "",
@@ -590,7 +592,7 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 			});
 
 			// open ScheduleModal as a create mode
-			userEvent.click(screen.getByRole("button", { name: "일정 추가" }));
+			await userEvent.click(screen.getByRole("button", { name: "일정 추가" }));
 
 			// action
 			const titleInput = screen.getByPlaceholderText("일정 제목");
@@ -603,7 +605,6 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 			userEvent.type(contentTextarea, CONTENT_TEXT);
 			userEvent.click(allDayCheckbox);
 			await userEvent.click(screen.getByRole("button", { name: "저장하기" }));
-
 			// assertion
 			expect(
 				await screen.findByRole("heading", {
