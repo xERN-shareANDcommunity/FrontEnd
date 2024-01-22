@@ -2,7 +2,11 @@ import { toast } from "react-toastify";
 
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 
-import { VIEW_TYPE } from "@/constants/calendarConstants.js";
+import {
+	SCHEDULE_PAGE_TYPE,
+	VIEW_TYPE,
+} from "@/constants/calendarConstants.js";
+import { inqueryUserGroup } from "@/features/user/user-service.js";
 import { getCurrentWeek } from "@/utils/calendarUtils.js";
 
 import {
@@ -13,12 +17,14 @@ import {
 	updateSchedule,
 	deleteSchedule,
 	getOverlappedSchedules,
+	getGroupScheduleProposal,
 } from "./schedule-service.js";
 
 const initialOverlappedScheduleInfo = { title: "", schedules: [] };
 
 const initialState = {
 	calendarSchedules: [],
+	currentGroupScheduleId: null,
 	scheduleProposals: [],
 	todaySchedules: [],
 	schedulesForTheWeek: [],
@@ -28,6 +34,7 @@ const initialState = {
 	currentWeek: getCurrentWeek(),
 	isLoading: false,
 	currentCalendarView: VIEW_TYPE.DAY_GRID_MONTH,
+	currentPageType: SCHEDULE_PAGE_TYPE.PERSONAL,
 };
 
 const scheduleSlice = createSlice({
@@ -55,6 +62,15 @@ const scheduleSlice = createSlice({
 		},
 		resetOverlappedSchedules: (state) => {
 			state.overlappedScheduleInfo = initialOverlappedScheduleInfo;
+		},
+		changeSchedulePage: (state, { payload }) => {
+			if (
+				payload !== SCHEDULE_PAGE_TYPE.PERSONAL &&
+				payload !== SCHEDULE_PAGE_TYPE.SHARED
+			) {
+				throw new Error("잘못된 페이지 타입입니다.");
+			}
+			state.currentPageType = payload;
 		},
 		resetSchedule: () => {
 			return initialState;
@@ -201,6 +217,15 @@ const scheduleSlice = createSlice({
 			.addCase(getOverlappedSchedules.rejected, (state) => {
 				state.overlappedScheduleInfo = initialOverlappedScheduleInfo;
 			})
+			.addCase(getGroupScheduleProposal.fulfilled, (state, { payload }) => {
+				state.scheduleProposals = payload;
+			})
+			// userGroup 업데이트 시
+			.addCase(inqueryUserGroup.fulfilled, (state, { payload }) => {
+				if (payload.length > 0 && !state.currentGroupScheduleId) {
+					state.currentGroupScheduleId = payload[0].groupId;
+				}
+			})
 			.addMatcher(
 				isAnyOf(
 					createSchedule.pending,
@@ -210,6 +235,7 @@ const scheduleSlice = createSlice({
 					updateSchedule.pending,
 					deleteSchedule.pending,
 					getOverlappedSchedules.pending,
+					getGroupScheduleProposal.pending,
 				),
 				(state) => {
 					state.isLoading = true;
@@ -224,6 +250,7 @@ const scheduleSlice = createSlice({
 					updateSchedule.fulfilled,
 					deleteSchedule.fulfilled,
 					getOverlappedSchedules.fulfilled,
+					getGroupScheduleProposal.fulfilled,
 				),
 				(state) => {
 					state.isLoading = false;
@@ -238,6 +265,7 @@ const scheduleSlice = createSlice({
 					updateSchedule.rejected,
 					deleteSchedule.rejected,
 					getOverlappedSchedules.rejected,
+					getGroupScheduleProposal.rejected,
 				),
 				(state) => {
 					state.isLoading = false;
@@ -252,6 +280,7 @@ export const {
 	setCurrentWeek,
 	setCurrentCalenderView,
 	resetOverlappedSchedules,
+	changeSchedulePage,
 	resetSchedule,
 } = scheduleSlice.actions;
 

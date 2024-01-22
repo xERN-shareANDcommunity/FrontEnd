@@ -4,6 +4,11 @@ export const VIEW_TYPE = {
 	DAY_GRID_MONTH: "dayGridMonth",
 };
 
+export const SCHEDULE_PAGE_TYPE = {
+	PERSONAL: "personal",
+	SHARED: "shared",
+};
+
 export const GROUP_SCHEDULE_COLORS = [
 	"#669900",
 	"#99cc33",

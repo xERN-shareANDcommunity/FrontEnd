@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ScheduleItem from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItem/ScheduleItem";
+import { SCHEDULE_PAGE_TYPE } from "@/constants/calendarConstants";
 import { DottedCalendarIcon, ScheduleAddIcon } from "@/constants/iconConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
-import {
-	getSchedulesForTheWeek,
-	getTodaySchedules,
-} from "@/features/schedule/schedule-service.js";
 import { resetOverlappedSchedules } from "@/features/schedule/schedule-slice";
 import { openScheduleCreateModal } from "@/features/ui/ui-slice";
 
@@ -24,7 +21,7 @@ import {
 	TodoTabButton,
 } from "./ScheduleItemList.styles";
 
-const ScheduleItemList = ({ isPersonal }) => {
+const ScheduleItemList = () => {
 	const dispatch = useDispatch();
 	const {
 		scheduleProposals,
@@ -34,8 +31,11 @@ const ScheduleItemList = ({ isPersonal }) => {
 			title: overlappedScheduleTitle,
 			schedules: overlappedSchedules,
 		},
+		currentPageType,
 	} = useSelector((state) => state.schedule);
 	const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
+	const isPersonal = currentPageType === SCHEDULE_PAGE_TYPE.PERSONAL;
 
 	const isTodayTab =
 		(isPersonal && currentTabIndex === 0) ||
@@ -48,11 +48,6 @@ const ScheduleItemList = ({ isPersonal }) => {
 	const isProposalTab = !isPersonal && currentTabIndex === 0;
 
 	const isOverlappedSchedulesOn = overlappedSchedules.length > 0;
-
-	useEffect(() => {
-		dispatch(getTodaySchedules());
-		dispatch(getSchedulesForTheWeek());
-	}, []);
 
 	const handleMenuOpen = () => {
 		dispatch(

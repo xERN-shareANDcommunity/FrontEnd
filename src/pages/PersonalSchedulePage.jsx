@@ -5,9 +5,17 @@ import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal";
 import CalendarContainer from "@/components/Common/SchedulePage/CalendarContainer/CalendarContainer";
 import ScheduleItemList from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItemList";
 import { LayoutMain } from "@/components/Common/SchedulePage/SchedulePageLayout.styles";
-import { VIEW_TYPE } from "@/constants/calendarConstants";
+import { SCHEDULE_PAGE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
-import { resetSchedule } from "@/features/schedule/schedule-slice";
+import {
+	getSchedulesForTheWeek,
+	getSchedulesSummary,
+	getTodaySchedules,
+} from "@/features/schedule/schedule-service";
+import {
+	changeSchedulePage,
+	resetSchedule,
+} from "@/features/schedule/schedule-slice";
 
 const PersonalSchedulePage = () => {
 	const dispatch = useDispatch();
@@ -17,6 +25,13 @@ const PersonalSchedulePage = () => {
 	);
 
 	useEffect(() => {
+		const getPersonalPageInfo = async () => {
+			await dispatch(changeSchedulePage(SCHEDULE_PAGE_TYPE.PERSONAL));
+			dispatch(getSchedulesSummary());
+			dispatch(getTodaySchedules());
+			dispatch(getSchedulesForTheWeek());
+		};
+		getPersonalPageInfo();
 		return () => {
 			dispatch(resetSchedule());
 		};
@@ -25,8 +40,8 @@ const PersonalSchedulePage = () => {
 	return (
 		<>
 			<LayoutMain isMonthly={currentCalendarView === VIEW_TYPE.DAY_GRID_MONTH}>
-				<CalendarContainer isPersonal={true} />
-				<ScheduleItemList isPersonal={true} />
+				<CalendarContainer />
+				<ScheduleItemList />
 			</LayoutMain>
 			{openedModal === UI_TYPE.PERSONAL_SCHEDULE && (
 				<ScheduleModal type={openedModal} />
