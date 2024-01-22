@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import moment from "moment";
+import { useTheme } from "styled-components";
 
 import { getSchedulesSummary } from "@/features/schedule/schedule-service";
 import {
@@ -13,6 +14,7 @@ import {
 	convertByweekdayNumberToString,
 	getCurrentWeek,
 	getFirstDateOfWeek,
+	getGroupColor,
 } from "@/utils/calendarUtils";
 
 import { CalendarContainerDiv } from "./CalendarContainer.styles";
@@ -22,6 +24,7 @@ const CalendarContainer = ({ isPersonal }) => {
 	const dispatch = useDispatch();
 
 	const calendarRef = useRef(null);
+	const theme = useTheme();
 
 	const { calendarSchedules } = useSelector((state) => state.schedule);
 
@@ -39,12 +42,18 @@ const CalendarContainer = ({ isPersonal }) => {
 					},
 					duration:
 						new Date(schedule.endDateTime) - new Date(schedule.startDateTime),
+					color: schedule.isGroup
+						? getGroupColor(schedule.id)
+						: theme.colors.disabled_text,
 			  }
 			: {
 					id: schedule.id,
 					userId: schedule.userId,
 					start: new Date(schedule.startDateTime),
 					end: new Date(schedule.endDateTime),
+					color: schedule.isGroup
+						? getGroupColor(schedule.id)
+						: theme.colors.disabled_text,
 			  },
 	);
 

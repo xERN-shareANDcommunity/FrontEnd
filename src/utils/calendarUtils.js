@@ -1,6 +1,7 @@
 import moment from "moment";
 
 import customFetch from "@/components/UI/BaseAxios";
+import { GROUP_SCHEDULE_COLORS } from "@/constants/calendarConstants";
 import convertToUTC from "@/utils/convertToUTC";
 
 // 리스트(주마다 보기)로 진행했을 떄 보여줄 첫 일요일을 계산합니다.
@@ -79,4 +80,8 @@ export const getSchedule = async (
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+export const getGroupColor = (scheduleId) => {
+	return GROUP_SCHEDULE_COLORS[scheduleId % 20];
 };

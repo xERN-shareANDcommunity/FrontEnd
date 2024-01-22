@@ -4,7 +4,7 @@ export const VIEW_TYPE = {
 	DAY_GRID_MONTH: "dayGridMonth",
 };
 
-export const CALENDAR_USER_COLORS = [
+export const GROUP_SCHEDULE_COLORS = [
 	"#669900",
 	"#99cc33",
 	"#ccee66",

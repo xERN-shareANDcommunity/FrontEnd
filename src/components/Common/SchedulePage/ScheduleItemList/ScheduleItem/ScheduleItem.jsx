@@ -15,7 +15,7 @@ import {
 	openScheduleEditModal,
 	openScheduleViewModal,
 } from "@/features/ui/ui-slice";
-import { checkIsAlldaySchedule } from "@/utils/calendarUtils";
+import { checkIsAlldaySchedule, getGroupColor } from "@/utils/calendarUtils";
 
 import {
 	CardDiv,
@@ -94,7 +94,7 @@ const ScheduleItem = ({
 			<ScheduleItemLi data-testid={`scheduleItem-${id}`}>
 				<CardDiv>
 					<ColoredCircleDiv
-						bgColor={isGroup ? colors.sunday : colors.disabled_text}
+						bgColor={isGroup ? getGroupColor(id) : colors.disabled_text}
 					/>
 					<ScheduleItemContentDiv>
 						<div>

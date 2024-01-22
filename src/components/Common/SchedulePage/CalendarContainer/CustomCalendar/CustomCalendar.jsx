@@ -6,7 +6,6 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import rrulePlugin from "@fullcalendar/rrule";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { useTheme } from "styled-components";
 
 import { VIEW_TYPE } from "@/constants/calendarConstants";
 import { getOverlappedSchedules } from "@/features/schedule/schedule-service";
@@ -111,8 +110,6 @@ const CustomCalendar = forwardRef(
 		const { currentYear, currentMonth, currentWeek, currentCalendarView } =
 			useSelector((state) => state.schedule);
 		const dispatch = useDispatch();
-
-		const theme = useTheme();
 
 		/** 리스트 뷰: 일정 박스를 클릭 시, 여기서 겹친 일정들 중에서 가장 작은 단위에 일정이 조회됩니다 */
 		const handleScheduleClick = (clickedInfo) => {
@@ -257,7 +254,6 @@ const CustomCalendar = forwardRef(
 					}}
 					slotLabelFormat={getTimeFormat}
 					slotDuration="1:00:00"
-					eventBackgroundColor={theme.colors.disabled_text}
 					displayEventTime={false}
 					eventDisplay="block"
 					eventBorderColor="transparent"
