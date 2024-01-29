@@ -9,7 +9,7 @@ export const SCHEDULE_PAGE_TYPE = {
 	SHARED: "shared",
 };
 
-export const GROUP_SCHEDULE_COLORS = [
+export const SCHEDULE_COLORS = [
 	"#669900",
 	"#99cc33",
 	"#ccee66",
