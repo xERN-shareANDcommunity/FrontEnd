@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { Fragment, forwardRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -7,7 +7,7 @@ import FullCalendar from "@fullcalendar/react";
 import rrulePlugin from "@fullcalendar/rrule";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
-import { VIEW_TYPE } from "@/constants/calendarConstants";
+import { SCHEDULE_PAGE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
 import { getOverlappedSchedules } from "@/features/schedule/schedule-service";
 import {
 	resetOverlappedSchedules,
@@ -15,6 +15,7 @@ import {
 } from "@/features/schedule/schedule-slice";
 
 import { CustomCalendarDiv, TitleSelect } from "./CustomCalendar.styles";
+import GroupMenu from "./GroupMenu/GroupMenu";
 
 // 월이 포함한 주차 갯수 계산하기
 const countWeek = (year, month) => {
@@ -104,11 +105,15 @@ const getDayHeaderContentInTimeGridWeek = ({ date, text, isToday }) => {
 		</>
 	);
 };
-
 const CustomCalendar = forwardRef(
 	({ fullCalendarEvents, handleDateChange }, calendarRef) => {
-		const { currentYear, currentMonth, currentWeek, currentCalendarView } =
-			useSelector((state) => state.schedule);
+		const {
+			currentYear,
+			currentMonth,
+			currentWeek,
+			currentCalendarView,
+			currentPageType,
+		} = useSelector((state) => state.schedule);
 		const dispatch = useDispatch();
 
 		/** 리스트 뷰: 일정 박스를 클릭 시, 여기서 겹친 일정들 중에서 가장 작은 단위에 일정이 조회됩니다 */
@@ -117,6 +122,7 @@ const CustomCalendar = forwardRef(
 			const { start, end } = clickedInfo.event; // 클릭한 이벤트들 중 가장 작은 단위의 처음과 끝
 			dispatch(getOverlappedSchedules({ start, end }));
 		};
+
 		// 월별 보기의 경우 날짜 박스 클릭 이벤트리스너를 등록합니다
 		useEffect(() => {
 			const dateDivs = document.querySelectorAll(".fc-daygrid-day");
@@ -207,6 +213,7 @@ const CustomCalendar = forwardRef(
 				>
 					{getDateOptions(currentCalendarView)}
 				</TitleSelect>
+				{currentPageType === SCHEDULE_PAGE_TYPE.SHARED && <GroupMenu />}
 				<FullCalendar
 					ref={calendarRef}
 					plugins={[
