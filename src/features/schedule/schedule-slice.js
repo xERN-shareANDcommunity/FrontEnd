@@ -72,6 +72,9 @@ const scheduleSlice = createSlice({
 			}
 			state.currentPageType = payload;
 		},
+		changeCurrentGroupId: (state, { payload }) => {
+			state.currentGroupScheduleId = payload;
+		},
 		resetSchedule: () => {
 			return initialState;
 		},
@@ -281,6 +284,7 @@ export const {
 	setCurrentCalenderView,
 	resetOverlappedSchedules,
 	changeSchedulePage,
+	changeCurrentGroupId,
 	resetSchedule,
 } = scheduleSlice.actions;
 
