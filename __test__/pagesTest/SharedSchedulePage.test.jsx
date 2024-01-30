@@ -7,7 +7,9 @@ import { render, screen } from "../../jest.setup";
 
 describe("SharedSchedulePage without modal", () => {
 	it("initially render same component as PersonalPage", () => {
-		render(<SharedSchedulePage />);
+		render(<SharedSchedulePage />, {
+			preloadedState: { auth: { user: { userId: 1 } } },
+		});
 
 		const today = new Date();
 		expect(
