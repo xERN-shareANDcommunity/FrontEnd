@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal";
 import CalendarContainer from "@/components/Common/SchedulePage/CalendarContainer/CalendarContainer";
@@ -27,9 +28,12 @@ const PersonalSchedulePage = () => {
 	useEffect(() => {
 		const getPersonalPageInfo = async () => {
 			await dispatch(changeSchedulePage(SCHEDULE_PAGE_TYPE.PERSONAL));
+			toast.dismiss();
+			toast.loading("개인 일정을 가져오는 중...");
 			dispatch(getSchedulesSummary());
 			dispatch(getTodaySchedules());
 			dispatch(getSchedulesForTheWeek());
+			toast.dismiss();
 		};
 		getPersonalPageInfo();
 		return () => {
