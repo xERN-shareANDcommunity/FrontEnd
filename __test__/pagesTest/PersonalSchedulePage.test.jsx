@@ -587,7 +587,7 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 	});
 	describe("mutate schedule", () => {
 		it("POST new all day schedule", async () => {
-			render(<PersonalSchedulePage />, {
+			const { unmount } = render(<PersonalSchedulePage />, {
 				preloadedState: { auth: { user: { userId: 1 } } },
 			});
 
@@ -611,9 +611,11 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 					name: TITLE_TEXT,
 				}),
 			).toBeInTheDocument();
+
+			unmount();
 		});
 		it("PUT all day schedule after changing title", async () => {
-			render(<PersonalSchedulePage />, {
+			const { unmount } = render(<PersonalSchedulePage />, {
 				preloadedState: { auth: { user: { userId: 1 } } },
 			});
 
@@ -642,10 +644,12 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 					name: "오늘오늘",
 				}),
 			).toBeNull();
+
+			unmount();
 		});
 
 		it("DELETE current all day schedule", async () => {
-			render(<PersonalSchedulePage />, {
+			const { unmount } = render(<PersonalSchedulePage />, {
 				preloadedState: { auth: { user: { userId: 1 } } },
 			});
 
@@ -671,6 +675,8 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 			});
 			expect(scheduleAddButton).toBeInTheDocument();
 			expect(scheduleItemHeadingToBeDeleted).toBeNull();
+
+			unmount();
 		});
 	});
 });
