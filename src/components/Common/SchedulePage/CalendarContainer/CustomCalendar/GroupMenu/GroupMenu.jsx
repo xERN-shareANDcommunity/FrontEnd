@@ -31,6 +31,7 @@ const GroupMenu = () => {
 				{groupMembers.map(({ member }, index) => (
 					<Fragment key={member.userId}>
 						<GroupMemberAvatar
+							data-testid={`groupMemberAvatar-${!index ? "owner" : "member"}`}
 							priority={groupMembers.length - index}
 							style={{ border: `1px solid ${SCHEDULE_COLORS[index]}` }}
 						>
