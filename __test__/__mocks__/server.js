@@ -8,7 +8,7 @@ import {
 	getUserPersonalScheduleSummary,
 	postPersonalSchedule,
 	putPersonalSchedule,
-} from "./handlers/users/calendar";
+} from "./handlers/user/calendar";
 
 const BASE_URL = "http://localhost/back";
 
