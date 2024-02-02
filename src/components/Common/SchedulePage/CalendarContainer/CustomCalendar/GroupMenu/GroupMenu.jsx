@@ -26,7 +26,7 @@ const GroupMenu = () => {
 	}, [currentGroupScheduleId]);
 
 	return (
-		<GroupMenuDiv>
+		<GroupMenuDiv role="menu">
 			<div className="groupMembers">
 				{groupMembers.map(({ member }, index) => (
 					<Fragment key={member.userId}>

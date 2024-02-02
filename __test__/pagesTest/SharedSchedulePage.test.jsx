@@ -1,9 +1,13 @@
 import React from "react";
 
+import { userEvent } from "@storybook/testing-library";
+
 import SharedSchedulePage from "@/pages/SharedSchedulePage.jsx";
 import lightTheme from "@/styles/theme.js";
 
-import { render, screen } from "../../jest.setup";
+import { render, screen, waitFor } from "../../jest.setup";
+
+const calendarScheduleSelector = "a.fc-event";
 
 describe("SharedSchedulePage without modal", () => {
 	it("initially render same component as PersonalPage", () => {
@@ -36,4 +40,71 @@ describe("SharedSchedulePage without modal", () => {
 			}),
 		).toBeInTheDocument();
 	});
+	it("initially render components about group", async () => {
+		const { unmount, container } = render(<SharedSchedulePage />, {
+			preloadedState: { auth: { user: { userId: 1 } } },
+		});
+
+		// GroupMenu
+		const groupMenu = await screen.findByRole("menu");
+		expect(groupMenu).toBeInTheDocument();
+		// div.groupMembers
+		expect(
+			(await screen.findByTestId("groupMemberAvatar-owner")).childElementCount,
+		).toBe(2);
+		const memberAvatars = screen.getAllByTestId("groupMemberAvatar-member");
+		expect(memberAvatars).toHaveLength(2);
+		memberAvatars.forEach((memberAvatar) => {
+			expect(memberAvatar.childElementCount).toBe(1);
+		});
+		// div.inviteButton
+		expect(screen.getByRole("button", { name: "사용자 초대" })).toBeEnabled();
+
+		// GroupSelect
+		expect(screen.getAllByRole("combobox")[1]).toHaveTextContent("내 그룹 1");
+
+		// calendarSchedules
+		expect(container.querySelectorAll(calendarScheduleSelector).length).toBe(2);
+
+		// proposal list(미완)
+
+		unmount();
+	});
+	it("GroupSelect: change selected group", async () => {
+		const { unmount, container } = render(<SharedSchedulePage />, {
+			preloadedState: { auth: { user: { userId: 1 } } },
+		});
+		// wait for rendering GroupSelect
+		await screen.findByRole("menu");
+
+		const GroupSelect = screen.getByRole("button", { name: "내 그룹 1" });
+
+		userEvent.click(GroupSelect);
+
+		const initialGroupOption = screen.getAllByRole("button", {
+			name: "내 그룹 1",
+		})[1];
+		const GroupOptionToChange = screen.getByRole("button", {
+			name: "내 그룹 2",
+		});
+
+		expect(initialGroupOption).toBeInTheDocument();
+		expect(initialGroupOption).toHaveStyle({
+			backgroundColor: lightTheme.colors.primary,
+			color: lightTheme.colors.white,
+		});
+
+		expect(GroupOptionToChange).toBeInTheDocument();
+
+		userEvent.click(GroupOptionToChange);
+
+		await waitFor(() => {
+			expect(container.querySelectorAll(calendarScheduleSelector).length).toBe(
+				0,
+			);
+		});
+
+		unmount();
+	});
+	it("Mutate group schedule proposal", () => {});
 });

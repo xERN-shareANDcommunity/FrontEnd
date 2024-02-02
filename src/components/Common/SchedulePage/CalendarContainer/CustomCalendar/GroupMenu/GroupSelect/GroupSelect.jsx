@@ -29,7 +29,7 @@ const GroupSelect = () => {
 	};
 
 	return (
-		<GroupSelectWrapperDiv ref={wrapperRef}>
+		<GroupSelectWrapperDiv ref={wrapperRef} role="combobox">
 			<SelectButton
 				type="button"
 				className={isOpen ? "activated" : ""}
