@@ -12,7 +12,7 @@ export const getUserGroup = (req, res, ctx) => {
 						"https://selody-images.s3.ap-northeast-2.amazonaws.com/group/group.png",
 				},
 				{
-					groupId: 30,
+					groupId: 2,
 					name: "내 그룹 2",
 					description: "test-dㅁㄴㄱ호데;ㅗㅎㄱescription",
 					member: 2,
@@ -20,7 +20,7 @@ export const getUserGroup = (req, res, ctx) => {
 						"https://selody-images.s3.ap-northeast-2.amazonaws.com/group/group.png",
 				},
 				{
-					groupId: 31,
+					groupId: 3,
 					name: "내 그룹 3",
 					description: "이게 내 세 번째",
 					member: 2,
