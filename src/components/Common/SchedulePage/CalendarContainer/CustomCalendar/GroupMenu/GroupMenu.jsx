@@ -5,6 +5,7 @@ import { SCHEDULE_COLORS } from "@/constants/calendarConstants";
 import { CrownIcon } from "@/constants/iconConstants";
 import { getGroupMembers } from "@/utils/calendarUtils";
 
+import ExtraGroupMembers from "./ExtraGroupMembers/ExtraGroupMembers";
 import { GroupMemberAvatar, GroupMenuDiv } from "./GroupMenu.styles";
 import GroupSelect from "./GroupSelect/GroupSelect";
 
@@ -28,7 +29,7 @@ const GroupMenu = () => {
 	return (
 		<GroupMenuDiv role="menu">
 			<div className="groupMembers">
-				{groupMembers.map(({ member }, index) => (
+				{groupMembers.slice(0, 5).map(({ member }, index) => (
 					<Fragment key={member.userId}>
 						<GroupMemberAvatar
 							data-testid={`groupMemberAvatar-${!index ? "owner" : "member"}`}
@@ -45,6 +46,9 @@ const GroupMenu = () => {
 						</GroupMemberAvatar>
 					</Fragment>
 				))}
+				{groupMembers.length > 5 && (
+					<ExtraGroupMembers extraMembers={groupMembers.slice(5)} />
+				)}
 			</div>
 			{isUserOwner && (
 				<button type="button" className="inviteButton">
