@@ -16,6 +16,7 @@ const ExtraGroupMembers = ({ extraMembers }) => {
 	return (
 		<RelativeWrapperDiv ref={wrapperRef}>
 			<button
+				data-testid="ExtraGroupMember-toggleButton"
 				type="button"
 				onClick={() => setIsOpen((prev) => !prev)}
 				className={isOpen ? "activated" : ""}
@@ -23,7 +24,7 @@ const ExtraGroupMembers = ({ extraMembers }) => {
 				<WhitePlusIcon />
 			</button>
 			{isOpen && (
-				<div className="dropdown">
+				<div className="dropdown" data-testid="ExtraGroupMember-dropdown">
 					<ul>
 						{extraMembers.map(({ member }, index) => (
 							<li key={member.userId}>

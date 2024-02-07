@@ -53,10 +53,16 @@ describe("SharedSchedulePage without modal", () => {
 			(await screen.findByTestId("groupMemberAvatar-owner")).childElementCount,
 		).toBe(2);
 		const memberAvatars = screen.getAllByTestId("groupMemberAvatar-member");
-		expect(memberAvatars).toHaveLength(2);
+		expect(memberAvatars).toHaveLength(4); // 5명 - owner 1명
 		memberAvatars.forEach((memberAvatar) => {
 			expect(memberAvatar.childElementCount).toBe(1);
 		});
+
+		// ExtraGroupMembers: 멤버가 6명임
+		expect(
+			screen.getByTestId("ExtraGroupMember-toggleButton"),
+		).toBeInTheDocument();
+
 		// div.inviteButton
 		expect(screen.getByRole("button", { name: "사용자 초대" })).toBeEnabled();
 
@@ -67,6 +73,29 @@ describe("SharedSchedulePage without modal", () => {
 		expect(container.querySelectorAll(calendarScheduleSelector).length).toBe(2);
 
 		// proposal list(미완)
+
+		unmount();
+	});
+	it("toggle ExtraGroupMembers", async () => {
+		const { unmount } = render(<SharedSchedulePage />, {
+			preloadedState: { auth: { user: { userId: 1 } } },
+		});
+
+		const extraGroupMemberButton = await screen.findByTestId(
+			"ExtraGroupMember-toggleButton",
+		);
+
+		expect(extraGroupMemberButton).toBeInTheDocument();
+
+		userEvent.click(extraGroupMemberButton);
+
+		expect(
+			screen.getByTestId("ExtraGroupMember-dropdown").childElementCount,
+		).toBe(1);
+
+		userEvent.click(extraGroupMemberButton);
+
+		expect(screen.queryByTestId("ExtraGroupMember-dropdown")).toBeNull();
 
 		unmount();
 	});

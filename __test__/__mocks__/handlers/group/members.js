@@ -34,8 +34,44 @@ export const getGroupMembers = (req, res, ctx) => {
 				{
 					accessLevel: "viewer",
 					member: {
-						nickname: "user2",
+						nickname: "user3",
 						userId: 3,
+						image:
+							"https://selody-images.s3.ap-northeast-2.amazonaws.com/profile/calender-dynamic-gradient%2B1.png",
+						commentCount: 0,
+						likeCount: 0,
+						joinedDate: "2024-01-15T08:07:14.000Z",
+					},
+				},
+				{
+					accessLevel: "viewer",
+					member: {
+						nickname: "user4",
+						userId: 4,
+						image:
+							"https://selody-images.s3.ap-northeast-2.amazonaws.com/profile/calender-dynamic-gradient%2B1.png",
+						commentCount: 0,
+						likeCount: 0,
+						joinedDate: "2024-01-15T08:06:14.000Z",
+					},
+				},
+				{
+					accessLevel: "viewer",
+					member: {
+						nickname: "user5",
+						userId: 5,
+						image:
+							"https://selody-images.s3.ap-northeast-2.amazonaws.com/profile/calender-dynamic-gradient%2B1.png",
+						commentCount: 0,
+						likeCount: 0,
+						joinedDate: "2024-01-15T08:07:14.000Z",
+					},
+				},
+				{
+					accessLevel: "viewer",
+					member: {
+						nickname: "user6",
+						userId: 6,
 						image:
 							"https://selody-images.s3.ap-northeast-2.amazonaws.com/profile/calender-dynamic-gradient%2B1.png",
 						commentCount: 0,
