@@ -39,8 +39,9 @@ export const SelectButton = styled.button`
 
 export const PickerDiv = styled.div`
 	position: absolute;
+	z-index: 2;
 	left: 0;
-	bottom: calc(100% + 7px);
+	top: calc(100% + 7px);
 	padding: 8px 8px;
 	display: flex;
 	background-color: ${({ theme: { colors } }) => colors.white};
