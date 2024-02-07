@@ -1,4 +1,4 @@
-import React, { Fragment, forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import dayGridPlugin from "@fullcalendar/daygrid";
