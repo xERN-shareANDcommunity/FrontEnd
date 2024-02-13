@@ -8,6 +8,7 @@ import lightTheme from "@/styles/theme.js";
 import { render, screen, waitFor } from "../../jest.setup";
 
 const calendarScheduleSelector = "a.fc-event";
+const EXTRA_MEMBER_DROPDOWN_COUNT = 1;
 
 describe("SharedSchedulePage without modal", () => {
 	it("initially render same component as PersonalPage", () => {
@@ -91,7 +92,7 @@ describe("SharedSchedulePage without modal", () => {
 
 		expect(
 			screen.getByTestId("ExtraGroupMember-dropdown").childElementCount,
-		).toBe(1);
+		).toBe(1 + EXTRA_MEMBER_DROPDOWN_COUNT);
 
 		userEvent.click(extraGroupMemberButton);
 
