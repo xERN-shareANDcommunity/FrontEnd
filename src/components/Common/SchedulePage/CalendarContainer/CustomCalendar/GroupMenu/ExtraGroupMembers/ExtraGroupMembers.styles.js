@@ -23,25 +23,32 @@ export const RelativeWrapperDiv = styled.div`
 	}
 
 	& > div.dropdown {
-		position: absolute;
-		z-index: 2;
-		top: calc(100% + 7px);
-		max-height: 170px;
-		overflow-y: auto;
-
-		-ms-overflow-style: none; /* Internet Explorer 10+ */
-		scrollbar-width: none; /* Firefox */
-		&::-webkit-scrollbar {
-			display: none; /* Safari and Chrome */
+		& > svg,
+		ul {
+			position: absolute;
+			z-index: 2;
 		}
 
-		width: 146px;
-		border: 1px solid ${({ theme: { colors } }) => colors.disabled_text};
-		background-color: ${({ theme: { colors } }) => colors.white};
-		padding: 8px;
+		& > svg {
+			top: calc(100% + 4px);
+			left: -22px;
+		}
+
 		& > ul {
+			top: calc(100% + 17px + 3px); /* arrow + top_padding */
+			left: calc(-22px + 12px); /* bubble_position + left_padding */
+			width: 122px;
+			height: calc(156px - 2 * 3px); /* bubble_height - 2 * top_padding */
+			overflow-y: auto;
+
+			-ms-overflow-style: none; /* Internet Explorer 10+ */
+			scrollbar-width: none; /* Firefox */
+			&::-webkit-scrollbar {
+				display: none; /* Safari and Chrome */
+			}
+
 			& > li {
-				padding: 5px;
+				padding: 5px 10px;
 				display: flex;
 				align-items: center;
 				gap: 8px;
@@ -56,6 +63,7 @@ export const RelativeWrapperDiv = styled.div`
 
 				& > img {
 					border-radius: 50%;
+					background-color: ${({ theme: { colors } }) => colors.bg_01};
 				}
 			}
 		}

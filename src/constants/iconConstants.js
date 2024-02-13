@@ -14,6 +14,7 @@ import EmptyFeedIcon from "@/assets/icon/ic-empty-feed.svg";
 import EmptyGroupListIcon from "@/assets/icon/ic-empty-group-list.svg";
 import EmptyGroupMemberIcon from "@/assets/icon/ic-empty-group-member.svg";
 import EmptyMyGroupIcon from "@/assets/icon/ic-empty-my-group.svg";
+import ExtraMembersDropdownIcon from "@/assets/icon/ic-extraMembers-dropdown.svg";
 import CommentIcon from "@/assets/icon/ic-feed-comment.svg";
 import EmptyHeartIcon from "@/assets/icon/ic-feed-heart-empty.svg";
 import FillHeartIcon from "@/assets/icon/ic-feed-heart-fill.svg";
@@ -88,4 +89,5 @@ export {
 	FeedImgCloseIcon,
 	DottedCalendarIcon,
 	WhitePlusIcon,
+	ExtraMembersDropdownIcon,
 };
