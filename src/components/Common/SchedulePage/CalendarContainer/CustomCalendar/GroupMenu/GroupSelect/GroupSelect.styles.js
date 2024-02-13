@@ -46,6 +46,15 @@ export const PickerDiv = styled.div`
 	display: flex;
 	background-color: ${({ theme: { colors } }) => colors.white};
 	width: 100%;
+	max-height: 200px;
+
+	overflow-y: auto;
+	-ms-overflow-style: none; /* Internet Explorer 10+ */
+	scrollbar-width: none; /* Firefox */
+	&::-webkit-scrollbar {
+		display: none; /* Safari and Chrome */
+	}
+
 	flex-direction: column;
 	box-shadow: 2px 4px 8px 0px rgba(0, 0, 0, 0.1);
 	-webkit-box-shadow: 2px 4px 8px 0px rgba(0, 0, 0, 0.1);
@@ -63,7 +72,7 @@ export const PickerDiv = styled.div`
 
 	& > button {
 		cursor: pointer;
-		height: 33px;
+		min-height: 33px;
 		padding: 0 4px;
 
 		&:not(:last-child) {
