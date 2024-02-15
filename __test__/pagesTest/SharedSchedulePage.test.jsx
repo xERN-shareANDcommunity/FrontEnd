@@ -64,7 +64,7 @@ describe("SharedSchedulePage without modal", () => {
 			screen.getByTestId("ExtraGroupMember-toggleButton"),
 		).toBeInTheDocument();
 
-		// div.inviteButton
+		// div.inviteButton: 내가 만든 그룹이므로
 		expect(screen.getByRole("button", { name: "사용자 초대" })).toBeEnabled();
 
 		// GroupSelect
@@ -97,6 +97,28 @@ describe("SharedSchedulePage without modal", () => {
 		userEvent.click(extraGroupMemberButton);
 
 		expect(screen.queryByTestId("ExtraGroupMember-dropdown")).toBeNull();
+
+		unmount();
+	});
+	it("toggle GroupInviteLink with buttons", async () => {
+		const { unmount } = render(<SharedSchedulePage />, {
+			preloadedState: { auth: { user: { userId: 1 } } },
+		});
+
+		const inviteButton = await screen.findByRole("button", {
+			name: "사용자 초대",
+		});
+
+		userEvent.click(inviteButton);
+
+		await waitFor(
+			() => expect(screen.getByRole("button", { name: "복사" })).toBeEnabled(),
+			{ timeout: 5000 },
+		);
+
+		userEvent.click(inviteButton);
+
+		expect(screen.queryByRole("button", { name: "복사" })).toBeNull();
 
 		unmount();
 	});

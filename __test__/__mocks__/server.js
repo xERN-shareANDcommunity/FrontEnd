@@ -8,6 +8,7 @@ import {
 	getScheduleProposalsList,
 	// getSingleGroupSchedule,
 } from "./handlers/group/calendar";
+import { getInviteLink, postInviteLink } from "./handlers/group/inviteLink";
 import { getGroupMembers } from "./handlers/group/members";
 import {
 	deletePersonalSchedule,
@@ -54,6 +55,8 @@ export const handlers = [
 	// 	`${BASE_URL}/api/group/:group_id/calendar/api/:schedule_id`,
 	// 	getSingleGroupSchedule,
 	// ),
+	rest.get(`${BASE_URL}/api/group/:group_id/join/:invite-link`, getInviteLink),
+	rest.get(`${BASE_URL}/api/group/:group_id/join/:invite-link`, postInviteLink),
 ];
 
 export const server = setupServer(...handlers);
