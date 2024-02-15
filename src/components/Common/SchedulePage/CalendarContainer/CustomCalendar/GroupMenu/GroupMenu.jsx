@@ -6,6 +6,7 @@ import { CrownIcon } from "@/constants/iconConstants";
 import { getGroupMembers } from "@/utils/calendarUtils";
 
 import ExtraGroupMembers from "./ExtraGroupMembers/ExtraGroupMembers";
+import GroupInviteButton from "./GroupInviteButton/GroupInviteButton";
 import { GroupMemberAvatar, GroupMenuDiv } from "./GroupMenu.styles";
 import GroupSelect from "./GroupSelect/GroupSelect";
 
@@ -50,11 +51,7 @@ const GroupMenu = () => {
 					<ExtraGroupMembers extraMembers={groupMembers.slice(5)} />
 				)}
 			</div>
-			{isUserOwner && (
-				<button type="button" className="inviteButton">
-					사용자 초대
-				</button>
-			)}
+			{isUserOwner && <GroupInviteButton />}
 			{currentGroupScheduleId && <GroupSelect />}
 		</GroupMenuDiv>
 	);
