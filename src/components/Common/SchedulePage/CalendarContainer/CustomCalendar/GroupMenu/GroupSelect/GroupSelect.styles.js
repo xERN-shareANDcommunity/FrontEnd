@@ -14,6 +14,9 @@ export const SelectButton = styled.button`
 
 	& > span {
 		flex: 1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	& > svg {
@@ -74,6 +77,9 @@ export const PickerDiv = styled.div`
 		cursor: pointer;
 		min-height: 33px;
 		padding: 0 4px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 
 		&:not(:last-child) {
 			border-bottom: 0.5px solid
