@@ -19,14 +19,16 @@ import DateAndTime from "./DateAndTime/DateAndTime";
 import Repeat from "./Repeat/Repeat";
 import RepeatDetail, { getRecurringString } from "./RepeatDetail/RepeatDetail";
 import {
-	ScheduleModalLayoutDiv,
-	TitleInput,
-	DetailTextarea,
 	AllDayCheckBoxDiv,
 	RepeatContainerDiv,
 	FooterDiv,
-	SubmitButton,
 } from "./ScheduleModal.styles";
+import {
+	DetailTextarea,
+	ScheduleModalLayoutDiv,
+	TitleInput,
+	SubmitButton,
+} from "../ScheduleModal.Shared.styles";
 
 const initialFormValues = {
 	title: "",
