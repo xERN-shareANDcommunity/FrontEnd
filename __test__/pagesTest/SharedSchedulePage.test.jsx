@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 import { userEvent } from "@storybook/testing-library";
 
@@ -159,4 +160,23 @@ describe("SharedSchedulePage without modal", () => {
 		unmount();
 	});
 	it("Mutate group schedule proposal", () => {});
+});
+
+describe("ScheduleProposalModal in SharedSchedulePage", () => {
+	beforeAll(() => {
+		ReactDOM.createPortal = jest.fn((element) => {
+			return element;
+		});
+		window.scrollTo = jest.fn();
+	});
+	it("trigger opening ScheduleProposalModal", () => {
+		render(<SharedSchedulePage />, {
+			preloadedState: { auth: { user: { userId: 1 } } },
+		});
+
+		userEvent.click(screen.getByRole("button", { name: "후보 추가" }));
+
+		expect(screen.getByTestId("ScheduleProposalModal")).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "저장하기" })).toBeDisabled();
+	});
 });

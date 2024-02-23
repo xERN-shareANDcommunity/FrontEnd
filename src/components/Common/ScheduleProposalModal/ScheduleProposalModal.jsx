@@ -41,7 +41,7 @@ const ScheduleProposalModal = () => {
 
 	return (
 		<FormModal isEmpty={checkIsEmpty()}>
-			<ScheduleModalLayoutDiv>
+			<ScheduleModalLayoutDiv data-testid="ScheduleProposalModal">
 				<h2>일정 후보 등록</h2>
 				<TitleInput
 					onChange={(e) =>
