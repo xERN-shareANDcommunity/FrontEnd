@@ -6,7 +6,10 @@ import { SCHEDULE_PAGE_TYPE } from "@/constants/calendarConstants";
 import { DottedCalendarIcon, ScheduleAddIcon } from "@/constants/iconConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
 import { resetOverlappedSchedules } from "@/features/schedule/schedule-slice";
-import { openScheduleCreateModal } from "@/features/ui/ui-slice";
+import {
+	openScheduleCreateModal,
+	openScheduleProposalModal,
+} from "@/features/ui/ui-slice";
 
 import {
 	TodoHeader,
@@ -201,7 +204,9 @@ const ScheduleItemList = () => {
 								<span>후보 선택</span>
 							</TodoBodyHeaderButton>
 						)}
-						<TodoBodyHeaderButton onClick={() => {}}>
+						<TodoBodyHeaderButton
+							onClick={() => dispatch(openScheduleProposalModal())}
+						>
 							<ScheduleAddIcon />
 							<span>후보 추가</span>
 						</TodoBodyHeaderButton>

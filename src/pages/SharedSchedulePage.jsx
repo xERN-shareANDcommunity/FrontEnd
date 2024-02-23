@@ -5,7 +5,9 @@ import { toast } from "react-toastify";
 import CalendarContainer from "@/components/Common/SchedulePage/CalendarContainer/CalendarContainer";
 import ScheduleItemList from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItemList";
 import { LayoutMain } from "@/components/Common/SchedulePage/SchedulePageLayout.styles";
+import ScheduleProposalModal from "@/components/Common/ScheduleProposalModal/ScheduleProposalModal";
 import { SCHEDULE_PAGE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
+import { SCHEDULE_MODAL_TYPE, UI_TYPE } from "@/constants/uiConstants";
 import {
 	getGroupScheduleProposal,
 	getSchedulesForTheWeek,
@@ -23,6 +25,7 @@ const SharedSchedulePage = () => {
 	const { currentCalendarView, currentGroupScheduleId } = useSelector(
 		({ schedule }) => schedule,
 	);
+	const { openedModal, scheduleModalMode } = useSelector(({ ui }) => ui);
 
 	useEffect(() => {
 		const getSharedSchedulePreset = async () => {
@@ -51,6 +54,10 @@ const SharedSchedulePage = () => {
 		<LayoutMain isMonthly={currentCalendarView === VIEW_TYPE.DAY_GRID_MONTH}>
 			<CalendarContainer />
 			<ScheduleItemList />
+			{openedModal === UI_TYPE.SHARE_SCHEDULE &&
+				scheduleModalMode === SCHEDULE_MODAL_TYPE.PROPOSAL && (
+					<ScheduleProposalModal />
+				)}
 		</LayoutMain>
 	);
 };
