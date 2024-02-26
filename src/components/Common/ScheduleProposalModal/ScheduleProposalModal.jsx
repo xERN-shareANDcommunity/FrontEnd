@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import _ from "lodash";
 import moment from "moment";
 
+import { RadiosDiv } from "./ScheduleProposalModal.styles";
 import FormModal from "../Modal/FormModal/FormModal";
 import {
 	DetailTextarea,
@@ -27,7 +28,7 @@ const initialFormValues = {
 
 const ScheduleProposalModal = () => {
 	const [formValues, setFormValues] = useState(initialFormValues);
-
+	const [isMultiple, setIsMultiple] = useState(false);
 	const prevFormValue = useRef(initialFormValues);
 
 	const checkIsEmpty = () => {
@@ -53,10 +54,26 @@ const ScheduleProposalModal = () => {
 						setFormValues((prev) => ({ ...prev, content: e.target.value }))
 					}
 				/>
-				<div>
-					<span>단일 날짜</span>
-					<span>여러 날짜</span>
-				</div>
+				<RadiosDiv>
+					<label htmlFor="single">
+						<input
+							type="radio"
+							id="single"
+							checked={!isMultiple}
+							onClick={() => setIsMultiple(false)}
+						/>
+						단일 날짜
+					</label>
+					<label htmlFor="multiple">
+						<input
+							type="radio"
+							id="multiple"
+							checked={isMultiple}
+							onClick={() => setIsMultiple(true)}
+						/>
+						여러 날짜
+					</label>
+				</RadiosDiv>
 				<SubmitButton onClick={() => {}} disabled={true}>
 					저장하기
 				</SubmitButton>
