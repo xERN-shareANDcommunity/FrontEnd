@@ -30,13 +30,13 @@ export const RelativeWrapperDiv = styled.div`
 		}
 
 		& > svg {
-			top: calc(100% + 4px);
-			left: -22px;
+			top: calc(100% + 3px);
+			left: -23px;
 		}
 
 		& > ul {
 			top: calc(100% + 17px + 3px); /* arrow + top_padding */
-			left: calc(-22px + 12px); /* bubble_position + left_padding */
+			left: calc(-23px + 12px); /* bubble_position + left_padding */
 			width: 122px;
 			height: calc(156px - 2 * 3px); /* bubble_height - 2 * top_padding */
 			overflow-y: auto;
