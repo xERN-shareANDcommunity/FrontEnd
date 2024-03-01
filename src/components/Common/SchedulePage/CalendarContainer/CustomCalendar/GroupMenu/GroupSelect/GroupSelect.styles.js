@@ -77,9 +77,9 @@ export const PickerDiv = styled.div`
 		cursor: pointer;
 		min-height: 33px;
 		padding: 0 4px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		display: flex;
+		align-items: center;
+		gap: 8px;
 
 		&:not(:last-child) {
 			border-bottom: 0.5px solid
@@ -90,6 +90,17 @@ export const PickerDiv = styled.div`
 			background-color: ${({ theme: { colors } }) => colors.primary};
 			color: ${({ theme: { colors } }) => colors.white};
 			border-radius: 5px;
+		}
+
+		& > img {
+			border-radius: 50%;
+			background-color: ${({ theme: { colors } }) => colors.bg_01};
+		}
+
+		& > span {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 	}
 `;

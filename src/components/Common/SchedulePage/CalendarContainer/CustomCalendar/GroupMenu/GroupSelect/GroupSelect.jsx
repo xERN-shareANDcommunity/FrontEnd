@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { SCHEDULE_COLORS } from "@/constants/calendarConstants";
 import { DownArrowIcon } from "@/constants/iconConstants";
 import { changeCurrentGroupId } from "@/features/schedule/schedule-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -46,7 +47,7 @@ const GroupSelect = () => {
 			</SelectButton>
 			{isOpen && (
 				<PickerDiv>
-					{userGroupList.map((obj) => (
+					{userGroupList.map((obj, index) => (
 						<button
 							key={obj.groupId}
 							type="button"
@@ -54,7 +55,16 @@ const GroupSelect = () => {
 							value={obj.groupId}
 							onClick={handleOptionClick}
 						>
-							{obj.name}
+							<img
+								src={obj.image}
+								alt={`${obj.name} 그룹 이미지`}
+								width={26}
+								height={26}
+								style={{
+									border: `1px solid ${SCHEDULE_COLORS[index + 5]}`,
+								}}
+							/>
+							<span>{obj.name}</span>
 						</button>
 					))}
 				</PickerDiv>
