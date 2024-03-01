@@ -134,12 +134,8 @@ describe("SharedSchedulePage without modal", () => {
 
 		userEvent.click(GroupSelect);
 
-		const initialGroupOption = screen.getAllByRole("button", {
-			name: "내 그룹 1",
-		})[1];
-		const GroupOptionToChange = screen.getByRole("button", {
-			name: "내 그룹 2",
-		});
+		const initialGroupOption = screen.getByTestId(1);
+		const GroupOptionToChange = screen.getByTestId(2);
 
 		expect(initialGroupOption).toBeInTheDocument();
 		expect(initialGroupOption).toHaveStyle({

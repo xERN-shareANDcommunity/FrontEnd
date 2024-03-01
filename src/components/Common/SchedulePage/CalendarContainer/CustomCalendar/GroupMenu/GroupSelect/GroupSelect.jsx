@@ -54,6 +54,7 @@ const GroupSelect = () => {
 							className={obj.groupId === currentGroupId ? "selected" : ""}
 							value={obj.groupId}
 							onClick={handleOptionClick}
+							data-testid={obj.groupId}
 						>
 							<img
 								src={obj.image}
