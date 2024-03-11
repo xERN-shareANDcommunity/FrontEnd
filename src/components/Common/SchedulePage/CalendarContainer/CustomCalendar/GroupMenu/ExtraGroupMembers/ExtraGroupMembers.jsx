@@ -35,8 +35,8 @@ const ExtraGroupMembers = ({ extraMembers }) => {
 								<img
 									src={member.image}
 									alt={`${member.nickname}님의 이미지`}
-									width={26}
-									height={26}
+									width={23}
+									height={23}
 									style={{
 										border: `1px solid ${SCHEDULE_COLORS[index + 5]}`,
 									}}

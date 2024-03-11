@@ -59,8 +59,8 @@ const GroupSelect = () => {
 							<img
 								src={obj.image}
 								alt={`${obj.name} 그룹 이미지`}
-								width={26}
-								height={26}
+								width={23}
+								height={23}
 								style={{
 									border: `1px solid ${SCHEDULE_COLORS[index + 5]}`,
 								}}
