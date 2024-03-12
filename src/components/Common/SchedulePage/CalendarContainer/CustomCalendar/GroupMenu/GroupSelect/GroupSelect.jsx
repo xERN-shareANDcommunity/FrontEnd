@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { SCHEDULE_COLORS } from "@/constants/calendarConstants";
 import { DownArrowIcon } from "@/constants/iconConstants";
@@ -13,6 +14,8 @@ import {
 } from "./GroupSelect.styles";
 
 const GroupSelect = () => {
+	const navigate = useNavigate();
+
 	const dispatch = useDispatch();
 	const userGroupList = useSelector((state) => state.user.userGroupList);
 	const currentGroupId = useSelector(
@@ -28,6 +31,16 @@ const GroupSelect = () => {
 		dispatch(changeCurrentGroupId(Number(event.target.value)));
 		setIsOpen(false);
 	};
+
+	useEffect(() => {
+		if (userGroupList.length > 0) {
+			navigate("/personal", {
+				state: {
+					isRedirected: true,
+				},
+			});
+		}
+	}, [userGroupList]);
 
 	return (
 		<GroupSelectWrapperDiv ref={wrapperRef} role="combobox">
