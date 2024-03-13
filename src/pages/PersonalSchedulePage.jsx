@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import EmptyUserGroupNotificationModal from "@/components/Common/Modal/EmptyUserGroupNotificationModal/EmptyUserGroupNotificationModal";
 import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal";
 import CalendarContainer from "@/components/Common/SchedulePage/CalendarContainer/CalendarContainer";
 import ScheduleItemList from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItemList";
@@ -19,6 +21,8 @@ import {
 } from "@/features/schedule/schedule-slice";
 
 const PersonalSchedulePage = () => {
+	const location = useLocation();
+
 	const dispatch = useDispatch();
 	const openedModal = useSelector(({ ui }) => ui.openedModal);
 	const currentCalendarView = useSelector(
@@ -50,6 +54,7 @@ const PersonalSchedulePage = () => {
 			{openedModal === UI_TYPE.PERSONAL_SCHEDULE && (
 				<ScheduleModal type={openedModal} />
 			)}
+			{location.state?.isRedirected && <EmptyUserGroupNotificationModal />}
 		</>
 	);
 };
