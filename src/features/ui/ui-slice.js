@@ -103,6 +103,9 @@ const uiSlice = createSlice({
 			state.feedDetailModalId = payload;
 			state.openedModal = UI_TYPE.FEED_DETAIL_MODAL;
 		},
+		openEmptyGroupNotificationModal: (state) => {
+			state.openedModal = UI_TYPE.EMPTY_GROUP_NOTIFICATION;
+		},
 		closeModal: () => {
 			return initialState;
 		},
@@ -135,6 +138,7 @@ export const {
 	openMemberRequestModal,
 	openDeleteMemberWarningModal,
 	openFeedDetailModal,
+	openEmptyGroupNotificationModal,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { SCHEDULE_COLORS } from "@/constants/calendarConstants";
 import { DownArrowIcon } from "@/constants/iconConstants";
 import { changeCurrentGroupId } from "@/features/schedule/schedule-slice";
+import { openEmptyGroupNotificationModal } from "@/features/ui/ui-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import {
@@ -33,12 +34,9 @@ const GroupSelect = () => {
 	};
 
 	useEffect(() => {
-		if (userGroupList.length > 0) {
-			navigate("/personal", {
-				state: {
-					isRedirected: true,
-				},
-			});
+		if (userGroupList.length === 0) {
+			dispatch(openEmptyGroupNotificationModal());
+			navigate("/personal");
 		}
 	}, [userGroupList]);
 
