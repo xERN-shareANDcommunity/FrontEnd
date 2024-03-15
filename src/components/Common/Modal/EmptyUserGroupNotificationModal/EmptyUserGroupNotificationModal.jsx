@@ -18,13 +18,7 @@ const EmptyUserGroupNotificationModal = () => {
 					<span>&apos;그룹 신청하기&apos; 버튼을 통해</span>
 					<span>그룹을 만들어보세요.</span>
 				</p>
-				{/* 여기 그룹 검색 탭으로 전환되어야 함을 알리는 state를 더해야 함 */}
-				<button
-					type="button"
-					onClick={() =>
-						navitage("/community", { state: { isForGroupSearching: true } })
-					}
-				>
+				<button type="button" onClick={() => navitage("/community?tab=search")}>
 					그룹 신청하기
 				</button>
 			</NotificationModalWrapperDiv>
