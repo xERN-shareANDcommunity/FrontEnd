@@ -29,7 +29,7 @@ const GroupSelect = () => {
 	useOutsideClick(wrapperRef, () => isOpen && setIsOpen(false));
 
 	const handleOptionClick = (event) => {
-		dispatch(changeCurrentGroupId(Number(event.target.value)));
+		dispatch(changeCurrentGroupId(Number(event.currentTarget.value)));
 		setIsOpen(false);
 	};
 
