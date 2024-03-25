@@ -114,6 +114,16 @@ export const ProfileButton = styled.button`
 	position: relative;
 	cursor: pointer;
 
+	&.grayButton {
+		background-color: ${({ theme: { colors } }) => colors.btn_02};
+		border: none;
+		cursor: default;
+
+		&:hover {
+			background-color: ${({ theme: { colors } }) => colors.btn_02};
+		}
+	}
+
 	&:hover {
 		background-color: ${({ theme: { colors } }) => colors.btn_04};
 	}

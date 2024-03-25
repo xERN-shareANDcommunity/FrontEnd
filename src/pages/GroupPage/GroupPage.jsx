@@ -15,6 +15,7 @@ import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	getGroupInfo,
 	getGroupMemberList,
+	getGroupRequestMemberList,
 } from "@/features/group/group-service";
 import { resetGroupStateForGroupPage } from "@/features/group/group-slice";
 import { resetPostStateForGroupPage } from "@/features/post/post-slice";
@@ -26,7 +27,9 @@ const GroupPage = () => {
 	const dispatch = useDispatch();
 
 	const { user } = useSelector((state) => state.auth);
-	const { groupInfo, groupMemberList } = useSelector((state) => state.group);
+	const { groupInfo, groupMemberList, groupRequestMemberList } = useSelector(
+		(state) => state.group,
+	);
 
 	const { openedModal } = useSelector((state) => state.ui);
 
@@ -43,6 +46,7 @@ const GroupPage = () => {
 
 	useEffect(() => {
 		dispatch(getGroupMemberList(groupId));
+		dispatch(getGroupRequestMemberList(groupId));
 
 		try {
 			dispatch(getGroupInfo(groupId)).unwrap();
@@ -71,7 +75,7 @@ const GroupPage = () => {
 		}
 	}, [searchParams]);
 
-	if (isLoading || !groupInfo) {
+	if (isLoading || !groupInfo || !groupRequestMemberList) {
 		return <div>그룹 정보 불러오는 중...</div>;
 	}
 
@@ -80,6 +84,9 @@ const GroupPage = () => {
 	const leaderName = groupInfo.information.leaderInfo.nickname;
 	const isGroupLeader = groupInfo.accessLevel === "owner";
 	const isGroupMember = groupInfo.accessLevel !== null;
+	const isGroupRequest = groupRequestMemberList.findIndex(
+		(data) => data.member.userId === user.userId,
+	);
 
 	return (
 		<GroupMain>
@@ -89,6 +96,7 @@ const GroupPage = () => {
 				isGroupMember={isGroupMember}
 				isManaging={isManaging}
 				groupMemberList={groupMemberList}
+				isGroupRequest={isGroupRequest}
 			/>
 
 			{isManaging ? (
