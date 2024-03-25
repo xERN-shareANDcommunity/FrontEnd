@@ -60,7 +60,7 @@ const ScheduleProposalModal = () => {
 							type="radio"
 							id="single"
 							checked={!isMultiple}
-							onClick={() => setIsMultiple(false)}
+							onChange={() => setIsMultiple(false)}
 						/>
 						단일 날짜
 					</label>
@@ -69,7 +69,7 @@ const ScheduleProposalModal = () => {
 							type="radio"
 							id="multiple"
 							checked={isMultiple}
-							onClick={() => setIsMultiple(true)}
+							onChange={() => setIsMultiple(true)}
 						/>
 						여러 날짜
 					</label>
