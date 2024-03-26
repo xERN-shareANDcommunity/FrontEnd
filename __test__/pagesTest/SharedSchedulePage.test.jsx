@@ -175,6 +175,16 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 		expect(screen.getByTestId("ScheduleProposalModal")).toBeInTheDocument();
 		expect(screen.getByLabelText("단일 날짜")).toBeChecked();
 		expect(screen.getByLabelText("여러 날짜")).not.toBeChecked();
+
+		expect(
+			screen.getByRole("heading", { name: "일정 추천" }),
+		).toBeInTheDocument();
+
+		// proposalParams
+		expect(screen.getByRole("button", { name: "기간" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "시간" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "추천받기" })).toBeDisabled();
+
 		expect(screen.getByRole("button", { name: "저장하기" })).toBeDisabled();
 	});
 });
