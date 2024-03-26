@@ -12,6 +12,9 @@ import GroupSelect from "./GroupSelect/GroupSelect";
 
 const GroupMenu = () => {
 	const userId = useSelector((state) => state.auth.user.userId);
+	const isUserGroupFetching = useSelector(
+		(state) => state.user.isUserGroupFetching,
+	);
 	const currentGroupScheduleId = useSelector(
 		(state) => state.schedule.currentGroupScheduleId,
 	);
@@ -26,6 +29,16 @@ const GroupMenu = () => {
 			getGroupMembers((data) => setGroupMembers(data), currentGroupScheduleId);
 		}
 	}, [currentGroupScheduleId]);
+
+	if (isUserGroupFetching) {
+		return (
+			<GroupMenuDiv>
+				<div className="loading">
+					<div className="shimmer" />
+				</div>
+			</GroupMenuDiv>
+		);
+	}
 
 	return (
 		<GroupMenuDiv role="menu">

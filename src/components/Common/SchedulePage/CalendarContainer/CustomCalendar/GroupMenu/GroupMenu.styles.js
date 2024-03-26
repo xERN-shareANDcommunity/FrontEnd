@@ -10,6 +10,30 @@ export const GroupMenuDiv = styled.div`
 	display: flex;
 	gap: 10px;
 
+	& > .loading {
+		width: 281px;
+		line-height: 33px;
+		background-color: ${({ theme: { colors } }) => colors.bg_02};
+
+		& > .shimmer {
+			animation: loading 2s infinite;
+			width: 10px;
+			height: 100%;
+			background-color: ${({ theme: { colors } }) => colors.white};
+			transform: skewX(-40deg);
+			box-shadow: 0 0 30px 30px ${({ theme: { colors } }) => colors.white};
+		}
+
+		@keyframes loading {
+			0% {
+				transform: translateX(-40px);
+			}
+			100% {
+				transform: translateX(321px);
+			}
+		}
+	}
+
 	& > .groupMembers {
 		display: flex;
 		align-items: center;
