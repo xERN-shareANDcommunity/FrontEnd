@@ -3,7 +3,10 @@ import React, { useRef, useState } from "react";
 import _ from "lodash";
 import moment from "moment";
 
-import { RadiosDiv } from "./ScheduleProposalModal.styles";
+import {
+	ProposalParamsWrapperDiv,
+	RadiosDiv,
+} from "./ScheduleProposalModal.styles";
 import FormModal from "../Modal/FormModal/FormModal";
 import {
 	DetailTextarea,
@@ -15,10 +18,7 @@ import {
 const initialFormValues = {
 	title: "",
 	content: "",
-	startDate: moment().format("YYYY-MM-DD"),
-	startTime: moment().format("HH:mm"),
-	endDate: moment().format("YYYY-MM-DD"),
-	endTime: moment().format("HH:mm"),
+
 	isAllDay: false,
 	freq: "NONE",
 	interval: "",
@@ -30,6 +30,11 @@ const ScheduleProposalModal = () => {
 	const [formValues, setFormValues] = useState(initialFormValues);
 	const [isMultiple, setIsMultiple] = useState(false);
 	const prevFormValue = useRef(initialFormValues);
+	const proposalParams = {
+		startDate: moment().format("YYYY-MM-DD"),
+		endDate: null,
+		minDuration: null,
+	};
 
 	const checkIsEmpty = () => {
 		const trimmedFormValues = {
@@ -74,6 +79,31 @@ const ScheduleProposalModal = () => {
 						여러 날짜
 					</label>
 				</RadiosDiv>
+				<ProposalParamsWrapperDiv>
+					<div className="content">
+						<h3>일정 추천</h3>
+						<button type="button">
+							{!proposalParams.endDate
+								? "기간"
+								: `${proposalParams.startDate}~${proposalParams.endDate}`}
+						</button>
+						<button type="button">
+							{proposalParams.minDuration
+								? `${proposalParams.minDuration}`
+								: "시간"}
+						</button>
+					</div>
+					<button
+						type="button"
+						disabled={
+							!proposalParams.startDate ||
+							!proposalParams.endDate ||
+							!proposalParams.minDuration
+						}
+					>
+						추천받기
+					</button>
+				</ProposalParamsWrapperDiv>
 				<SubmitButton onClick={() => {}} disabled={true}>
 					저장하기
 				</SubmitButton>
