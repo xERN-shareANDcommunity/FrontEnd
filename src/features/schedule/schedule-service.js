@@ -278,3 +278,29 @@ ${moment(end).format(`${yearFormat}MM월 DD일 HH시 mm분`)}`;
 		return { schedules: data.schedules, title };
 	},
 );
+
+export const getScheduleProposals = createAsyncThunk(
+	"schedule/getScheduleProposals",
+	async ({ startDateStr, endDateStr, minDuration }, thunkAPI) => {
+		const groupId = thunkAPI.getState().schedule.currentGroupScheduleId;
+
+		if (!startDateStr || !endDateStr || !minDuration || !groupId) {
+			return thunkAPI.rejectWithValue("잘못된 데이터 형식입니다.");
+		}
+
+		const data = await commonThunk(
+			{
+				method: "GET",
+				url: `/api/group/2/proposals?startDateTime=${new Date(
+					startDateStr,
+				).toISOString()}&endDateTime=${new Date(
+					endDateStr,
+				).toISOString()}&duration=${minDuration}`,
+				successCode: 200,
+			},
+			thunkAPI,
+		);
+
+		return data;
+	},
+);

@@ -64,6 +64,7 @@ const uiSlice = createSlice({
 		openScheduleProposalModal: (state) => {
 			state.openedModal = UI_TYPE.SHARE_SCHEDULE;
 			state.scheduleModalMode = SCHEDULE_MODAL_TYPE.PROPOSAL;
+			state.isLoading = false;
 		},
 		openCreateGroupModal: (state) => {
 			state.openedModal = UI_TYPE.CREATE_GROUP;

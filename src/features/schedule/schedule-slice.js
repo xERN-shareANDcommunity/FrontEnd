@@ -18,6 +18,7 @@ import {
 	deleteSchedule,
 	getOverlappedSchedules,
 	getGroupScheduleProposal,
+	getScheduleProposals,
 } from "./schedule-service.js";
 
 const initialOverlappedScheduleInfo = { title: "", schedules: [] };
@@ -26,6 +27,7 @@ const initialState = {
 	calendarSchedules: [],
 	currentGroupScheduleId: null,
 	scheduleProposals: [],
+	recommendedScheduleProposals: [],
 	todaySchedules: [],
 	schedulesForTheWeek: [],
 	overlappedScheduleInfo: initialOverlappedScheduleInfo,
@@ -223,6 +225,9 @@ const scheduleSlice = createSlice({
 			.addCase(getGroupScheduleProposal.fulfilled, (state, { payload }) => {
 				state.scheduleProposals = payload;
 			})
+			.addCase(getScheduleProposals.fulfilled, (state, { payload }) => {
+				state.recommendedScheduleProposals = payload.proposals;
+			})
 			// userGroup 업데이트 시
 			.addCase(inqueryUserGroup.fulfilled, (state, { payload }) => {
 				if (payload.length > 0 && !state.currentGroupScheduleId) {
@@ -239,6 +244,7 @@ const scheduleSlice = createSlice({
 					deleteSchedule.pending,
 					getOverlappedSchedules.pending,
 					getGroupScheduleProposal.pending,
+					getScheduleProposals.pending,
 				),
 				(state) => {
 					state.isLoading = true;
@@ -254,6 +260,7 @@ const scheduleSlice = createSlice({
 					deleteSchedule.fulfilled,
 					getOverlappedSchedules.fulfilled,
 					getGroupScheduleProposal.fulfilled,
+					getScheduleProposals.fulfilled,
 				),
 				(state) => {
 					state.isLoading = false;
@@ -269,6 +276,7 @@ const scheduleSlice = createSlice({
 					deleteSchedule.rejected,
 					getOverlappedSchedules.rejected,
 					getGroupScheduleProposal.rejected,
+					getScheduleProposals.rejected,
 				),
 				(state) => {
 					state.isLoading = false;
