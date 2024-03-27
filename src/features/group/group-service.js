@@ -198,21 +198,6 @@ export const changeGroupOption = createAsyncThunk(
 	},
 );
 
-export const cancelGroupJoin = createAsyncThunk(
-	"group/cancelGroupJoin",
-	async (groupId, thunkAPI) => {
-		const data = await commonThunk(
-			{
-				method: "POST",
-				url: `/api/group/${groupId}/members/request`,
-				successCode: 200,
-			},
-			thunkAPI,
-		);
-		return data;
-	},
-);
-
 export const changeRequestGroupJoin = createAsyncThunk(
 	"group/changeRequestGroupJoin",
 	async (groupId, thunkAPI) => {
