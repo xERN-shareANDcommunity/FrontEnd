@@ -5,6 +5,7 @@ import { SCHEDULE_PAGE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
 import commonThunk from "@/features/commonThunk";
 import { getFirstDateOfWeek } from "@/utils/calendarUtils";
 import { convertScheduleFormValueToData } from "@/utils/convertSchedule";
+import convertToUTC from "@/utils/convertToUTC";
 
 export const getGroupScheduleProposal = createAsyncThunk(
 	"schedule/getGroupScheduleProposal",
@@ -281,7 +282,10 @@ ${moment(end).format(`${yearFormat}MM월 DD일 HH시 mm분`)}`;
 
 export const getScheduleProposals = createAsyncThunk(
 	"schedule/getScheduleProposals",
-	async ({ startDateStr, endDateStr, minDuration }, thunkAPI) => {
+	async (
+		{ startDateStr, endDateStr, startTimeStr, endTimeStr, minDuration },
+		thunkAPI,
+	) => {
 		const groupId = thunkAPI.getState().schedule.currentGroupScheduleId;
 
 		if (!startDateStr || !endDateStr || !minDuration || !groupId) {
@@ -291,11 +295,13 @@ export const getScheduleProposals = createAsyncThunk(
 		const data = await commonThunk(
 			{
 				method: "GET",
-				url: `/api/group/2/proposals?startDateTime=${new Date(
+				url: `/api/group/2/proposals?startDateTime=${convertToUTC(
 					startDateStr,
-				).toISOString()}&endDateTime=${new Date(
+					startTimeStr,
+				)}&endDateTime=${convertToUTC(
 					endDateStr,
-				).toISOString()}&duration=${minDuration}`,
+					endTimeStr,
+				)}&duration=${minDuration}`,
 				successCode: 200,
 			},
 			thunkAPI,
