@@ -127,7 +127,21 @@ const groupSlice = createSlice({
 			.addCase(
 				changeRequestGroupJoin.fulfilled,
 				(state, { meta: { arg }, payload }) => {
-					if (payload.message === "성공적으로 신청되었습니다.") {
+					if (payload.data.message === "성공적으로 신청되었습니다.") {
+						const { userId, nickname, profileImage } = payload.user;
+
+						const requestUserInfo = {
+							accessLevel: "viewer",
+							member: {
+								userId,
+								nickname,
+								image: profileImage,
+								isPendingMember: 1,
+							},
+						};
+
+						state.groupRequestMemberList.push(requestUserInfo);
+
 						toast.success("그룹 신청 완료");
 					} else {
 						state.groupRequestMemberList = state.groupRequestMemberList.filter(
