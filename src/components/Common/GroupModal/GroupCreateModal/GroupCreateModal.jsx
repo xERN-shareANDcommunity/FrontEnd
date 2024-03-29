@@ -72,7 +72,9 @@ const GroupCreateModal = () => {
 					</>
 				)}
 			</TopDiv>
-			<GroupNameLabel htmlFor="name">그룹 이름</GroupNameLabel>
+			<GroupNameLabel htmlFor="name">
+				그룹 이름<span>{name.length}/20자</span>
+			</GroupNameLabel>
 			<GroupNameTextarea
 				name="name"
 				onChange={(e) => setName(e.target.value)}
@@ -80,7 +82,7 @@ const GroupCreateModal = () => {
 				maxLength={20}
 			/>
 			<GroupDescriptionLabel htmlFor="description">
-				그룹 소개
+				그룹 소개<span>{description.length}/100자</span>
 			</GroupDescriptionLabel>
 			<GroupDescriptionTextarea
 				name="description"

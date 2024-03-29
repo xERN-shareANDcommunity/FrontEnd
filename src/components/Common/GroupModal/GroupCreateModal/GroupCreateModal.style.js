@@ -36,6 +36,12 @@ export const GroupNameLabel = styled.label`
 	font-size: 13px;
 	font-family: Inter;
 	font-weight: 500;
+
+	& > span {
+		margin-left: 6px;
+		font-size: 8px;
+		color: ${({ theme: { colors } }) => colors.disabled_text};
+	}
 `;
 
 export const GroupNameTextarea = styled.textarea`
