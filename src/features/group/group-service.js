@@ -201,11 +201,14 @@ export const changeGroupOption = createAsyncThunk(
 export const changeRequestGroupJoin = createAsyncThunk(
 	"group/changeRequestGroupJoin",
 	async (groupId, thunkAPI) => {
+		const { user } = thunkAPI.getState().auth;
+
 		const data = await commonThunk(
 			{
 				method: "POST",
 				url: `/api/group/${groupId}/members/request`,
 				successCode: 200,
+				userInfo: user,
 			},
 			thunkAPI,
 		);

@@ -128,7 +128,6 @@ const groupSlice = createSlice({
 				changeRequestGroupJoin.fulfilled,
 				(state, { meta: { arg }, payload }) => {
 					if (payload.message === "성공적으로 신청되었습니다.") {
-						console.log(state);
 						toast.success("그룹 신청 완료");
 					} else {
 						state.groupRequestMemberList = state.groupRequestMemberList.filter(
