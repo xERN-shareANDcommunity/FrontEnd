@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import FeedOption from "@/components/Common/Feed/FeedOption";
 import BaseModal from "@/components/Common/Modal/BaseModal";
 import {
 	CrownIcon,
@@ -9,17 +10,16 @@ import {
 	FillHeartIcon,
 } from "@/constants/iconConstants";
 import { getComments } from "@/features/comment/comment-service";
-import { useTimeStamp } from "@/hooks/useTimeStamp";
+import useOutsideClick from "@/hooks/useOutsideClick";
 
 import {
 	ContainerDiv,
 	FeedDiv,
 	ProfileDiv,
 	ContentDiv,
-	CommentDiv,
-	CommentContentDiv,
 } from "./FeedDetailModal.style";
 import { IconDiv, IconItemButton } from "../Feed.styles";
+import FeedComment from "../FeedComment/FeedComment";
 
 const FeedDetailModal = ({
 	groupId,
@@ -37,6 +37,13 @@ const FeedDetailModal = ({
 	const dispatch = useDispatch();
 
 	const { comments } = useSelector((state) => state.comment);
+	const { user } = useSelector((state) => state.auth);
+
+	const [isOptionOpen, setIsOptionOpen] = useState(false);
+
+	const optionMenuRef = useRef();
+
+	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
 
 	useEffect(() => {
 		dispatch(getComments({ groupId, postId }));
@@ -52,6 +59,16 @@ const FeedDetailModal = ({
 							{author}
 							{author === leaderName && <CrownIcon />}
 						</h3>
+
+						{user.nickname === author && (
+							<FeedOption
+								postId={postId}
+								groupId={groupId}
+								optionMenuRef={optionMenuRef}
+								isOptionOpen={isOptionOpen}
+								handleOptionClick={() => setIsOptionOpen((prev) => !prev)}
+							/>
+						)}
 					</ProfileDiv>
 					<ContentDiv>
 						<p>{content}</p>
@@ -71,14 +88,14 @@ const FeedDetailModal = ({
 
 				{comments.length !== 0 &&
 					comments.comment.map((commentInfo) => (
-						<CommentDiv key={commentInfo.commentId}>
-							<img src={commentInfo.authorImage} alt="profileImg" />
-							<CommentContentDiv>
-								<h3>{commentInfo.author}</h3>
-								<h4>{useTimeStamp(commentInfo.updatedAt)}</h4>
-								<p>{commentInfo.content}</p>
-							</CommentContentDiv>
-						</CommentDiv>
+						<FeedComment
+							key={commentInfo.commendId}
+							commendId={commentInfo.commendId}
+							author={commentInfo.author}
+							authorImage={commentInfo.authorImage}
+							updatedAt={commentInfo.updatedAt}
+							content={commentInfo.content}
+						/>
 					))}
 			</ContainerDiv>
 		</BaseModal>
