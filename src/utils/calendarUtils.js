@@ -104,3 +104,49 @@ export const getGroupMembers = async (onFulfilled, groupId) => {
 export const getGroupColor = (groupId) => {
 	return SCHEDULE_COLORS[groupId % 20];
 };
+
+export const getTimeString = (start, end) => {
+	const isAllday = checkIsAlldaySchedule(start, end);
+	const startDate = new Date(start);
+	const endDate = new Date(end);
+	const startDateString = `${
+		startDate.getMonth() + 1
+	}월 ${startDate.getDate()}일`;
+
+	if (isAllday) {
+		return `${startDateString} 하루 종일`;
+	}
+
+	const startTimeString = `${
+		startDate.getHours() < 10
+			? `0${startDate.getHours()}`
+			: startDate.getHours()
+	}:${
+		startDate.getMinutes() < 10
+			? `0${startDate.getMinutes()}`
+			: startDate.getMinutes()
+	}`;
+	let endDateString = `${endDate.getMonth() + 1}월 ${endDate.getDate()}일`;
+	const endTimeString = `${
+		// eslint-disable-next-line no-nested-ternary
+		!endDate.getHours() && !endDate.getMinutes()
+			? 24
+			: endDate.getHours() < 10
+			? `0${endDate.getHours()}`
+			: endDate.getHours()
+	}:${
+		endDate.getMinutes() < 10
+			? `0${endDate.getMinutes()}`
+			: endDate.getMinutes()
+	}`;
+
+	const isOnlyToday = startDate.toDateString() === endDate.toDateString();
+
+	if (isOnlyToday || checkIsAlldaySchedule(start, end)) {
+		endDateString = null;
+	}
+
+	return `${startDateString} ${startTimeString} ~ ${
+		endDateString || ""
+	} ${endTimeString}`;
+};
