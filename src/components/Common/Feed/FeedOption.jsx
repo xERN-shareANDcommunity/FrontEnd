@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { OptionThreeDotIcon } from "@/constants/iconConstants";
+import { deleteComment, putComment } from "@/features/comment/comment-service";
 import { deleteGroupPost } from "@/features/post/post-service";
 
 import { OptionDiv, OptionMenuDiv } from "./Feed.styles";
@@ -12,11 +13,22 @@ const FeedOption = ({
 	optionMenuRef,
 	isOptionOpen,
 	handleOptionClick,
+	isComment,
+	commentId,
 }) => {
 	const dispatch = useDispatch();
+	const content = "test";
 
-	const deletePost = () => {
+	const handleDeletePost = () => {
 		dispatch(deleteGroupPost({ postGroupId: groupId, postId }));
+	};
+
+	const handleDeleteComment = () => {
+		dispatch(deleteComment({ groupId, postId, commentId }));
+	};
+
+	const handlePutComment = () => {
+		dispatch(putComment({ groupId, postId, commentId, content }));
 	};
 
 	return (
@@ -27,10 +39,15 @@ const FeedOption = ({
 				<OptionMenuDiv>
 					<ul>
 						<li>
-							<button type="button">수정</button>
+							<button type="button" onClick={isComment && handlePutComment}>
+								수정
+							</button>
 						</li>
 						<li>
-							<button type="button" onClick={deletePost}>
+							<button
+								type="button"
+								onClick={isComment ? handleDeleteComment : handleDeletePost}
+							>
 								삭제
 							</button>
 						</li>

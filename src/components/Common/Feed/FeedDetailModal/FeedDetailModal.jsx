@@ -87,10 +87,10 @@ const FeedDetailModal = ({
 				</FeedDiv>
 
 				{comments.length !== 0 &&
-					comments.comment.map((commentInfo) => (
+					comments.map((commentInfo) => (
 						<FeedComment
 							key={commentInfo.commentId}
-							commendId={commentInfo.commentId}
+							commentId={commentInfo.commentId}
 							author={commentInfo.author}
 							authorImage={commentInfo.authorImage}
 							updatedAt={commentInfo.updatedAt}

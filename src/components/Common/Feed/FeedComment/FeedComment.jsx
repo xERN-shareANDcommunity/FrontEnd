@@ -10,7 +10,7 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 import { useTimeStamp } from "@/hooks/useTimeStamp";
 
 const FeedComment = ({
-	// commentId,
+	commentId,
 	postId,
 	groupId,
 	author,
@@ -42,6 +42,8 @@ const FeedComment = ({
 					optionMenuRef={optionMenuRef}
 					isOptionOpen={isOptionOpen}
 					handleOptionClick={() => setIsOptionOpen((prev) => !prev)}
+					isComment
+					commentId={commentId}
 				/>
 			)}
 		</CommentDiv>
