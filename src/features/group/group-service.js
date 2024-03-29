@@ -212,7 +212,7 @@ export const changeRequestGroupJoin = createAsyncThunk(
 			},
 			thunkAPI,
 		);
-		return data;
+		return { data, user };
 	},
 );
 
