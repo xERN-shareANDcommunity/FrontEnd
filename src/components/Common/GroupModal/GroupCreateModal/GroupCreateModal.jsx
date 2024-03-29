@@ -20,10 +20,22 @@ import {
 const GroupCreateModal = () => {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
+	const [profileImg, setProfileImg] = useState("");
+	const [previewImg, setPreviewImg] = useState("");
 
 	const dispatch = useDispatch();
 
 	const isEmpty = name.trim() === "" && description.trim() === "";
+
+	const handleChangeImg = (e) => {
+		const file = e.target.files[0];
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onloadend = () => {
+			setProfileImg(file);
+			setPreviewImg(reader.result);
+		};
+	};
 
 	const handleCreateGroup = (event) => {
 		event.preventDefault();
@@ -37,6 +49,8 @@ const GroupCreateModal = () => {
 
 		formData.append("data", JSON.stringify(data));
 
+		formData.append("image", profileImg);
+
 		if (name.length < 21 && description.length < 101) {
 			dispatch(createGroup(formData));
 			dispatch(closeModal({ type: "CREATE_GROUP" }));
@@ -47,9 +61,20 @@ const GroupCreateModal = () => {
 		<FormModal isEmpty={isEmpty}>
 			<TopDiv>
 				<TitleH2>그룹 만들기</TitleH2>
-				<GroupImgAddIcon />
+				{previewImg.length !== 0 ? (
+					<img src={previewImg} alt="profileImg" />
+				) : (
+					<>
+						<label htmlFor="profileImg">
+							<GroupImgAddIcon />
+						</label>
+						<input type="file" id="profileImg" onChange={handleChangeImg} />
+					</>
+				)}
 			</TopDiv>
-			<GroupNameLabel htmlFor="name">그룹 이름</GroupNameLabel>
+			<GroupNameLabel htmlFor="name">
+				그룹 이름<span>{name.length}/20자</span>
+			</GroupNameLabel>
 			<GroupNameTextarea
 				name="name"
 				onChange={(e) => setName(e.target.value)}
@@ -57,7 +82,7 @@ const GroupCreateModal = () => {
 				maxLength={20}
 			/>
 			<GroupDescriptionLabel htmlFor="description">
-				그룹 소개
+				그룹 소개<span>{description.length}/100자</span>
 			</GroupDescriptionLabel>
 			<GroupDescriptionTextarea
 				name="description"
@@ -68,7 +93,9 @@ const GroupCreateModal = () => {
 			<ButtonWrapDiv>
 				<GroupCreateButton
 					type="submit"
-					disabled={!name.trim()}
+					disabled={
+						!name.trim() || name.length > 20 || description.length > 100
+					}
 					onClick={handleCreateGroup}
 				>
 					생성하기
