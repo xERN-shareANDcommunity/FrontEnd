@@ -124,6 +124,8 @@ const Feed = ({ post, groupId, leaderName }) => {
 
 			{openedModal === UI_TYPE.FEED_DETAIL_MODAL(post.postId) && (
 				<FeedDetailModal
+					groupId={groupId}
+					postId={post.postId}
 					author={post.author}
 					authorImage={post.authorImage}
 					content={post.content}

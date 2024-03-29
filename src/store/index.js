@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import authReducer from "@/features/auth/auth-slice.js";
+import commentReducer from "@/features/comment/comment-slice";
 import groupReducer from "@/features/group/group-slice.js";
 import postReducer from "@/features/post/post-slice";
 import scheduleReducer from "@/features/schedule/schedule-slice.js";
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
 	ui: uiReducer,
 	user: userReducer,
 	post: postReducer,
+	comment: commentReducer,
 });
 
 export const setupStore = (preloadedState) => {

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import BaseModal from "@/components/Common/Modal/BaseModal";
 import {
@@ -7,6 +8,8 @@ import {
 	EmptyHeartIcon,
 	FillHeartIcon,
 } from "@/constants/iconConstants";
+import { getComments } from "@/features/comment/comment-service";
+import { useTimeStamp } from "@/hooks/useTimeStamp";
 
 import {
 	ContainerDiv,
@@ -19,6 +22,8 @@ import {
 import { IconDiv, IconItemButton } from "../Feed.styles";
 
 const FeedDetailModal = ({
+	groupId,
+	postId,
 	author,
 	authorImage,
 	content,
@@ -29,6 +34,14 @@ const FeedDetailModal = ({
 	leaderName,
 	handleLikeClick,
 }) => {
+	const dispatch = useDispatch();
+
+	const { comments } = useSelector((state) => state.comment);
+
+	useEffect(() => {
+		dispatch(getComments({ groupId, postId }));
+	}, []);
+
 	return (
 		<BaseModal>
 			<ContainerDiv>
@@ -56,18 +69,17 @@ const FeedDetailModal = ({
 					</ContentDiv>
 				</FeedDiv>
 
-				<CommentDiv>
-					<img src={authorImage} alt="profileImg" />
-					<CommentContentDiv>
-						<h3>그룹원 01</h3>
-						<h4>15분 전</h4>
-						<p>
-							오늘은 개발 스터디 그룹에서 알고리즘 대회에 참가했어! 문제를
-							풀면서 서로 도움을 주고 받으며 즐거운 시간을 보냈어. 성장하는
-							모습을 느낄 수 있어 뿌듯해
-						</p>
-					</CommentContentDiv>
-				</CommentDiv>
+				{comments.length !== 0 &&
+					comments.comment.map((commentInfo) => (
+						<CommentDiv key={commentInfo.commentId}>
+							<img src={commentInfo.authorImage} alt="profileImg" />
+							<CommentContentDiv>
+								<h3>{commentInfo.author}</h3>
+								<h4>{useTimeStamp(commentInfo.updatedAt)}</h4>
+								<p>{commentInfo.content}</p>
+							</CommentContentDiv>
+						</CommentDiv>
+					))}
 			</ContainerDiv>
 		</BaseModal>
 	);

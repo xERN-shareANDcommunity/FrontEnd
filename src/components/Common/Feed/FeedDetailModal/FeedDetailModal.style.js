@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
 	margin-top: 56px;
 	padding: 0 34px;
 `;
 
-export const FeedDiv = styled.div``;
+export const FeedDiv = styled.div`
+	padding-bottom: 24px;
+	border-bottom: 1px solid ${({ theme: { colors } }) => colors.text_03};
+`;
 
 export const ProfileDiv = styled.div`
 	display: flex;
@@ -50,7 +50,6 @@ export const CommentDiv = styled.div`
 	display: flex;
 	gap: 10px;
 	border-bottom: 1px solid #d9d9d9;
-	border-top: 1px solid #d9d9d9;
 
 	& > img {
 		width: 58px;
