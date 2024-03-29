@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import FeedDetailModal from "@/components/Common/Feed/FeedDetailModal/FeedDetailModal";
 import FeedOption from "@/components/Common/Feed/FeedOption";
 import {
 	CrownIcon,
@@ -8,10 +9,12 @@ import {
 	EmptyHeartIcon,
 	FillHeartIcon,
 } from "@/constants/iconConstants";
+import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	cancelLikeGroupPost,
 	likeGroupPost,
 } from "@/features/post/post-service";
+import { openFeedDetailModal } from "@/features/ui/ui-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { useTimeStamp } from "@/hooks/useTimeStamp";
 
@@ -20,6 +23,7 @@ import {
 	TopDiv,
 	InfoDiv,
 	BottomDiv,
+	ContentDiv,
 	IconDiv,
 	IconItemButton,
 } from "./Feed.styles";
@@ -28,6 +32,7 @@ const Feed = ({ post, groupId, leaderName }) => {
 	const dispatch = useDispatch();
 
 	const { user } = useSelector((state) => state.auth);
+	const { openedModal } = useSelector((state) => state.ui);
 
 	const [isPostLiked, setIsPostLiked] = useState(post.isLiked);
 	const [postLikesCount, setPostLikesCount] = useState(post.likesCount);
@@ -59,7 +64,9 @@ const Feed = ({ post, groupId, leaderName }) => {
 		}
 	};
 
-	const handleLikeClick = () => {
+	const handleLikeClick = (e) => {
+		e.stopPropagation();
+
 		if (!isPostLiked) {
 			setIsPostLiked(true);
 			setPostLikesCount((prev) => prev + 1);
@@ -72,14 +79,20 @@ const Feed = ({ post, groupId, leaderName }) => {
 	};
 
 	return (
-		<FeedArticle key={post.postId}>
+		<FeedArticle
+			key={post.postId}
+			onClick={() => dispatch(openFeedDetailModal(post.postId))}
+		>
 			{user.nickname === post.author && (
 				<FeedOption
 					postId={post.postId}
 					groupId={groupId}
 					optionMenuRef={optionMenuRef}
 					isOptionOpen={isOptionOpen}
-					handleOptionClick={() => setIsOptionOpen((prev) => !prev)}
+					handleOptionClick={(e) => {
+						e.stopPropagation();
+						setIsOptionOpen((prev) => !prev);
+					}}
 				/>
 			)}
 			<TopDiv>
@@ -93,7 +106,10 @@ const Feed = ({ post, groupId, leaderName }) => {
 				</InfoDiv>
 			</TopDiv>
 			<BottomDiv>
-				<p>{post.content}</p>
+				<ContentDiv>
+					<p>{post.content}</p>
+				</ContentDiv>
+
 				<IconDiv>
 					<IconItemButton onClick={handleLikeClick}>
 						{isPostLiked ? <FillHeartIcon /> : <EmptyHeartIcon />}
@@ -105,6 +121,20 @@ const Feed = ({ post, groupId, leaderName }) => {
 					</IconItemButton>
 				</IconDiv>
 			</BottomDiv>
+
+			{openedModal === UI_TYPE.FEED_DETAIL_MODAL(post.postId) && (
+				<FeedDetailModal
+					author={post.author}
+					authorImage={post.authorImage}
+					content={post.content}
+					createdAt={useTimeStamp(post.createdAt)}
+					likeCount={postLikesCount}
+					isPostLiked={isPostLiked}
+					commentCount={post.commentCount}
+					leaderName={leaderName}
+					handleLikeClick={handleLikeClick}
+				/>
+			)}
 		</FeedArticle>
 	);
 };

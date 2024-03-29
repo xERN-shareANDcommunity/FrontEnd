@@ -94,6 +94,9 @@ const uiSlice = createSlice({
 			state.warningModalUserInfo = payload;
 			state.openedModal = UI_TYPE.DELETE_MEMBER_WARNING_MODAL;
 		},
+		openFeedDetailModal: (state, { payload }) => {
+			state.openedModal = UI_TYPE.FEED_DETAIL_MODAL(payload);
+		},
 		closeModal: () => {
 			return initialState;
 		},
@@ -124,6 +127,7 @@ export const {
 	openMemberModal,
 	openMemberRequestModal,
 	openDeleteMemberWarningModal,
+	openFeedDetailModal,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
