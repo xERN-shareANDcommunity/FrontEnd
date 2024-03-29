@@ -89,12 +89,14 @@ const FeedDetailModal = ({
 				{comments.length !== 0 &&
 					comments.comment.map((commentInfo) => (
 						<FeedComment
-							key={commentInfo.commendId}
-							commendId={commentInfo.commendId}
+							key={commentInfo.commentId}
+							commendId={commentInfo.commentId}
 							author={commentInfo.author}
 							authorImage={commentInfo.authorImage}
 							updatedAt={commentInfo.updatedAt}
 							content={commentInfo.content}
+							postId={postId}
+							groupId={groupId}
 						/>
 					))}
 			</ContainerDiv>
