@@ -208,7 +208,6 @@ export const changeRequestGroupJoin = createAsyncThunk(
 				method: "POST",
 				url: `/api/group/${groupId}/members/request`,
 				successCode: 200,
-				userInfo: user,
 			},
 			thunkAPI,
 		);
