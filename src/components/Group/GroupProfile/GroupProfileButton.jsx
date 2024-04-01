@@ -113,7 +113,7 @@ const GroupProfileButton = ({
 	if (isGroupRequest !== -1) {
 		return (
 			<ProfileButtonDiv>
-				<ProfileButton className="grayButton">수락 대기 중</ProfileButton>
+				<ProfileButton className="disabledButton">수락 대기 중</ProfileButton>
 				<ProfileWhiteButton
 					onClick={() => dispatch(changeRequestGroupJoin(groupId))}
 				>
