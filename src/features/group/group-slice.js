@@ -124,33 +124,30 @@ const groupSlice = createSlice({
 			.addCase(getGroupInfo.fulfilled, (state, { payload }) => {
 				state.groupInfo = payload;
 			})
-			.addCase(
-				changeRequestGroupJoin.fulfilled,
-				(state, { meta: { arg }, payload }) => {
-					if (payload.data.message === "성공적으로 신청되었습니다.") {
-						const { userId, nickname, profileImage } = payload.user;
+			.addCase(changeRequestGroupJoin.fulfilled, (state, { payload }) => {
+				if (payload.data.message === "성공적으로 신청되었습니다.") {
+					const { userId, nickname, profileImage } = payload.user;
 
-						const requestUserInfo = {
-							accessLevel: "viewer",
-							member: {
-								userId,
-								nickname,
-								image: profileImage,
-								isPendingMember: 1,
-							},
-						};
+					const requestUserInfo = {
+						accessLevel: "viewer",
+						member: {
+							userId,
+							nickname,
+							image: profileImage,
+							isPendingMember: 1,
+						},
+					};
 
-						state.groupRequestMemberList.push(requestUserInfo);
+					state.groupRequestMemberList.push(requestUserInfo);
 
-						toast.success("그룹 신청 완료");
-					} else {
-						state.groupRequestMemberList = state.groupRequestMemberList.filter(
-							(prev) => prev.member.userId === arg,
-						);
-						toast.success("그룹 신청 취소 완료");
-					}
-				},
-			)
+					toast.success("그룹 신청 완료");
+				} else {
+					state.groupRequestMemberList = state.groupRequestMemberList.filter(
+						(prev) => prev.member.userId !== payload.user.userId,
+					);
+					toast.success("그룹 신청 취소 완료");
+				}
+			})
 			.addCase(changeGroupPublicOption.fulfilled, ({ payload }) => {
 				toast.error(payload.error);
 			})
