@@ -89,8 +89,6 @@ const GroupPage = () => {
 			(data) => data.member.userId === user.userId,
 		) !== -1;
 
-	console.log(groupRequestMemberList);
-
 	return (
 		<GroupMain>
 			<GroupProfile
