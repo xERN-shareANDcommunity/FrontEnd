@@ -15,7 +15,6 @@ import {
 	approveGroupJoin,
 	rejectGroupJoin,
 	deleteGroupMember,
-	cancelGroupJoin,
 	changeRequestGroupJoin,
 	changeGroupPublicOption,
 	updateGroupProfile,
@@ -125,8 +124,29 @@ const groupSlice = createSlice({
 			.addCase(getGroupInfo.fulfilled, (state, { payload }) => {
 				state.groupInfo = payload;
 			})
-			.addCase(changeRequestGroupJoin.fulfilled, () => {
-				toast.success("그룹 신청 취소 완료");
+			.addCase(changeRequestGroupJoin.fulfilled, (state, { payload }) => {
+				if (payload.data.message === "성공적으로 신청되었습니다.") {
+					const { userId, nickname, profileImage } = payload.user;
+
+					const requestUserInfo = {
+						accessLevel: "viewer",
+						member: {
+							userId,
+							nickname,
+							image: profileImage,
+							isPendingMember: 1,
+						},
+					};
+
+					state.groupRequestMemberList.push(requestUserInfo);
+
+					toast.success("그룹 신청 완료");
+				} else {
+					state.groupRequestMemberList = state.groupRequestMemberList.filter(
+						(prev) => prev.member.userId !== payload.user.userId,
+					);
+					toast.success("그룹 신청 취소 완료");
+				}
 			})
 			.addCase(changeGroupPublicOption.fulfilled, ({ payload }) => {
 				toast.error(payload.error);
@@ -138,9 +158,6 @@ const groupSlice = createSlice({
 					toast.success("그룹 정보가 수정되었습니다");
 				},
 			)
-			.addCase(cancelGroupJoin.fulfilled, () => {
-				toast.success("그룹 신청 취소 완료");
-			})
 			.addCase(changeGroupOption.fulfilled, () => {})
 			.addCase(delegateGroup.fulfilled, () => {
 				toast.success("그룹장 위임이 완료되었습니다.");

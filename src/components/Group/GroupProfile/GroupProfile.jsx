@@ -14,6 +14,7 @@ const GroupProfile = ({
 	isGroupLeader,
 	isManaging,
 	groupMemberList,
+	isGroupRequest,
 }) => {
 	return (
 		<ContainerDiv>
@@ -37,6 +38,7 @@ const GroupProfile = ({
 				isGroupMember={isGroupMember}
 				isGroupLeader={isGroupLeader}
 				isManaging={isManaging}
+				isGroupRequest={isGroupRequest}
 			/>
 		</ContainerDiv>
 	);

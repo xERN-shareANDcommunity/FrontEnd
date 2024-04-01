@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import GroupDelegateModal from "@/components/Common/GroupModal/GroupDelegateModal/GroupDelegateModal";
 import { AddIcon } from "@/constants/iconConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
+import { changeRequestGroupJoin } from "@/features/group/group-service";
 import { openDelegateGroupModal } from "@/features/ui/ui-slice";
 
 import {
@@ -19,6 +20,7 @@ const GroupProfileButton = ({
 	isGroupMember,
 	isGroupLeader,
 	isManaging,
+	isGroupRequest,
 	// eslint-disable-next-line consistent-return
 }) => {
 	const dispatch = useDispatch();
@@ -93,14 +95,29 @@ const GroupProfileButton = ({
 	}
 
 	// 그룹 멤버가 아닐떄
-	if (!isGroupMember) {
+	if (!isGroupMember && !isGroupRequest) {
 		return (
 			<ProfileButtonDiv>
-				<ProfileWhiteButton>
+				<ProfileWhiteButton
+					onClick={() => dispatch(changeRequestGroupJoin(groupId))}
+				>
 					<>
 						<AddIcon />
 						그룹 참여 요청
 					</>
+				</ProfileWhiteButton>
+			</ProfileButtonDiv>
+		);
+	}
+
+	if (isGroupRequest) {
+		return (
+			<ProfileButtonDiv>
+				<ProfileButton className="disabledButton">수락 대기 중</ProfileButton>
+				<ProfileWhiteButton
+					onClick={() => dispatch(changeRequestGroupJoin(groupId))}
+				>
+					요청 취소
 				</ProfileWhiteButton>
 			</ProfileButtonDiv>
 		);
