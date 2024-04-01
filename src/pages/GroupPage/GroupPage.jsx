@@ -84,9 +84,10 @@ const GroupPage = () => {
 	const leaderName = groupInfo.information.leaderInfo.nickname;
 	const isGroupLeader = groupInfo.accessLevel === "owner";
 	const isGroupMember = groupInfo.accessLevel !== null;
-	const isGroupRequest = groupRequestMemberList.findIndex(
-		(data) => data.member.userId === user.userId,
-	);
+	const isGroupRequest =
+		groupRequestMemberList.findIndex(
+			(data) => data.member.userId === user.userId,
+		) !== -1;
 
 	return (
 		<GroupMain>
