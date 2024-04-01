@@ -95,7 +95,7 @@ const GroupProfileButton = ({
 	}
 
 	// 그룹 멤버가 아닐떄
-	if (!isGroupMember && isGroupRequest === -1) {
+	if (!isGroupMember && !isGroupRequest) {
 		return (
 			<ProfileButtonDiv>
 				<ProfileWhiteButton
@@ -110,7 +110,7 @@ const GroupProfileButton = ({
 		);
 	}
 
-	if (isGroupRequest !== -1) {
+	if (isGroupRequest) {
 		return (
 			<ProfileButtonDiv>
 				<ProfileButton className="disabledButton">수락 대기 중</ProfileButton>
