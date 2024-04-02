@@ -3,10 +3,13 @@ import React, { useState } from "react";
 import moment from "moment";
 import PropTypes from "prop-types";
 
-import { DateDiv, DateContainerDiv } from "./DateAndTime.styles";
-import DatePicker from "../DatePicker";
-import { LabelH3 } from "../ScheduleModal.styles";
-import TimePicker from "../TimePicker";
+import DatePicker from "./DatePicker";
+import TimePicker from "./TimePicker";
+import {
+	LabelH3,
+	DateContainerDiv,
+	DateDiv,
+} from "../ScheduleModal.Shared.styles";
 
 const TIME_PICKER_TYPE = {
 	START: "start",
