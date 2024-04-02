@@ -396,20 +396,3 @@ export const FooterDiv = styled.div`
 	display: flex;
 	justify-content: flex-end;
 `;
-
-// common
-export const LabelH3 = styled.h3`
-	color: ${({ theme: { colors } }) => colors.text_01};
-	font-size: ${({
-		theme: {
-			typography: { size },
-		},
-	}) => size.s2};
-	line-height: 17px;
-	font-weight: ${({
-		theme: {
-			typography: { weight },
-		},
-	}) => weight.medium};
-	margin-bottom: 12px;
-`;

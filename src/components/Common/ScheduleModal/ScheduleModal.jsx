@@ -15,7 +15,7 @@ import { closeModal, setIsLoading } from "@/features/ui/ui-slice";
 import { getSchedule } from "@/utils/calendarUtils";
 import { convertScheduleDataToFormValue } from "@/utils/convertSchedule";
 
-import DateAndTime from "./DateAndTime/DateAndTime";
+import DateAndTime from "./DateAndTime";
 import Repeat from "./Repeat/Repeat";
 import RepeatDetail, { getRecurringString } from "./RepeatDetail/RepeatDetail";
 import {

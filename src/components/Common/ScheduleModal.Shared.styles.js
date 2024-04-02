@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ScheduleModalLayoutDiv = styled.div`
-	width: 550px;
+	width: ${({ isProposal }) => (isProposal ? 672 : 550)}px;
 	display: flex;
 	flex-direction: column;
 	font-family: "Inter", sans-serif;
@@ -59,6 +59,40 @@ export const DetailTextarea = styled.textarea`
 	margin-bottom: ${({ theme }) => theme.spacing.padding.medium}px;
 	&::placeholder {
 		color: ${({ theme }) => theme.colors.disabled_text};
+	}
+`;
+
+export const LabelH3 = styled.h3`
+	color: ${({ theme: { colors } }) => colors.text_01};
+	font-size: ${({
+		theme: {
+			typography: { size },
+		},
+	}) => size.s2};
+	line-height: 17px;
+	font-weight: ${({
+		theme: {
+			typography: { weight },
+		},
+	}) => weight.medium};
+	margin-bottom: 12px;
+`;
+
+// date and time
+export const DateContainerDiv = styled.div`
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 12px;
+`;
+export const DateDiv = styled.div`
+	display: flex;
+	gap: 15px;
+	width: 45%;
+
+	&:last-child {
+		justify-content: flex-end;
 	}
 `;
 
