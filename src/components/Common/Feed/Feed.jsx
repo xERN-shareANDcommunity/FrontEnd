@@ -132,7 +132,6 @@ const Feed = ({ post, groupId, leaderName }) => {
 					createdAt={useTimeStamp(post.createdAt)}
 					likeCount={postLikesCount}
 					isPostLiked={isPostLiked}
-					commentCount={post.commentCount}
 					leaderName={leaderName}
 					handleLikeClick={handleLikeClick}
 				/>

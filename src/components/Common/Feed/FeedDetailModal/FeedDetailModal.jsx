@@ -37,7 +37,6 @@ const FeedDetailModal = ({
 	createdAt,
 	likeCount,
 	isPostLiked,
-	commentCount,
 	leaderName,
 	handleLikeClick,
 }) => {
@@ -65,6 +64,7 @@ const FeedDetailModal = ({
 	const handleCommentButton = () => {
 		if (commentBtnText === "등록하기") {
 			dispatch(postComment({ groupId, postId, content: commentContent }));
+			setCommentContent("");
 		} else {
 			dispatch(
 				putComment({ groupId, postId, commentId, content: commentContent }),
@@ -110,7 +110,7 @@ const FeedDetailModal = ({
 							</IconItemButton>
 							<IconItemButton>
 								<CommentIcon />
-								<span>{commentCount}</span>
+								<span>{comments.length}</span>
 							</IconItemButton>
 						</IconDiv>
 					</ContentDiv>
