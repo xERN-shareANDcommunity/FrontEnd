@@ -55,7 +55,7 @@ export const putComment = createAsyncThunk(
 			{
 				method: "PUT",
 				url: `/api/group/${groupId}/post/${postId}/comment/${commentId}`,
-				data: content,
+				data: { content },
 				successCode: 200,
 			},
 			thunkAPI,

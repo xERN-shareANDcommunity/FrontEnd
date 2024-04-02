@@ -32,7 +32,9 @@ const commentSlice = createSlice({
 				toast.success("댓글이 삭제되었습니다.");
 			})
 			.addCase(putComment.fulfilled, (state, { payload }) => {
-				console.log(payload);
+				state.comments[
+					state.comments.findIndex((el) => el.commentId === payload.commentId)
+				].content = payload.content;
 				toast.success("댓글이 수정되었습니다.");
 			});
 	},

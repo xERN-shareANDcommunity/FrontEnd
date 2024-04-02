@@ -17,6 +17,7 @@ const FeedComment = ({
 	authorImage,
 	updatedAt,
 	content,
+	handleEditCommentClick,
 }) => {
 	const { user } = useSelector((state) => state.auth);
 
@@ -44,6 +45,8 @@ const FeedComment = ({
 					handleOptionClick={() => setIsOptionOpen((prev) => !prev)}
 					isComment
 					commentId={commentId}
+					content={content}
+					handleEditCommentClick={handleEditCommentClick}
 				/>
 			)}
 		</CommentDiv>

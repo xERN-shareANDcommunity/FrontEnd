@@ -9,7 +9,11 @@ import {
 	EmptyHeartIcon,
 	FillHeartIcon,
 } from "@/constants/iconConstants";
-import { getComments, postComment } from "@/features/comment/comment-service";
+import {
+	getComments,
+	postComment,
+	putComment,
+} from "@/features/comment/comment-service";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import {
@@ -43,11 +47,33 @@ const FeedDetailModal = ({
 	const { user } = useSelector((state) => state.auth);
 
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
+
 	const [commentContent, setCommentContent] = useState("");
+	const [commentId, setCommentId] = useState(0);
+	const [commentBtnText, setCommentBtnText] = useState("등록하기");
 
 	const optionMenuRef = useRef();
 
 	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
+
+	const handleEditCommentClick = (editCommentId, prevContent) => {
+		setCommentId(editCommentId);
+		setCommentContent(prevContent);
+		setCommentBtnText("수정하기");
+	};
+
+	const handleCommentButton = () => {
+		if (commentBtnText === "등록하기") {
+			dispatch(postComment({ groupId, postId, content: commentContent }));
+		} else {
+			dispatch(
+				putComment({ groupId, postId, commentId, content: commentContent }),
+			);
+			setCommentBtnText("등록하기");
+			setCommentContent("");
+			setCommentId(0);
+		}
+	};
 
 	useEffect(() => {
 		dispatch(getComments({ groupId, postId }));
@@ -102,6 +128,7 @@ const FeedDetailModal = ({
 								content={commentInfo.content}
 								postId={postId}
 								groupId={groupId}
+								handleEditCommentClick={handleEditCommentClick}
 							/>
 						))}
 				</CommentDiv>
@@ -115,15 +142,8 @@ const FeedDetailModal = ({
 							value={commentContent}
 							onChange={(e) => setCommentContent(e.target.value)}
 						/>
-						<button
-							type="button"
-							onClick={() =>
-								dispatch(
-									postComment({ groupId, postId, content: commentContent }),
-								)
-							}
-						>
-							등록하기
+						<button type="button" onClick={handleCommentButton}>
+							{commentBtnText}
 						</button>
 					</CommentInputContentDiv>
 				</CommentInputDiv>
