@@ -45,3 +45,55 @@ export const ContentDiv = styled.div`
 		width: 1020px;
 	}
 `;
+
+export const CommentInputDiv = styled.div`
+	padding: 24px 0;
+	display: flex;
+	gap: 10px;
+
+	& > img {
+		width: 58px;
+		height: 58px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+`;
+
+export const CommentInputContentDiv = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	& > h3 {
+		font-size: 14px;
+		font-weight: ${({ theme: { typography } }) => typography.weight.medium};
+		color: ${({ theme: { colors } }) => colors.text_01};
+	}
+
+	& > textarea {
+		margin-top: 10px;
+		height: 120px;
+		resize: none;
+		border: 1px solid ${({ theme: { colors } }) => colors.text_01};
+		outline: none;
+		border-radius: 10px;
+		padding: 10px 18px;
+		font-family: Inter;
+		font-size: 12px;
+		color: ${({ theme: { colors } }) => colors.text_03};
+	}
+
+	& > button {
+		margin-top: 20px;
+		align-self: flex-end;
+		width: 132px;
+		height: 40px;
+		background-color: ${({ theme: { colors } }) => colors.primary};
+		color: ${({ theme: { colors } }) => colors.white};
+		text-align: center;
+		font-size: 14px;
+		font-weight: ${({ theme: { typography } }) => typography.weight.medium};
+		border-radius: 5px;
+		cursor: pointer;
+	}
+`;

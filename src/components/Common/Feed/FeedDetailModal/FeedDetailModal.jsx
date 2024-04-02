@@ -17,6 +17,8 @@ import {
 	FeedDiv,
 	ProfileDiv,
 	ContentDiv,
+	CommentInputDiv,
+	CommentInputContentDiv,
 } from "./FeedDetailModal.style";
 import { IconDiv, IconItemButton } from "../Feed.styles";
 import FeedComment from "../FeedComment/FeedComment";
@@ -99,6 +101,15 @@ const FeedDetailModal = ({
 							groupId={groupId}
 						/>
 					))}
+
+				<CommentInputDiv>
+					<img src={authorImage} alt="profileImg" />
+					<CommentInputContentDiv>
+						<h3>{author}</h3>
+						<textarea placeholder="댓글을 입력하세요" />
+						<button type="button">등록하기</button>
+					</CommentInputContentDiv>
+				</CommentInputDiv>
 			</ContainerDiv>
 		</BaseModal>
 	);
