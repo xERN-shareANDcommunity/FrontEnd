@@ -17,6 +17,22 @@ export const getComments = createAsyncThunk(
 	},
 );
 
+export const postComment = createAsyncThunk(
+	"comment/postComment",
+	async ({ groupId, postId, content }, thunkAPI) => {
+		const data = await commonThunk(
+			{
+				method: "POST",
+				url: `/api/group/${groupId}/post/${postId}/comment`,
+				data: { content },
+				successCode: 201,
+			},
+			thunkAPI,
+		);
+		return data;
+	},
+);
+
 export const deleteComment = createAsyncThunk(
 	"comment/deleteComment",
 	async ({ groupId, postId, commentId }, thunkAPI) => {

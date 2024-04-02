@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
-	margin-top: 56px;
+	margin-top: 20px;
 	padding: 0 34px;
+	max-height: 728px;
 `;
 
 export const FeedDiv = styled.div`
@@ -46,8 +47,13 @@ export const ContentDiv = styled.div`
 	}
 `;
 
+export const CommentDiv = styled.div`
+	max-height: 322px;
+	overflow-y: scroll;
+`;
+
 export const CommentInputDiv = styled.div`
-	padding: 24px 0;
+	padding-top: 24px;
 	display: flex;
 	gap: 10px;
 

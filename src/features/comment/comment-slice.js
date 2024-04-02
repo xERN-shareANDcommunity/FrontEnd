@@ -2,7 +2,12 @@ import { toast } from "react-toastify";
 
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getComments, deleteComment, putComment } from "./comment-service";
+import {
+	getComments,
+	deleteComment,
+	putComment,
+	postComment,
+} from "./comment-service";
 
 const initialState = {
 	comments: [],
@@ -16,6 +21,9 @@ const commentSlice = createSlice({
 		builder
 			.addCase(getComments.fulfilled, (state, { payload }) => {
 				state.comments = payload.comment;
+			})
+			.addCase(postComment.fulfilled, (state, { payload }) => {
+				state.comments.push(payload);
 			})
 			.addCase(deleteComment.fulfilled, (state, { meta: { arg } }) => {
 				state.comments = state.comments.filter(

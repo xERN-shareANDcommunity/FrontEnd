@@ -9,7 +9,7 @@ import {
 	EmptyHeartIcon,
 	FillHeartIcon,
 } from "@/constants/iconConstants";
-import { getComments } from "@/features/comment/comment-service";
+import { getComments, postComment } from "@/features/comment/comment-service";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import {
@@ -17,6 +17,7 @@ import {
 	FeedDiv,
 	ProfileDiv,
 	ContentDiv,
+	CommentDiv,
 	CommentInputDiv,
 	CommentInputContentDiv,
 } from "./FeedDetailModal.style";
@@ -42,6 +43,7 @@ const FeedDetailModal = ({
 	const { user } = useSelector((state) => state.auth);
 
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
+	const [commentContent, setCommentContent] = useState("");
 
 	const optionMenuRef = useRef();
 
@@ -88,26 +90,41 @@ const FeedDetailModal = ({
 					</ContentDiv>
 				</FeedDiv>
 
-				{comments.length !== 0 &&
-					comments.map((commentInfo) => (
-						<FeedComment
-							key={commentInfo.commentId}
-							commentId={commentInfo.commentId}
-							author={commentInfo.author}
-							authorImage={commentInfo.authorImage}
-							updatedAt={commentInfo.updatedAt}
-							content={commentInfo.content}
-							postId={postId}
-							groupId={groupId}
-						/>
-					))}
+				<CommentDiv>
+					{comments.length !== 0 &&
+						comments.map((commentInfo) => (
+							<FeedComment
+								key={commentInfo.commentId}
+								commentId={commentInfo.commentId}
+								author={commentInfo.author}
+								authorImage={commentInfo.authorImage}
+								updatedAt={commentInfo.updatedAt}
+								content={commentInfo.content}
+								postId={postId}
+								groupId={groupId}
+							/>
+						))}
+				</CommentDiv>
 
 				<CommentInputDiv>
 					<img src={authorImage} alt="profileImg" />
 					<CommentInputContentDiv>
 						<h3>{author}</h3>
-						<textarea placeholder="댓글을 입력하세요" />
-						<button type="button">등록하기</button>
+						<textarea
+							placeholder="댓글을 입력하세요"
+							value={commentContent}
+							onChange={(e) => setCommentContent(e.target.value)}
+						/>
+						<button
+							type="button"
+							onClick={() =>
+								dispatch(
+									postComment({ groupId, postId, content: commentContent }),
+								)
+							}
+						>
+							등록하기
+						</button>
 					</CommentInputContentDiv>
 				</CommentInputDiv>
 			</ContainerDiv>

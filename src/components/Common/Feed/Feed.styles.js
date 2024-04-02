@@ -20,6 +20,7 @@ export const OptionDiv = styled.div`
 export const OptionMenuDiv = styled.div`
 	position: absolute;
 	z-index: 2;
+	right: 0;
 
 	& > ul > li {
 		width: 60px;
