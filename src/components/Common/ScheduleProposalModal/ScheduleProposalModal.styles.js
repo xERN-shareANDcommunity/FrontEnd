@@ -1,93 +1,98 @@
 import styled from "styled-components";
 
-export const RadiosDiv = styled.div`
-	margin-bottom: 20px;
-	height: 22px;
-	display: flex;
-	gap: 22px;
-	align-items: center;
-
-	& > label {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		cursor: pointer;
-
-		& > input[type="radio"] {
-			margin: 0;
-			width: 22px;
-			height: 22px;
-			accent-color: ${({ theme: { colors } }) => colors.text_01};
-			font-size: ${({
-				theme: {
-					typography: { size },
-				},
-			}) => size.s2};
-			line-height: 22px;
-			font-weight: ${({
-				theme: {
-					typography: { weight },
-				},
-			}) => weight.medium};
-		}
-	}
-`;
-
 export const ProposalParamsWrapperDiv = styled.div`
-	height: 33px;
 	display: flex;
-	justify-content: space-between;
-	align-items: stretch;
+	flex-direction: column;
+	margin-bottom: 18px;
 
-	& > .content {
+	& > .durationAndSubmit {
 		display: flex;
-		align-items: stretch;
-		gap: 18px;
-
-		& > h3 {
-			line-height: 33px;
-			font-size: ${({
-				theme: {
-					typography: { size },
-				},
-			}) => size.s2};
-			color: ${({ theme: { colors } }) => colors.text_01};
-		}
-
+		justify-content: space-between;
 		& > button {
-			background-color: ${({ theme: { colors } }) => colors.bg_01};
+			width: 184px;
+			height: 33px;
+			border-radius: 5px;
+			background-color: ${({ theme: { colors } }) => colors.primary_light};
 			text-align: center;
 			font-size: ${({
 				theme: {
 					typography: { size },
 				},
-			}) => size.s1};
-			color: ${({ theme: { colors } }) => colors.text_02};
+			}) => size.s2};
+			color: ${({ theme: { colors } }) => colors.white};
+			cursor: pointer;
 
-			&:first-of-type {
-				width: 188px;
-			}
-
-			&:last-of-type {
-				width: 107px;
+			&:disabled {
+				background-color: ${({ theme: { colors } }) => colors.btn_02};
 			}
 		}
 	}
+`;
 
-	& > button {
-		width: 96px;
-		border-radius: 5px;
-		background-color: ${({ theme: { colors } }) => colors.primary_light};
-		text-align: center;
-		font-size: ${({
-			theme: {
-				typography: { size },
-			},
-		}) => size.s2};
-		color: ${({ theme: { colors } }) => colors.white};
+export const RecommendedProposalsDiv = styled.div`
+	padding-inline: 14px;
+	width: 100%;
 
-		&:disabled {
-			background-color: ${({ theme: { colors } }) => colors.btn_02};
+	& > div {
+		margin-bottom: 6px;
+		&:last-child {
+			margin-bottom: 12px;
+		}
+		height: 35px;
+		border: 1px solid ${({ theme: { colors } }) => colors.primary};
+		padding-left: 20px;
+		padding-right: 10px;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		& > div {
+			display: flex;
+			gap: 26px;
+
+			& > button {
+				cursor: pointer;
+				border: 1px solid ${({ theme: { colors } }) => colors.disabled_text};
+				border-radius: 50%;
+				width: 20px;
+				height: 20px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				& > div {
+					width: 12px;
+					height: 12px;
+					background-color: ${({ theme: { colors } }) => colors.text_01};
+					border-radius: 50%;
+				}
+			}
+
+			& > span {
+				line-height: 20px;
+				font-size: ${({
+					theme: {
+						typography: { size },
+					},
+				}) => size.s2};
+				font-weight: ${({
+					theme: {
+						typography: { weight },
+					},
+				}) => weight.medium};
+			}
+		}
+
+		& > button {
+			min-width: 38px;
+			height: 17px;
+			background-color: ${({ theme: { colors } }) => colors.primary};
+			border-radius: 10px;
+			color: ${({ theme: { colors } }) => colors.white};
+			text-align: center;
+			font-size: 10px;
+			line-height: 17px;
 		}
 	}
 `;
