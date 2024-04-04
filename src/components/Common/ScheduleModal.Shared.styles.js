@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ScheduleModalLayoutDiv = styled.div`
-	width: ${({ isProposal }) => (isProposal ? 672 : 550)}px;
+	width: 550px;
 	display: flex;
 	flex-direction: column;
 	font-family: "Inter", sans-serif;
@@ -69,6 +69,22 @@ export const LabelH3 = styled.h3`
 			typography: { size },
 		},
 	}) => size.s2};
+	line-height: 17px;
+	font-weight: ${({
+		theme: {
+			typography: { weight },
+		},
+	}) => weight.medium};
+	margin-bottom: 12px;
+`;
+
+export const LabelH4 = styled.h4`
+	color: ${({ theme: { colors } }) => colors.text_01};
+	font-size: ${({
+		theme: {
+			typography: { size },
+		},
+	}) => size.s1};
 	line-height: 17px;
 	font-weight: ${({
 		theme: {

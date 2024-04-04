@@ -9,6 +9,7 @@ import {
 	LabelH3,
 	DateContainerDiv,
 	DateDiv,
+	LabelH4,
 } from "../ScheduleModal.Shared.styles";
 
 const TIME_PICKER_TYPE = {
@@ -18,6 +19,7 @@ const TIME_PICKER_TYPE = {
 };
 
 const DateAndTime = ({
+	isProposal = false,
 	startDate,
 	startTime,
 	endDate,
@@ -34,7 +36,8 @@ const DateAndTime = ({
 
 	return (
 		<>
-			<LabelH3>날짜 및 시간</LabelH3>
+			<LabelH3>{isProposal ? "일정 추천" : "날짜 및 시간"}</LabelH3>
+			{isProposal && <LabelH4>일정 검색 범위</LabelH4>}
 			<DateContainerDiv>
 				<DateDiv>
 					<DatePicker
@@ -77,6 +80,7 @@ const DateAndTime = ({
 };
 
 DateAndTime.propTypes = {
+	isProposal: PropTypes.bool.isRequired,
 	startDate: PropTypes.string.isRequired,
 	startTime: PropTypes.string.isRequired,
 	endDate: PropTypes.string.isRequired,
