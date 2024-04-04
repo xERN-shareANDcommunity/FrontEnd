@@ -8,6 +8,7 @@ import moment from "moment";
 import { getScheduleProposals } from "@/features/schedule/schedule-service";
 import { getTimeString } from "@/utils/calendarUtils";
 
+import DurationPicker from "./DurationPicker/DurationPicker";
 import {
 	ProposalParamsWrapperDiv,
 	RecommendedProposalsDiv,
@@ -16,6 +17,7 @@ import FormModal from "../Modal/FormModal/FormModal";
 import DateAndTime from "../ScheduleModal/DateAndTime";
 import {
 	DetailTextarea,
+	LabelH4,
 	ScheduleModalLayoutDiv,
 	SubmitButton,
 	TitleInput,
@@ -146,19 +148,28 @@ const ScheduleProposalModal = () => {
 						onDateChange={handleDateValueChange}
 						onTimeChange={handleTimeValueChange}
 					/>
-					<button
-						type="button"
-						disabled={
-							!proposalParams.startDateStr ||
-							!proposalParams.startTimeStr ||
-							!proposalParams.endDateStr ||
-							!proposalParams.endTimeStr ||
-							!proposalParams.minDuration
-						}
-						onClick={handleGettingProposal}
-					>
-						추천받기
-					</button>
+					<LabelH4>일정 최소 구간</LabelH4>
+					<div className="durationAndSubmit">
+						<DurationPicker
+							value={proposalParams.minDuration}
+							onChange={(value) =>
+								setProposalParams((prev) => ({ ...prev, minDuration: value }))
+							}
+						/>
+						<button
+							type="button"
+							disabled={
+								!proposalParams.startDateStr ||
+								!proposalParams.startTimeStr ||
+								!proposalParams.endDateStr ||
+								!proposalParams.endTimeStr ||
+								!proposalParams.minDuration
+							}
+							onClick={handleGettingProposal}
+						>
+							추천받기
+						</button>
+					</div>
 				</ProposalParamsWrapperDiv>
 				<RecommendedProposalsDiv>
 					{recommendedScheduleProposals.map((proposals, index) => (
