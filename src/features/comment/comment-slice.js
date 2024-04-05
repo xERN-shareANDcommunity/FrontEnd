@@ -16,7 +16,11 @@ const initialState = {
 const commentSlice = createSlice({
 	name: "comment",
 	initialState,
-	reducers: {},
+	reducers: {
+		resetComments: (state) => {
+			state.comments = [];
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getComments.fulfilled, (state, { payload }) => {
@@ -39,5 +43,7 @@ const commentSlice = createSlice({
 			});
 	},
 });
+
+export const { resetComments } = commentSlice.actions;
 
 export default commentSlice.reducer;

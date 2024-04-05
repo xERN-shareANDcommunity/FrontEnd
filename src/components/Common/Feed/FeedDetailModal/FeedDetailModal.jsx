@@ -14,6 +14,7 @@ import {
 	postComment,
 	putComment,
 } from "@/features/comment/comment-service";
+import { resetComments } from "@/features/comment/comment-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import {
@@ -82,6 +83,10 @@ const FeedDetailModal = ({
 
 	useEffect(() => {
 		dispatch(getComments({ groupId, postId }));
+
+		return () => {
+			dispatch(resetComments());
+		};
 	}, []);
 
 	return (
