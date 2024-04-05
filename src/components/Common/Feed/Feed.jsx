@@ -79,10 +79,7 @@ const Feed = ({ post, groupId, leaderName }) => {
 	};
 
 	return (
-		<FeedArticle
-			key={post.postId}
-			onClick={() => dispatch(openFeedDetailModal(post.postId))}
-		>
+		<FeedArticle onClick={() => dispatch(openFeedDetailModal(post.postId))}>
 			{user.nickname === post.author && (
 				<FeedOption
 					postId={post.postId}

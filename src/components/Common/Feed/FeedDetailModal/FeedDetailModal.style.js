@@ -50,6 +50,12 @@ export const ContentDiv = styled.div`
 export const CommentDiv = styled.div`
 	max-height: 322px;
 	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 `;
 
 export const CommentInputDiv = styled.div`

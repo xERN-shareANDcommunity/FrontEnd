@@ -28,6 +28,11 @@ import {
 import { IconDiv, IconItemButton } from "../Feed.styles";
 import FeedComment from "../FeedComment/FeedComment";
 
+const COMMENT_BTN_TEXT = {
+	ADD: "등록하기",
+	EDIT: "수정하기",
+};
+
 const FeedDetailModal = ({
 	groupId,
 	postId,
@@ -49,7 +54,7 @@ const FeedDetailModal = ({
 
 	const [commentContent, setCommentContent] = useState("");
 	const [commentId, setCommentId] = useState(0);
-	const [commentBtnText, setCommentBtnText] = useState("등록하기");
+	const [commentBtnText, setCommentBtnText] = useState(COMMENT_BTN_TEXT.ADD);
 
 	const optionMenuRef = useRef();
 
@@ -58,18 +63,18 @@ const FeedDetailModal = ({
 	const handleEditCommentClick = (editCommentId, prevContent) => {
 		setCommentId(editCommentId);
 		setCommentContent(prevContent);
-		setCommentBtnText("수정하기");
+		setCommentBtnText(COMMENT_BTN_TEXT.EDIT);
 	};
 
 	const handleCommentButton = () => {
-		if (commentBtnText === "등록하기") {
+		if (commentBtnText === COMMENT_BTN_TEXT.ADD) {
 			dispatch(postComment({ groupId, postId, content: commentContent }));
 			setCommentContent("");
 		} else {
 			dispatch(
 				putComment({ groupId, postId, commentId, content: commentContent }),
 			);
-			setCommentBtnText("등록하기");
+			setCommentBtnText(COMMENT_BTN_TEXT.ADD);
 			setCommentContent("");
 			setCommentId(0);
 		}
@@ -84,7 +89,7 @@ const FeedDetailModal = ({
 			<ContainerDiv>
 				<FeedDiv>
 					<ProfileDiv>
-						<img src={authorImage} alt="profileImg" />
+						<img src={authorImage} alt={`${author}님의 프로필 이미지`} />
 						<h3>
 							{author}
 							{author === leaderName && <CrownIcon />}
@@ -142,7 +147,7 @@ const FeedDetailModal = ({
 							value={commentContent}
 							onChange={(e) => setCommentContent(e.target.value)}
 						/>
-						<button type="button" onClick={handleCommentButton}>
+						<button type="submit" onClick={handleCommentButton}>
 							{commentBtnText}
 						</button>
 					</CommentInputContentDiv>
