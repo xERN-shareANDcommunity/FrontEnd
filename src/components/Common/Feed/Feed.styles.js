@@ -37,6 +37,12 @@ export const OptionMenuDiv = styled.div`
 			border-bottom: none;
 			color: ${({ theme: { colors } }) => colors.text_01};
 		}
+
+		& > button {
+			width: 100%;
+			height: 100%;
+			text-align: center;
+		}
 	}
 `;
 
