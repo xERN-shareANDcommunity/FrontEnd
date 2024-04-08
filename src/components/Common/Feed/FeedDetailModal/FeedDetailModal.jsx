@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import FeedOption from "@/components/Common/Feed/FeedOption";
-import BaseModal from "@/components/Common/Modal/BaseModal";
+import FormModal from "@/components/Common/Modal/FormModal/FormModal";
 import {
 	CrownIcon,
 	CommentIcon,
@@ -63,7 +63,7 @@ const FeedDetailModal = ({
 	}, []);
 
 	return (
-		<BaseModal>
+		<FormModal isEmpty={commentContent.trim() === ""}>
 			<ContainerDiv>
 				<FeedDiv>
 					<ProfileDiv>
@@ -130,7 +130,7 @@ const FeedDetailModal = ({
 					</CommentInputContentDiv>
 				</CommentInputDiv>
 			</ContainerDiv>
-		</BaseModal>
+		</FormModal>
 	);
 };
 
