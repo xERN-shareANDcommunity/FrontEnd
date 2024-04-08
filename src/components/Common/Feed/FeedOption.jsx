@@ -15,7 +15,6 @@ const FeedOption = ({
 	handleOptionClick,
 	isComment,
 	commentId,
-	content,
 	handleEditCommentClick,
 }) => {
 	const dispatch = useDispatch();
@@ -38,9 +37,7 @@ const FeedOption = ({
 						<li>
 							<button
 								type="button"
-								onClick={() =>
-									isComment && handleEditCommentClick(commentId, content)
-								}
+								onClick={isComment && handleEditCommentClick}
 							>
 								수정
 							</button>

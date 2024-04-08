@@ -62,6 +62,7 @@ export const CommentInputDiv = styled.div`
 	padding-top: 24px;
 	display: flex;
 	gap: 10px;
+	border-top: 1px solid ${({ theme: { colors } }) => colors.text_03};
 
 	& > img {
 		width: 58px;

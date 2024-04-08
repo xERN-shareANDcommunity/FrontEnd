@@ -9,11 +9,7 @@ import {
 	EmptyHeartIcon,
 	FillHeartIcon,
 } from "@/constants/iconConstants";
-import {
-	getComments,
-	postComment,
-	putComment,
-} from "@/features/comment/comment-service";
+import { getComments, postComment } from "@/features/comment/comment-service";
 import { resetComments } from "@/features/comment/comment-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
@@ -28,11 +24,6 @@ import {
 } from "./FeedDetailModal.style";
 import { IconDiv, IconItemButton } from "../Feed.styles";
 import FeedComment from "../FeedComment/FeedComment";
-
-const COMMENT_BTN_TEXT = {
-	ADD: "등록하기",
-	EDIT: "수정하기",
-};
 
 const FeedDetailModal = ({
 	groupId,
@@ -52,33 +43,15 @@ const FeedDetailModal = ({
 	const { user } = useSelector((state) => state.auth);
 
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
-
 	const [commentContent, setCommentContent] = useState("");
-	const [commentId, setCommentId] = useState(0);
-	const [commentBtnText, setCommentBtnText] = useState(COMMENT_BTN_TEXT.ADD);
 
 	const optionMenuRef = useRef();
 
 	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
 
-	const handleEditCommentClick = (editCommentId, prevContent) => {
-		setCommentId(editCommentId);
-		setCommentContent(prevContent);
-		setCommentBtnText(COMMENT_BTN_TEXT.EDIT);
-	};
-
-	const handleCommentButton = () => {
-		if (commentBtnText === COMMENT_BTN_TEXT.ADD) {
-			dispatch(postComment({ groupId, postId, content: commentContent }));
-			setCommentContent("");
-		} else {
-			dispatch(
-				putComment({ groupId, postId, commentId, content: commentContent }),
-			);
-			setCommentBtnText(COMMENT_BTN_TEXT.ADD);
-			setCommentContent("");
-			setCommentId(0);
-		}
+	const handleAddComment = () => {
+		dispatch(postComment({ groupId, postId, content: commentContent }));
+		setCommentContent("");
 	};
 
 	useEffect(() => {
@@ -138,7 +111,6 @@ const FeedDetailModal = ({
 								content={commentInfo.content}
 								postId={postId}
 								groupId={groupId}
-								handleEditCommentClick={handleEditCommentClick}
 							/>
 						))}
 				</CommentDiv>
@@ -152,8 +124,8 @@ const FeedDetailModal = ({
 							value={commentContent}
 							onChange={(e) => setCommentContent(e.target.value)}
 						/>
-						<button type="submit" onClick={handleCommentButton}>
-							{commentBtnText}
+						<button type="submit" onClick={handleAddComment}>
+							등록
 						</button>
 					</CommentInputContentDiv>
 				</CommentInputDiv>
