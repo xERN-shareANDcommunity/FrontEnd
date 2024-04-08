@@ -16,6 +16,7 @@ import EmptyMyGroupIcon from "@/assets/icon/ic-empty-my-group.svg";
 import CommentIcon from "@/assets/icon/ic-feed-comment.svg";
 import EmptyHeartIcon from "@/assets/icon/ic-feed-heart-empty.svg";
 import FillHeartIcon from "@/assets/icon/ic-feed-heart-fill.svg";
+import FeedImgIcon from "@/assets/icon/ic-feed-img-upload.svg";
 import OptionThreeDotIcon from "@/assets/icon/ic-feed-option.svg";
 import GoogleLogoIcon from "@/assets/icon/ic-google-logo.svg";
 import AddIcon from "@/assets/icon/ic-group-add.svg";
@@ -80,4 +81,5 @@ export {
 	EmptyMyGroupIcon,
 	EmptySearchResultIcon,
 	EmptyGroupListIcon,
+	FeedImgIcon,
 };
