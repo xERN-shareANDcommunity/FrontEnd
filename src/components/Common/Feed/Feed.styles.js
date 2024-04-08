@@ -94,6 +94,12 @@ export const ContentDiv = styled.div`
 		font-size: ${({ theme: { typography } }) => typography.size.s1};
 		line-height: normal;
 	}
+
+	& > img {
+		width: 90%;
+		height: 90%;
+		object-fit: cover;
+	}
 `;
 
 export const IconDiv = styled.div`

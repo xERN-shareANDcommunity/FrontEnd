@@ -113,8 +113,8 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 			<BottomDiv>
 				<ContentDiv>
 					<p>{post.content}</p>
+					{post.image && <img src={post.image} alt="postImg" />}
 				</ContentDiv>
-
 				<IconDiv>
 					<IconItemButton onClick={handleLikeClick}>
 						{isPostLiked ? <FillHeartIcon /> : <EmptyHeartIcon />}

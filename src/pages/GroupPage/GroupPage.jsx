@@ -105,7 +105,7 @@ const GroupPage = () => {
 						<SecretFeed />
 					) : (
 						<FeedDiv>
-							{isGroupMember && <UploadFeed />}
+							{isGroupMember && <UploadFeed groupId={groupId} />}
 							<GroupTitle />
 							<GroupFeed groupId={groupId} leaderId={leaderId} />
 						</FeedDiv>

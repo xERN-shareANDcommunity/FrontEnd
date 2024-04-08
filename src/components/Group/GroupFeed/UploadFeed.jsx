@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { FeedImgIcon } from "@/constants/iconConstants";
+import { createPost } from "@/features/post/post-service";
 
 import {
 	UploadSection,
@@ -10,10 +11,40 @@ import {
 	UploadButton,
 } from "./UploadFeed.styles";
 
-const UploadFeed = () => {
+const UploadFeed = ({ groupId }) => {
+	const dispatch = useDispatch();
+
 	const { user } = useSelector((state) => state.auth);
 
 	const [content, setContent] = useState("");
+	const [profileImg, setProfileImg] = useState("");
+
+	const handleChangeImg = (e) => {
+		const file = e.target.files[0];
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onloadend = () => {
+			setProfileImg(file);
+		};
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		const formData = new FormData();
+
+		const data = {
+			content,
+		};
+
+		formData.append("data", JSON.stringify(data));
+
+		formData.append("image1", profileImg);
+
+		dispatch(createPost({ groupId, formData }));
+		setContent("");
+		setProfileImg("");
+	};
 
 	return (
 		<UploadSection>
@@ -31,9 +62,15 @@ const UploadFeed = () => {
 						<p>이미지 등록하기</p>
 					</ImgAddDiv>
 				</label>
-				<input type="file" id="feedImg" onChange={() => {}} />
+				<input type="file" id="feedImg" onChange={handleChangeImg} />
 			</TopDiv>
-			<UploadButton disabled>업로드</UploadButton>
+			<UploadButton
+				type="submit"
+				disabled={content.trim() === ""}
+				onClick={handleSubmit}
+			>
+				업로드
+			</UploadButton>
 		</UploadSection>
 	);
 };

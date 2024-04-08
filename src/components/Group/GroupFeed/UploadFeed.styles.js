@@ -66,8 +66,14 @@ export const UploadButton = styled.button`
 	height: 40px;
 	text-align: center;
 	border-radius: 5px;
-	background-color: ${({ theme: { colors } }) => colors.btn_02};
+	background-color: ${({ theme: { colors } }) => colors.primary};
 	color: ${({ theme: { colors } }) => colors.white};
 	font-size: ${({ theme: { typography } }) => typography.size.s2};
 	font-weight: ${({ theme: { typography } }) => typography.weight.medium};
+	cursor: pointer;
+
+	&:disabled {
+		background-color: ${({ theme: { colors } }) => colors.btn_02};
+		color: ${({ theme: { colors } }) => colors.white};
+	}
 `;
