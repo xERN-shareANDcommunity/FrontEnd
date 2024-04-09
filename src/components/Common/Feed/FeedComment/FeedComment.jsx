@@ -30,8 +30,19 @@ const FeedComment = ({
 	const [isEdit, setIsEdit] = useState(false);
 
 	const optionMenuRef = useRef();
+	const commentBoxRef = useRef(null);
 
 	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
+
+	const handleEditCommentMenuClick = () => {
+		commentBoxRef.current.scrollIntoView({
+			behavior: "smooth",
+			block: "center",
+		});
+
+		setIsOptionOpen(false);
+		setIsEdit(true);
+	};
 
 	const handleEditComment = () => {
 		dispatch(
@@ -48,7 +59,7 @@ const FeedComment = ({
 	return (
 		<CommentDiv>
 			<img src={authorImage} alt="profileImg" />
-			<CommentContentDiv>
+			<CommentContentDiv ref={commentBoxRef}>
 				<h3>{author}</h3>
 				<h4>{useTimeStamp(updatedAt)}</h4>
 
@@ -89,10 +100,7 @@ const FeedComment = ({
 					handleOptionClick={() => setIsOptionOpen((prev) => !prev)}
 					isComment
 					commentId={commentId}
-					handleEditCommentClick={() => {
-						setIsOptionOpen(false);
-						setIsEdit(true);
-					}}
+					handleEditCommentClick={handleEditCommentMenuClick}
 				/>
 			)}
 		</CommentDiv>
