@@ -11,6 +11,12 @@ import {
 } from "@/constants/iconConstants";
 import { getComments, postComment } from "@/features/comment/comment-service";
 import { resetComments } from "@/features/comment/comment-slice";
+import {
+	getGroupPostInfo,
+	cancelLikeGroupPost,
+	likeGroupPost,
+} from "@/features/post/post-service";
+import { resetPostInfo } from "@/features/post/post-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 import {
@@ -25,22 +31,13 @@ import {
 import { IconDiv, IconItemButton } from "../Feed.styles";
 import FeedComment from "../FeedComment/FeedComment";
 
-const FeedDetailModal = ({
-	groupId,
-	postId,
-	author,
-	authorImage,
-	content,
-	createdAt,
-	likeCount,
-	isPostLiked,
-	leaderId,
-	handleLikeClick,
-}) => {
+const FeedDetailModal = ({ groupId, leaderId }) => {
 	const dispatch = useDispatch();
 
 	const { comments } = useSelector((state) => state.comment);
 	const { user } = useSelector((state) => state.auth);
+	const { feedDetailModalId } = useSelector((state) => state.ui);
+	const { postInfo } = useSelector((state) => state.post);
 
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
 	const [commentContent, setCommentContent] = useState("");
@@ -49,34 +46,64 @@ const FeedDetailModal = ({
 
 	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
 
+	const handleLikeClick = () => {
+		if (!postInfo.post.isLiked) {
+			dispatch(
+				likeGroupPost({ postGroupId: groupId, postId: postInfo.post.postId }),
+			);
+		} else {
+			dispatch(
+				cancelLikeGroupPost({
+					postGroupId: groupId,
+					postId: postInfo.post.postId,
+				}),
+			);
+		}
+	};
+
 	const handleAddComment = () => {
-		dispatch(postComment({ groupId, postId, content: commentContent }));
+		dispatch(
+			postComment({
+				groupId,
+				postId: feedDetailModalId,
+				content: commentContent,
+			}),
+		);
 		setCommentContent("");
 	};
 
 	useEffect(() => {
-		dispatch(getComments({ groupId, postId }));
+		dispatch(getComments({ groupId, postId: feedDetailModalId }));
+		dispatch(getGroupPostInfo({ groupId, postId: feedDetailModalId }));
 
 		return () => {
 			dispatch(resetComments());
+			dispatch(resetPostInfo());
 		};
 	}, []);
+
+	if (!postInfo) {
+		return <div>로딩중...</div>;
+	}
 
 	return (
 		<FormModal isEmpty={commentContent.trim() === ""}>
 			<ContainerDiv>
 				<FeedDiv>
 					<ProfileDiv>
-						<img src={authorImage} alt={`${author}님의 프로필 이미지`} />
+						<img
+							src={postInfo.post.authorImage}
+							alt={`${postInfo.post.author}님의 프로필 이미지`}
+						/>
 						<h3>
-							{author}
+							{postInfo.post.author}
 							{/* 코멘트 작성자 id 필요 */}
-							{author === leaderId && <CrownIcon />}
+							{postInfo.post.author === leaderId && <CrownIcon />}
 						</h3>
 
-						{user.nickname === author && (
+						{postInfo.post.isMine && (
 							<FeedOption
-								postId={postId}
+								postId={feedDetailModalId}
 								groupId={groupId}
 								optionMenuRef={optionMenuRef}
 								isOptionOpen={isOptionOpen}
@@ -85,12 +112,12 @@ const FeedDetailModal = ({
 						)}
 					</ProfileDiv>
 					<ContentDiv>
-						<p>{content}</p>
-						<span>{createdAt}</span>
+						<p>{postInfo.post.content}</p>
+						<span>날짜 추가 예정</span>
 						<IconDiv>
 							<IconItemButton onClick={handleLikeClick}>
-								{isPostLiked ? <FillHeartIcon /> : <EmptyHeartIcon />}
-								<span>{likeCount}</span>
+								{postInfo.post.isLiked ? <FillHeartIcon /> : <EmptyHeartIcon />}
+								<span>{postInfo.post.likesCount}</span>
 							</IconItemButton>
 							<IconItemButton>
 								<CommentIcon />
@@ -110,16 +137,16 @@ const FeedDetailModal = ({
 								authorImage={commentInfo.authorImage}
 								updatedAt={commentInfo.updatedAt}
 								content={commentInfo.content}
-								postId={postId}
+								postId={postInfo.post.postId}
 								groupId={groupId}
 							/>
 						))}
 				</CommentDiv>
 
 				<CommentInputDiv>
-					<img src={authorImage} alt="profileImg" />
+					<img src={user.profileImage} alt="profileImg" />
 					<CommentInputContentDiv>
-						<h3>{author}</h3>
+						<h3>{user.nickname}</h3>
 						<textarea
 							placeholder="댓글을 입력하세요"
 							value={commentContent}
