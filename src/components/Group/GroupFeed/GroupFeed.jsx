@@ -50,6 +50,7 @@ const GroupFeed = ({ groupId, leaderId }) => {
 					post={post}
 					leaderId={leaderId}
 					groupId={groupId}
+					isGroupPage
 				/>
 			))}
 			{openedModal === UI_TYPE.FEED_DETAIL_MODAL && (

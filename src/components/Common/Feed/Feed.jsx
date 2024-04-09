@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import FeedOption from "@/components/Common/Feed/FeedOption";
 import {
@@ -26,7 +27,7 @@ import {
 	IconItemButton,
 } from "./Feed.styles";
 
-const Feed = ({ post, groupId, leaderId }) => {
+const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 	const dispatch = useDispatch();
 
 	const { user } = useSelector((state) => state.auth);
@@ -36,6 +37,8 @@ const Feed = ({ post, groupId, leaderId }) => {
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
 
 	const optionMenuRef = useRef();
+
+	const navigate = useNavigate();
 
 	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
 
@@ -76,7 +79,13 @@ const Feed = ({ post, groupId, leaderId }) => {
 	};
 
 	return (
-		<FeedArticle onClick={() => dispatch(openFeedDetailModal(post.postId))}>
+		<FeedArticle
+			onClick={() =>
+				isGroupPage
+					? dispatch(openFeedDetailModal(post.postId))
+					: navigate(`/group/${groupId}`)
+			}
+		>
 			{user.nickname === post.author && (
 				<FeedOption
 					postId={post.postId}
