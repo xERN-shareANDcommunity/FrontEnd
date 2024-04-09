@@ -81,7 +81,6 @@ const GroupPage = () => {
 
 	const { isPublicGroup } = groupInfo.information.group;
 	const leaderId = groupInfo.information.leaderInfo.userId;
-	const leaderName = groupInfo.information.leaderInfo.nickname;
 	const isGroupLeader = groupInfo.accessLevel === "owner";
 	const isGroupMember = groupInfo.accessLevel !== null;
 	const isGroupRequest =
@@ -113,7 +112,7 @@ const GroupPage = () => {
 						<FeedDiv>
 							{isGroupMember && <UploadFeed />}
 							<GroupTitle />
-							<GroupFeed groupId={groupId} leaderName={leaderName} />
+							<GroupFeed groupId={groupId} leaderId={leaderId} />
 						</FeedDiv>
 					)}
 

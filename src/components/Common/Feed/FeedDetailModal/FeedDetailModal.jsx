@@ -34,7 +34,7 @@ const FeedDetailModal = ({
 	createdAt,
 	likeCount,
 	isPostLiked,
-	leaderName,
+	leaderId,
 	handleLikeClick,
 }) => {
 	const dispatch = useDispatch();
@@ -70,7 +70,8 @@ const FeedDetailModal = ({
 						<img src={authorImage} alt={`${author}님의 프로필 이미지`} />
 						<h3>
 							{author}
-							{author === leaderName && <CrownIcon />}
+							{/* 코멘트 작성자 id 필요 */}
+							{author === leaderId && <CrownIcon />}
 						</h3>
 
 						{user.nickname === author && (

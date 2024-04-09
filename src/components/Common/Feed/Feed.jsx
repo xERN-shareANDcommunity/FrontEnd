@@ -28,7 +28,7 @@ import {
 	IconItemButton,
 } from "./Feed.styles";
 
-const Feed = ({ post, groupId, leaderName }) => {
+const Feed = ({ post, groupId, leaderId }) => {
 	const dispatch = useDispatch();
 
 	const { user } = useSelector((state) => state.auth);
@@ -101,7 +101,9 @@ const Feed = ({ post, groupId, leaderName }) => {
 					<InfoDiv>
 						<h3>
 							{post.author}
-							{post.author === leaderName && <CrownIcon />}
+
+							{/* 게시글 작성자 id 비교 필요 */}
+							{post.author === leaderId && <CrownIcon />}
 						</h3>
 						<h4>{useTimeStamp(post.createdAt)}</h4>
 					</InfoDiv>
@@ -134,7 +136,7 @@ const Feed = ({ post, groupId, leaderName }) => {
 					createdAt={useTimeStamp(post.createdAt)}
 					likeCount={postLikesCount}
 					isPostLiked={isPostLiked}
-					leaderName={leaderName}
+					leaderId={leaderId}
 					handleLikeClick={handleLikeClick}
 				/>
 			)}
