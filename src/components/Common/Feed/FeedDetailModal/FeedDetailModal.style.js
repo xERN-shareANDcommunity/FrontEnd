@@ -108,5 +108,10 @@ export const CommentInputContentDiv = styled.div`
 		font-weight: ${({ theme: { typography } }) => typography.weight.medium};
 		border-radius: 5px;
 		cursor: pointer;
+
+		&:disabled {
+			cursor: not-allowed;
+			background-color: ${({ theme: { colors } }) => colors.btn_02};
+		}
 	}
 `;

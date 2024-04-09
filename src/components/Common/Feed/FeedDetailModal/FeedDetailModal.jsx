@@ -124,7 +124,11 @@ const FeedDetailModal = ({
 							value={commentContent}
 							onChange={(e) => setCommentContent(e.target.value)}
 						/>
-						<button type="submit" onClick={handleAddComment}>
+						<button
+							type="submit"
+							disabled={commentContent === ""}
+							onClick={handleAddComment}
+						>
 							등록
 						</button>
 					</CommentInputContentDiv>

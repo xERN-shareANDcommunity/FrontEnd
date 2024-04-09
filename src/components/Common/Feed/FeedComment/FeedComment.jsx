@@ -66,7 +66,11 @@ const FeedComment = ({
 							>
 								취소
 							</button>
-							<button type="submit" onClick={handleEditComment}>
+							<button
+								type="submit"
+								disabled={content === newContent}
+								onClick={handleEditComment}
+							>
 								수정
 							</button>
 						</ButtonDiv>

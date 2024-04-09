@@ -20,7 +20,6 @@ export const CommentDiv = styled.div`
 `;
 
 export const CommentContentDiv = styled.div`
-	/* width: calc(100% - 100px); */
 	width: 100%;
 
 	& > h3 {
@@ -79,6 +78,11 @@ export const ButtonDiv = styled.div`
 		font-weight: ${({ theme: { typography } }) => typography.weight.medium};
 		border-radius: 5px;
 		cursor: pointer;
+
+		&:disabled {
+			cursor: not-allowed;
+			background-color: ${({ theme: { colors } }) => colors.btn_02};
+		}
 
 		&.cancelBtn {
 			background-color: ${({ theme: { colors } }) => colors.white};
