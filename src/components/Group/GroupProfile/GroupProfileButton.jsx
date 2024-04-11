@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import GroupDelegateModal from "@/components/Common/GroupModal/GroupDelegateModal/GroupDelegateModal";
 import { AddIcon } from "@/constants/iconConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import { changeRequestGroupJoin } from "@/features/group/group-service";
 import { openDelegateGroupModal } from "@/features/ui/ui-slice";
 
@@ -24,8 +22,6 @@ const GroupProfileButton = ({
 	// eslint-disable-next-line consistent-return
 }) => {
 	const dispatch = useDispatch();
-
-	const { openedModal } = useSelector((state) => state.ui);
 
 	const navigate = useNavigate();
 
@@ -56,13 +52,6 @@ const GroupProfileButton = ({
 					>
 						그룹장 위임
 					</ProfileWhiteButton>
-				)}
-
-				{openedModal === UI_TYPE.DELEGATE_GROUP && (
-					<GroupDelegateModal
-						groupInfo={groupInfo}
-						groupMembers={groupInfo.information.memberInfo}
-					/>
 				)}
 			</ProfileButtonDiv>
 		);

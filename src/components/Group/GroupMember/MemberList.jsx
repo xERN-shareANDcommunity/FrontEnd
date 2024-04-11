@@ -1,8 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { CrownIcon } from "@/constants/iconConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import { openMemberModal } from "@/features/ui/ui-slice";
 
 import {
@@ -12,12 +11,9 @@ import {
 	MemberMoreSpan,
 	MemberUl,
 } from "./GroupMember.Shared.styles";
-import MemberModal from "./MemberModal/MemberModal";
 
 const MemberList = ({ leaderId, groupMemberList }) => {
 	const dispatch = useDispatch();
-
-	const { openedModal } = useSelector((state) => state.ui);
 
 	return (
 		<MemberInnerDiv>
@@ -41,10 +37,6 @@ const MemberList = ({ leaderId, groupMemberList }) => {
 					</li>
 				))}
 			</MemberUl>
-
-			{openedModal === UI_TYPE.MEMBER_MODAL && (
-				<MemberModal memberList={groupMemberList} />
-			)}
 		</MemberInnerDiv>
 	);
 };

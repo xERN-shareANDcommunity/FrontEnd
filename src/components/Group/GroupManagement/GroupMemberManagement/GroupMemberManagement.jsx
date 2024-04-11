@@ -1,12 +1,10 @@
 import React, { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import DeleteMemberWarningModal from "@/components/Common/GroupModal/DeleteMemberWarningModal/DeleteMemberWarningModal";
 import { ACCESS_LEVEL_DATA } from "@/constants/accessConstants";
 import { InfoIcon, AccessArrowIcon } from "@/constants/iconConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import { changeAccessLevel } from "@/features/group/group-service";
 import { openDeleteMemberWarningModal } from "@/features/ui/ui-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
@@ -32,8 +30,6 @@ const groupMemberManagementTitleData = [
 
 const GroupMemberManagement = ({ groupId, memberList }) => {
 	const dispatch = useDispatch();
-
-	const { openedModal } = useSelector((state) => state.ui);
 
 	const [isAccessInfoOpen, setIsAccessInfoOpen] = useState(false);
 	const [isCommentListOpen, setIsCommentListOpen] = useState(false);
@@ -177,9 +173,6 @@ const GroupMemberManagement = ({ groupId, memberList }) => {
 							<span>
 								<button
 									type="button"
-									// onClick={() => {
-									// 	deleteMember(memberInfo.member.userId);
-									// }}
 									onClick={() =>
 										dispatch(openDeleteMemberWarningModal(memberInfo))
 									}
@@ -190,9 +183,6 @@ const GroupMemberManagement = ({ groupId, memberList }) => {
 						</MemberLi>
 					</MemberUl>
 				))}
-			{openedModal === UI_TYPE.DELETE_MEMBER_WARNING_MODAL && (
-				<DeleteMemberWarningModal groupId={groupId} />
-			)}
 		</>
 	);
 };

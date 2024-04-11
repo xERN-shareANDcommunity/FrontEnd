@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 
-import GroupJoinModal from "@/components/Common/GroupModal/GroupJoinModal/GroupJoinModal";
+import GroupModalTrigger from "@/components/Common/GroupModal/GroupModalTrigger/GroupModalTrigger";
 import GroupFeed from "@/components/Group/GroupFeed/GroupFeed";
 import SecretFeed from "@/components/Group/GroupFeed/SecretFeed";
 import UploadFeed from "@/components/Group/GroupFeed/UploadFeed";
@@ -11,7 +11,6 @@ import GroupMember from "@/components/Group/GroupMember/GroupMember";
 import GroupProfile from "@/components/Group/GroupProfile/GroupProfile";
 import GroupTitle from "@/components/Group/GroupTitle/GroupTitle";
 import { TAB_KEY, TAB_PARAM } from "@/constants/tabConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	getGroupInfo,
 	getGroupMemberList,
@@ -30,8 +29,6 @@ const GroupPage = () => {
 	const { groupInfo, groupMemberList, groupRequestMemberList } = useSelector(
 		(state) => state.group,
 	);
-
-	const { openedModal } = useSelector((state) => state.ui);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [isManaging, setIsManaging] = useState(false);
@@ -119,12 +116,17 @@ const GroupPage = () => {
 					{isGroupMember && (
 						<GroupMember groupId={groupId} leaderId={leaderId} />
 					)}
-
-					{openedModal === UI_TYPE.JOIN_GROUP && (
-						<GroupJoinModal inviteLink={inviteLink} />
-					)}
 				</>
 			)}
+
+			<GroupModalTrigger
+				groupId={groupId}
+				leaderId={leaderId}
+				groupInfo={groupInfo}
+				groupMemberList={groupMemberList}
+				groupRequestMemberList={groupRequestMemberList}
+				inviteLink={inviteLink}
+			/>
 		</GroupMain>
 	);
 };

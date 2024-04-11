@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import EmptyLayout from "@/components/Common/EmptyLayout/EmptyLayout";
 import Feed from "@/components/Common/Feed/Feed";
-import FeedDetailModal from "@/components/Common/Feed/FeedDetailModal/FeedDetailModal";
 import ScrollBottom from "@/components/Common/ScrollBottom";
 import { EMPTY_TYPE } from "@/constants/emptyConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import { getGroupAllPosts } from "@/features/post/post-service";
 
 import { FeedSection } from "./GroupFeed.styles";
@@ -17,7 +15,6 @@ const GroupFeed = ({ groupId, leaderId }) => {
 	const { allGroupPosts, allGroupPostsIsEnd } = useSelector(
 		(state) => state.post,
 	);
-	const { openedModal } = useSelector((state) => state.ui);
 
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -53,9 +50,6 @@ const GroupFeed = ({ groupId, leaderId }) => {
 					isGroupPage
 				/>
 			))}
-			{openedModal === UI_TYPE.FEED_DETAIL_MODAL && (
-				<FeedDetailModal groupId={groupId} leaderId={leaderId} />
-			)}
 			<ScrollBottom onView={handleOnView} />
 		</FeedSection>
 	);
