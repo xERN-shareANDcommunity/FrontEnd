@@ -6,7 +6,7 @@ import _ from "lodash";
 import moment from "moment";
 
 import FormModal from "@/components/Common/Modal/FormModal/FormModal";
-import { SCHEDULE_MODAL_TYPE, UI_TYPE } from "@/constants/uiConstants";
+import { SCHEDULE_MODAL_TYPE } from "@/constants/uiConstants";
 import {
 	createSchedule,
 	updateSchedule,
@@ -103,8 +103,9 @@ const ScheduleModal = () => {
 	// previous form value to compare
 	const prevFormValue = useRef(initialFormValues);
 	// state
-	const { openedModal, scheduleModalMode, scheduleModalId, isLoading } =
-		useSelector((state) => state.ui);
+	const { scheduleModalMode, scheduleModalId, isLoading } = useSelector(
+		(state) => state.ui,
+	);
 	const [formValues, setFormValues] = useState(initialFormValues);
 	// value
 	const isCreateMode = scheduleModalMode === SCHEDULE_MODAL_TYPE.CREATE;
@@ -314,10 +315,7 @@ const ScheduleModal = () => {
 			formValues.endDate !== "" &&
 			formValues.endTime !== "" &&
 			(formValues.freq === "NONE" || formValues.interval > 0) &&
-			(formValues.freq === "WEEKLY" ? formValues.byweekday.length > 0 : true) &&
-			(openedModal === UI_TYPE.SHARE_SCHEDULE
-				? formValues.voteEndDate !== "" && formValues.voteEndTime !== ""
-				: true)
+			(formValues.freq === "WEEKLY" ? formValues.byweekday.length > 0 : true)
 		);
 	};
 
@@ -525,62 +523,31 @@ const ScheduleModal = () => {
 						</label>
 					</AllDayCheckBoxDiv>
 				)}
-				{openedModal === UI_TYPE.SHARE_SCHEDULE ? (
-					<div>
-						{/* <InputLabel>일정 투표 종료일</InputLabel>
-						<DateContainerDiv>
-							<DateDiv>
-								<DateInput
-									type="date"
-									min={minStartDate}
-									value={formValues.voteEndDate}
-									onChange={(e) =>
-										setFormValues({
-											...formValues,
-											voteEndDate: e.target.value,
-										})
-									}
-								/>
-								<DateInput
-									type="time"
-									value={formValues.voteEndTime}
-									onChange={(e) =>
-										setFormValues({
-											...formValues,
-											voteEndTime: e.target.value,
-										})
-									}
-								/>
-							</DateDiv>
-						</DateContainerDiv> */}
-					</div>
-				) : (
-					<RepeatContainerDiv>
-						<Repeat
-							freq={formValues.freq}
-							until={formValues.until}
-							minUntil={calculateMinUntilDateString(
-								formValues.startDate,
-								formValues.freq,
-								formValues.interval,
-							)}
-							onFreqChange={handleFreqValueChange}
-							onUntilChange={handleUntilValueChange}
-							onToggleUntilOrNot={toggleUntilOrNot}
-						/>
-						<RepeatDetail
-							isWeekly={
-								formValues.freq === "WEEKLY" || formValues.freq === "WEEKLY_N"
-							}
-							isWithN={formValues.freq.endsWith("N")}
-							freq={formValues.freq}
-							interval={formValues.interval}
-							byweekday={formValues.byweekday}
-							onByweekdayChange={handleByweekdayValueChange}
-							onIntervalChange={handleIntervalValueChange}
-						/>
-					</RepeatContainerDiv>
-				)}
+				<RepeatContainerDiv>
+					<Repeat
+						freq={formValues.freq}
+						until={formValues.until}
+						minUntil={calculateMinUntilDateString(
+							formValues.startDate,
+							formValues.freq,
+							formValues.interval,
+						)}
+						onFreqChange={handleFreqValueChange}
+						onUntilChange={handleUntilValueChange}
+						onToggleUntilOrNot={toggleUntilOrNot}
+					/>
+					<RepeatDetail
+						isWeekly={
+							formValues.freq === "WEEKLY" || formValues.freq === "WEEKLY_N"
+						}
+						isWithN={formValues.freq.endsWith("N")}
+						freq={formValues.freq}
+						interval={formValues.interval}
+						byweekday={formValues.byweekday}
+						onByweekdayChange={handleByweekdayValueChange}
+						onIntervalChange={handleIntervalValueChange}
+					/>
+				</RepeatContainerDiv>
 				<FooterDiv
 					isAllDayCheckboxDisplayed={
 						formValues.startDate && !formValues.endDate
