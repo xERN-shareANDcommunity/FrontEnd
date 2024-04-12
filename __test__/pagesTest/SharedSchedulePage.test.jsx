@@ -185,6 +185,7 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 			screen.getByRole("heading", { name: "일정 최소 구간" }),
 		).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "추천받기" })).toBeEnabled();
+		expect(screen.getByRole("button", { name: "직접 만들기" })).toBeEnabled();
 
 		expect(screen.getByRole("button", { name: "저장하기" })).toBeDisabled();
 	});
