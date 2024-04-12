@@ -192,6 +192,9 @@ const ScheduleProposalModal = () => {
 							<button type="button">반복</button>
 						</div>
 					))}
+					<button type="button" onClick={() => {}}>
+						직접 만들기
+					</button>
 				</RecommendedProposalsDiv>
 				<SubmitButton onClick={() => {}} disabled={true}>
 					저장하기
