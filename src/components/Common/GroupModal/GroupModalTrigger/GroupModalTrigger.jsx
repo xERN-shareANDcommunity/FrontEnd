@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import FeedDetailModal from "@/components/Common/Feed/FeedDetailModal/FeedDetailModal";
 import DeleteMemberWarningModal from "@/components/Common/GroupModal/DeleteMemberWarningModal/DeleteMemberWarningModal";
@@ -17,9 +18,12 @@ const GroupModalTrigger = ({
 	groupInfo,
 	groupMemberList,
 	groupRequestMemberList,
-	inviteLink,
 }) => {
 	const { openedModal } = useSelector((state) => state.ui);
+
+	const [searchParams] = useSearchParams();
+
+	const inviteLink = searchParams.get("invite");
 
 	return (
 		<>
@@ -53,10 +57,7 @@ const GroupModalTrigger = ({
 			)}
 
 			{openedModal === UI_TYPE.DELEGATE_GROUP && (
-				<GroupDelegateModal
-					groupInfo={groupInfo}
-					groupMembers={groupInfo.information.memberInfo}
-				/>
+				<GroupDelegateModal groupInfo={groupInfo} />
 			)}
 		</>
 	);

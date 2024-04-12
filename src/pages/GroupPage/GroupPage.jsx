@@ -39,8 +39,6 @@ const GroupPage = () => {
 
 	const groupId = Number(param.id);
 
-	const inviteLink = searchParams.get("invite");
-
 	useEffect(() => {
 		dispatch(getGroupMemberList(groupId));
 		dispatch(getGroupRequestMemberList(groupId));
@@ -125,7 +123,6 @@ const GroupPage = () => {
 				groupInfo={groupInfo}
 				groupMemberList={groupMemberList}
 				groupRequestMemberList={groupRequestMemberList}
-				inviteLink={inviteLink}
 			/>
 		</GroupMain>
 	);
