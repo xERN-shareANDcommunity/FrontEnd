@@ -32,12 +32,16 @@ export const ProposalParamsWrapperDiv = styled.div`
 export const RecommendedProposalsDiv = styled.div`
 	padding-inline: 14px;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
 	& > div {
 		margin-bottom: 6px;
 		&:last-child {
 			margin-bottom: 12px;
 		}
+		width: 100%;
 		height: 35px;
 		border: 1px solid ${({ theme: { colors } }) => colors.primary};
 		padding-left: 20px;
@@ -94,5 +98,21 @@ export const RecommendedProposalsDiv = styled.div`
 			font-size: 10px;
 			line-height: 17px;
 		}
+	}
+
+	& > button {
+		margin-bottom: 12px;
+		width: 100%;
+		max-width: 311px;
+		height: 35px;
+		border-radius: 5px;
+		background-color: ${({ theme: { colors } }) => colors.btn_02};
+		text-align: center;
+		font-size: ${({
+			theme: {
+				typography: { size },
+			},
+		}) => size.s2};
+		cursor: pointer;
 	}
 `;
