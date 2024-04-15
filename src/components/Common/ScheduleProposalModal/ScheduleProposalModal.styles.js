@@ -1,5 +1,41 @@
 import styled from "styled-components";
 
+export const SliderWrapperDiv = styled.div`
+	overflow-x: hidden;
+	& > .slider {
+		width: 1100px;
+		display: flex;
+
+		&.toLeft {
+			animation: slideToLeft 0.5s ease-out forwards;
+		}
+
+		&.toRight {
+			animation: slideToRight 0.5s ease-out forwards;
+		}
+
+		@keyframes slideToLeft {
+			from {
+				transform: translateX(-50%);
+			}
+			to {
+				transform: translateX(0);
+			}
+		}
+		@keyframes slideToRight {
+			from {
+				transform: translateX(0);
+			}
+			to {
+				transform: translateX(-50%);
+			}
+		}
+		& > div {
+			width: 550px;
+		}
+	}
+`;
+
 export const ProposalParamsWrapperDiv = styled.div`
 	display: flex;
 	flex-direction: column;

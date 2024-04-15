@@ -12,6 +12,7 @@ import DurationPicker from "./DurationPicker/DurationPicker";
 import {
 	ProposalParamsWrapperDiv,
 	RecommendedProposalsDiv,
+	SliderWrapperDiv,
 } from "./ScheduleProposalModal.styles";
 import FormModal from "../Modal/FormModal/FormModal";
 import DateAndTime from "../ScheduleModal/DateAndTime";
@@ -44,6 +45,7 @@ const ScheduleProposalModal = () => {
 		endTimeStr: moment().format("HH:mm"),
 		minDuration: 60, // 분
 	});
+	const [displayedSlideIndex, setDisplayedSlideIndex] = useState(null);
 
 	const handleDateValueChange = (date, id) => {
 		const value = moment(date).format("YYYY-MM-DD");
@@ -138,64 +140,86 @@ const ScheduleProposalModal = () => {
 						setFormValues((prev) => ({ ...prev, content: e.target.value }))
 					}
 				/>
-				<ProposalParamsWrapperDiv>
-					<DateAndTime
-						isProposal={true}
-						startDate={proposalParams.startDateStr}
-						startTime={proposalParams.startTimeStr}
-						endDate={proposalParams.endDateStr}
-						endTime={proposalParams.endTimeStr}
-						onDateChange={handleDateValueChange}
-						onTimeChange={handleTimeValueChange}
-					/>
-					<LabelH4>일정 최소 구간</LabelH4>
-					<div className="durationAndSubmit">
-						<DurationPicker
-							value={proposalParams.minDuration}
-							onChange={(value) =>
-								setProposalParams((prev) => ({ ...prev, minDuration: value }))
-							}
-						/>
-						<button
-							type="button"
-							disabled={
-								!proposalParams.startDateStr ||
-								!proposalParams.startTimeStr ||
-								!proposalParams.endDateStr ||
-								!proposalParams.endTimeStr ||
-								!proposalParams.minDuration
-							}
-							onClick={handleGettingProposal}
-						>
-							추천받기
+				<SliderWrapperDiv>
+					<div
+						className={`slider ${
+							// eslint-disable-next-line no-nested-ternary
+							displayedSlideIndex === 0
+								? "toLeft"
+								: displayedSlideIndex === 1
+								? "toRight"
+								: ""
+						}`}
+					>
+						<div>
+							<ProposalParamsWrapperDiv>
+								<DateAndTime
+									isProposal={true}
+									startDate={proposalParams.startDateStr}
+									startTime={proposalParams.startTimeStr}
+									endDate={proposalParams.endDateStr}
+									endTime={proposalParams.endTimeStr}
+									onDateChange={handleDateValueChange}
+									onTimeChange={handleTimeValueChange}
+								/>
+								<LabelH4>일정 최소 구간</LabelH4>
+								<div className="durationAndSubmit">
+									<DurationPicker
+										value={proposalParams.minDuration}
+										onChange={(value) =>
+											setProposalParams((prev) => ({
+												...prev,
+												minDuration: value,
+											}))
+										}
+									/>
+									<button
+										type="button"
+										disabled={
+											!proposalParams.startDateStr ||
+											!proposalParams.startTimeStr ||
+											!proposalParams.endDateStr ||
+											!proposalParams.endTimeStr ||
+											!proposalParams.minDuration
+										}
+										onClick={handleGettingProposal}
+									>
+										추천받기
+									</button>
+								</div>
+							</ProposalParamsWrapperDiv>
+							<RecommendedProposalsDiv>
+								{recommendedScheduleProposals.map((proposals, index) => (
+									<div key={proposals.startDateTime}>
+										<div>
+											<button
+												type="button"
+												onClick={() => handleSelectRecommendation(index)}
+											>
+												{formValues.selectedRecommendationIndexes.indexOf(
+													index,
+												) !== -1 && <div />}
+											</button>
+											<span>
+												{getTimeString(
+													proposals.startDateTime,
+													proposals.endDateTime,
+												)}
+											</span>
+										</div>
+										<button type="button">반복</button>
+									</div>
+								))}
+								<button type="button" onClick={() => setDisplayedSlideIndex(1)}>
+									직접 만들기
+								</button>
+							</RecommendedProposalsDiv>
+						</div>
+						<button type="button" onClick={() => setDisplayedSlideIndex(0)}>
+							Heelo
 						</button>
 					</div>
-				</ProposalParamsWrapperDiv>
-				<RecommendedProposalsDiv>
-					{recommendedScheduleProposals.map((proposals, index) => (
-						<div key={proposals.startDateTime}>
-							<div>
-								<button
-									type="button"
-									onClick={() => handleSelectRecommendation(index)}
-								>
-									{formValues.selectedRecommendationIndexes.indexOf(index) !==
-										-1 && <div />}
-								</button>
-								<span>
-									{getTimeString(
-										proposals.startDateTime,
-										proposals.endDateTime,
-									)}
-								</span>
-							</div>
-							<button type="button">반복</button>
-						</div>
-					))}
-					<button type="button" onClick={() => {}}>
-						직접 만들기
-					</button>
-				</RecommendedProposalsDiv>
+				</SliderWrapperDiv>
 				<SubmitButton onClick={() => {}} disabled={true}>
 					저장하기
 				</SubmitButton>
