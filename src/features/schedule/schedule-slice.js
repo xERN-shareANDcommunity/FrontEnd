@@ -8,6 +8,7 @@ import {
 } from "@/constants/calendarConstants.js";
 import { inqueryUserGroup } from "@/features/user/user-service.js";
 import { getCurrentWeek } from "@/utils/calendarUtils.js";
+import { convertScheduleDataToFormValue } from "@/utils/convertSchedule.js";
 
 import {
 	createSchedule,
@@ -226,7 +227,10 @@ const scheduleSlice = createSlice({
 				state.scheduleProposals = payload;
 			})
 			.addCase(getScheduleProposals.fulfilled, (state, { payload }) => {
-				state.recommendedScheduleProposals = payload.proposals;
+				state.recommendedScheduleProposals = payload.proposals.map(
+					({ startDateTime, endDateTime }) =>
+						convertScheduleDataToFormValue({ startDateTime, endDateTime }),
+				);
 			})
 			// userGroup 업데이트 시
 			.addCase(inqueryUserGroup.fulfilled, (state, { payload }) => {

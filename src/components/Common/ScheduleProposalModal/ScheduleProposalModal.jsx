@@ -7,6 +7,7 @@ import moment from "moment";
 
 import { getScheduleProposals } from "@/features/schedule/schedule-service";
 import { getTimeString } from "@/utils/calendarUtils";
+import convertToUTC from "@/utils/convertToUTC";
 
 import DurationPicker from "./DurationPicker/DurationPicker";
 import {
@@ -27,7 +28,6 @@ import {
 const initialFormValues = {
 	title: "",
 	content: "",
-
 	selectedRecommendationIndexes: [],
 };
 
@@ -45,6 +45,7 @@ const ScheduleProposalModal = () => {
 		endTimeStr: moment().format("HH:mm"),
 		minDuration: 60, // 분
 	});
+
 	const [displayedSlideIndex, setDisplayedSlideIndex] = useState(null);
 
 	const handleDateValueChange = (date, id) => {
@@ -189,8 +190,13 @@ const ScheduleProposalModal = () => {
 								</div>
 							</ProposalParamsWrapperDiv>
 							<RecommendedProposalsDiv>
-								{recommendedScheduleProposals.map((proposals, index) => (
-									<div key={proposals.startDateTime}>
+								{recommendedScheduleProposals.map((proposal, index) => (
+									<div
+										key={
+											convertToUTC(proposal.startDate, proposal.startTime) +
+											convertToUTC(proposal.endDate, proposal.endTime)
+										}
+									>
 										<div>
 											<button
 												type="button"
@@ -202,8 +208,8 @@ const ScheduleProposalModal = () => {
 											</button>
 											<span>
 												{getTimeString(
-													proposals.startDateTime,
-													proposals.endDateTime,
+													convertToUTC(proposal.startDate, proposal.startTime),
+													convertToUTC(proposal.endDate, proposal.endTime),
 												)}
 											</span>
 										</div>
@@ -215,9 +221,70 @@ const ScheduleProposalModal = () => {
 								</button>
 							</RecommendedProposalsDiv>
 						</div>
-						<button type="button" onClick={() => setDisplayedSlideIndex(0)}>
-							Heelo
-						</button>
+						<div>
+							heelo
+							{/* <DateAndTime
+								startDate={formValues.startDate}
+								startTime={formValues.startTime}
+								endDate={formValues.endDate}
+								endTime={formValues.endTime}
+								onDateChange={handleDateValueChange}
+								onTimeChange={handleTimeValueChange}
+							/> */}
+							{/* {formValues.startDate && (
+								<AllDayCheckBoxDiv>
+									<label>
+										<input
+											type="checkbox"
+											onChange={handleIsAllDayValueChange}
+											checked={formValues.isAllDay}
+											disabled={isLoading || isViewMode}
+										/>
+										하루 종일
+									</label>
+								</AllDayCheckBoxDiv>
+							)}
+							<RepeatContainerDiv>
+								<Repeat
+									freq={formValues.freq}
+									until={formValues.until}
+									minUntil={calculateMinUntilDateString(
+										formValues.startDate,
+										formValues.freq,
+										formValues.interval,
+									)}
+									onFreqChange={handleFreqValueChange}
+									onUntilChange={handleUntilValueChange}
+									onToggleUntilOrNot={toggleUntilOrNot}
+								/>
+								<RepeatDetail
+									isWeekly={
+										formValues.freq === "WEEKLY" ||
+										formValues.freq === "WEEKLY_N"
+									}
+									isWithN={formValues.freq.endsWith("N")}
+									freq={formValues.freq}
+									interval={formValues.interval}
+									byweekday={formValues.byweekday}
+									onByweekdayChange={handleByweekdayValueChange}
+									onIntervalChange={handleIntervalValueChange}
+								/>
+							</RepeatContainerDiv>
+							<FooterDiv
+								isAllDayCheckboxDisplayed={
+									formValues.startDate && !formValues.endDate
+								}
+							>
+								{isViewMode || (
+									<SubmitButton
+										onClick={handleSubmit}
+										disabled={!checkFormIsFilledOrChanged() || isLoading}
+									>
+										{isEditMode ? "수정하기" : "저장하기"}
+									</SubmitButton>
+								)}
+							</FooterDiv> */}
+						</div>
 					</div>
 				</SliderWrapperDiv>
 				<SubmitButton onClick={() => {}} disabled={true}>
