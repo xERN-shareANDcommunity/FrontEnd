@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const SliderWrapperDiv = styled.div`
-	overflow-x: hidden;
-	& > .slider {
-		width: 1100px;
-		display: flex;
+const MODAL_INLINE_MARGIN = 20;
 
+export const SliderWrapperDiv = styled.div`
+	& > .slider {
+		display: flex;
+		gap: ${MODAL_INLINE_MARGIN * 2}px;
 		&.toLeft {
 			animation: slideToLeft 0.5s ease-out forwards;
 		}
@@ -16,7 +16,7 @@ export const SliderWrapperDiv = styled.div`
 
 		@keyframes slideToLeft {
 			from {
-				transform: translateX(-50%);
+				transform: translateX(calc(-100% - ${MODAL_INLINE_MARGIN * 2}px));
 			}
 			to {
 				transform: translateX(0);
@@ -27,11 +27,13 @@ export const SliderWrapperDiv = styled.div`
 				transform: translateX(0);
 			}
 			to {
-				transform: translateX(-50%);
+				transform: translateX(calc(-100% - ${MODAL_INLINE_MARGIN * 2}px));
 			}
 		}
+
 		& > div {
-			width: 550px;
+			width: 100%;
+			min-width: 550px;
 		}
 	}
 `;
