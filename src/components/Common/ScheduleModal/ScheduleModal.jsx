@@ -12,7 +12,12 @@ import {
 	updateSchedule,
 } from "@/features/schedule/schedule-service.js";
 import { closeModal, setIsLoading } from "@/features/ui/ui-slice";
-import { getSchedule } from "@/utils/calendarUtils";
+import {
+	calculateIsAllDay,
+	calculateMinUntilDateString,
+	getSchedule,
+	setByweekday,
+} from "@/utils/calendarUtils";
 import { convertScheduleDataToFormValue } from "@/utils/convertSchedule";
 
 import DateAndTime from "./DateAndTime";
@@ -43,60 +48,6 @@ const initialFormValues = {
 	byweekday: [],
 	until: "",
 };
-
-const calculateMinUntilDateString = (
-	startDateStr,
-	freq,
-	intervalValue,
-	isInfinite = false,
-) => {
-	const interval = Math.floor(
-		Number(intervalValue) > 0 ? Number(intervalValue) : 1,
-	);
-	if (typeof startDateStr !== "string") {
-		throw new Error(
-			`startDateStr은 문자열 타입이어야 합니다. 현재 값은 ${startDateStr}입니다.`,
-		);
-	}
-	if (startDateStr.trim() === "") {
-		throw new Error(
-			`startDateStr은 빈 문자열이 아니어야 합니다. 현재 값은 비어있습니다.`,
-		);
-	}
-
-	if (freq === "NONE" || isInfinite) {
-		return "";
-	}
-
-	const startDate = new Date(startDateStr);
-	let untilDate = "";
-
-	if (freq === "DAILY" || freq === "DAILY_N") {
-		untilDate = startDate.setDate(startDate.getDate() + interval + 1);
-	} else if (freq === "WEEKLY" || freq === "WEEKLY_N") {
-		untilDate = startDate.setDate(startDate.getDate() + 7 * interval + 1);
-	} else if (freq === "MONTHLY" || freq === "MONTHLY_N") {
-		startDate.setMonth(startDate.getMonth() + interval);
-		untilDate = startDate.setDate(startDate.getDate() + 1);
-	} else if (freq === "YEARLY" || freq === "YEARLY_N") {
-		startDate.setFullYear(startDate.getFullYear() + interval);
-		untilDate = startDate.setDate(startDate.getDate() + 1);
-	}
-	return new Date(untilDate).toISOString().slice(0, 10);
-};
-
-const setByweekday = (weekNum, prev, checked) => {
-	if (!checked) {
-		return prev.filter((num) => num !== weekNum);
-	}
-	if (prev.indexOf(weekNum) === -1) {
-		prev.push(weekNum);
-	}
-	return prev;
-};
-
-const calculateIsAllDay = (startDate, startTime, endDate, endTime) =>
-	startDate === endDate && startTime === "00:00" && endTime === "23:59";
 
 const ScheduleModal = () => {
 	const dispatch = useDispatch();
@@ -503,6 +454,7 @@ const ScheduleModal = () => {
 					disabled={isLoading || isViewMode}
 				/>
 				<DateAndTime
+					isProposal={false}
 					startDate={formValues.startDate}
 					startTime={formValues.startTime}
 					endDate={formValues.endDate}
