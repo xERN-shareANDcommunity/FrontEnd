@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 import moment from "moment";
 
+import EditedProposalForm from "@/components/Common/ScheduleProposalModal/EditedProposalForm";
 import { getScheduleProposals } from "@/features/schedule/schedule-service";
 import { getTimeString } from "@/utils/calendarUtils";
 import convertToUTC from "@/utils/convertToUTC";
@@ -46,7 +47,7 @@ const ScheduleProposalModal = () => {
 		minDuration: 60, // 분
 	});
 
-	const [displayedSlideIndex, setDisplayedSlideIndex] = useState(null);
+	const [editiedProposalIndex, setEditiedProposalIndex] = useState(null); // 수정하는 건 뭔가, 새로 만들기의 경우 어떻게 해야 할까? null, -1, 그 외 인덱스
 
 	const handleDateValueChange = (date, id) => {
 		const value = moment(date).format("YYYY-MM-DD");
@@ -145,9 +146,9 @@ const ScheduleProposalModal = () => {
 					<div
 						className={`slider ${
 							// eslint-disable-next-line no-nested-ternary
-							displayedSlideIndex === 0
+							editiedProposalIndex === -1
 								? "toLeft"
-								: displayedSlideIndex === 1
+								: editiedProposalIndex !== null
 								? "toRight"
 								: ""
 						}`}
@@ -216,80 +217,28 @@ const ScheduleProposalModal = () => {
 										<button type="button">반복</button>
 									</div>
 								))}
-								<button type="button" onClick={() => setDisplayedSlideIndex(1)}>
+								<button
+									type="button"
+									onClick={
+										() =>
+											setEditiedProposalIndex(
+												recommendedScheduleProposals.length,
+											) // 새로운 것 추가할 예정
+									}
+								>
 									직접 만들기
 								</button>
 							</RecommendedProposalsDiv>
+							<SubmitButton onClick={() => {}} disabled={true}>
+								저장하기
+							</SubmitButton>
 						</div>
-						<div>
-							heelo
-							{/* <DateAndTime
-								startDate={formValues.startDate}
-								startTime={formValues.startTime}
-								endDate={formValues.endDate}
-								endTime={formValues.endTime}
-								onDateChange={handleDateValueChange}
-								onTimeChange={handleTimeValueChange}
-							/> */}
-							{/* {formValues.startDate && (
-								<AllDayCheckBoxDiv>
-									<label>
-										<input
-											type="checkbox"
-											onChange={handleIsAllDayValueChange}
-											checked={formValues.isAllDay}
-											disabled={isLoading || isViewMode}
-										/>
-										하루 종일
-									</label>
-								</AllDayCheckBoxDiv>
-							)}
-							<RepeatContainerDiv>
-								<Repeat
-									freq={formValues.freq}
-									until={formValues.until}
-									minUntil={calculateMinUntilDateString(
-										formValues.startDate,
-										formValues.freq,
-										formValues.interval,
-									)}
-									onFreqChange={handleFreqValueChange}
-									onUntilChange={handleUntilValueChange}
-									onToggleUntilOrNot={toggleUntilOrNot}
-								/>
-								<RepeatDetail
-									isWeekly={
-										formValues.freq === "WEEKLY" ||
-										formValues.freq === "WEEKLY_N"
-									}
-									isWithN={formValues.freq.endsWith("N")}
-									freq={formValues.freq}
-									interval={formValues.interval}
-									byweekday={formValues.byweekday}
-									onByweekdayChange={handleByweekdayValueChange}
-									onIntervalChange={handleIntervalValueChange}
-								/>
-							</RepeatContainerDiv>
-							<FooterDiv
-								isAllDayCheckboxDisplayed={
-									formValues.startDate && !formValues.endDate
-								}
-							>
-								{isViewMode || (
-									<SubmitButton
-										onClick={handleSubmit}
-										disabled={!checkFormIsFilledOrChanged() || isLoading}
-									>
-										{isEditMode ? "수정하기" : "저장하기"}
-									</SubmitButton>
-								)}
-							</FooterDiv> */}
-						</div>
+						<EditedProposalForm
+							index={editiedProposalIndex}
+							onSubmit={() => setEditiedProposalIndex(-1)}
+						/>
 					</div>
 				</SliderWrapperDiv>
-				<SubmitButton onClick={() => {}} disabled={true}>
-					저장하기
-				</SubmitButton>
 			</ScheduleModalLayoutDiv>
 		</FormModal>
 	);

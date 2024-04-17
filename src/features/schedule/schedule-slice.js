@@ -78,6 +78,9 @@ const scheduleSlice = createSlice({
 		changeCurrentGroupId: (state, { payload }) => {
 			state.currentGroupScheduleId = payload;
 		},
+		changeRecommendedProposal: (state, { payload: { formValues, index } }) => {
+			state.recommendedScheduleProposals[index] = formValues;
+		},
 		resetSchedule: () => {
 			return initialState;
 		},
@@ -297,6 +300,7 @@ export const {
 	resetOverlappedSchedules,
 	changeSchedulePage,
 	changeCurrentGroupId,
+	changeRecommendedProposal,
 	resetSchedule,
 } = scheduleSlice.actions;
 
