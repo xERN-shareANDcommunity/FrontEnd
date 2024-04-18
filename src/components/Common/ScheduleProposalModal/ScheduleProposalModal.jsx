@@ -32,6 +32,14 @@ const initialFormValues = {
 	selectedRecommendationIndexes: [],
 };
 
+const initialProposalParams = {
+	startDateStr: moment().format("YYYY-MM-DD"),
+	startTimeStr: moment().format("HH:mm"),
+	endDateStr: moment().format("YYYY-MM-DD"),
+	endTimeStr: moment().format("HH:mm"),
+	minDuration: 60, // 분
+};
+
 const ScheduleProposalModal = () => {
 	const prevFormValue = useRef(initialFormValues);
 	const dispatch = useDispatch();
@@ -39,13 +47,10 @@ const ScheduleProposalModal = () => {
 		({ schedule }) => schedule.recommendedScheduleProposals,
 	);
 	const [formValues, setFormValues] = useState(initialFormValues);
-	const [proposalParams, setProposalParams] = useState({
-		startDateStr: moment().format("YYYY-MM-DD"),
-		startTimeStr: moment().format("HH:mm"),
-		endDateStr: moment().format("YYYY-MM-DD"),
-		endTimeStr: moment().format("HH:mm"),
-		minDuration: 60, // 분
-	});
+	const [prevProposalParams, setPrevProposalParams] = useState(
+		initialProposalParams,
+	);
+	const [proposalParams, setProposalParams] = useState(initialProposalParams);
 
 	const [editiedProposalIndex, setEditiedProposalIndex] = useState(null); // 수정하는 건 뭔가, 새로 만들기의 경우 어떻게 해야 할까? null, -1, 그 외 인덱스
 
@@ -81,7 +86,7 @@ const ScheduleProposalModal = () => {
 		}
 	};
 
-	const handleGettingProposal = () => {
+	const handleGettingProposal = async () => {
 		const checkTimeIsValid = () => {
 			if (proposalParams.startDateStr < proposalParams.endDateStr) {
 				return true;
@@ -100,8 +105,13 @@ const ScheduleProposalModal = () => {
 			return false;
 		};
 
-		if (checkTimeIsValid()) {
-			dispatch(getScheduleProposals(proposalParams));
+		if (checkTimeIsValid() && !_.isEqual(prevProposalParams, proposalParams)) {
+			try {
+				await dispatch(getScheduleProposals(proposalParams)).unwrap();
+				setPrevProposalParams(proposalParams);
+			} catch (error) {
+				toast.error("일정 추천 중 오류가 발생했습니다.");
+			}
 		}
 	};
 
@@ -177,13 +187,7 @@ const ScheduleProposalModal = () => {
 									/>
 									<button
 										type="button"
-										disabled={
-											!proposalParams.startDateStr ||
-											!proposalParams.startTimeStr ||
-											!proposalParams.endDateStr ||
-											!proposalParams.endTimeStr ||
-											!proposalParams.minDuration
-										}
+										disabled={_.isEqual(prevProposalParams, proposalParams)}
 										onClick={handleGettingProposal}
 									>
 										추천받기

@@ -230,10 +230,12 @@ const scheduleSlice = createSlice({
 				state.scheduleProposals = payload;
 			})
 			.addCase(getScheduleProposals.fulfilled, (state, { payload }) => {
-				state.recommendedScheduleProposals = payload.proposals.map(
-					({ startDateTime, endDateTime }) =>
+				state.recommendedScheduleProposals = [
+					...state.recommendedScheduleProposals,
+					...payload.proposals.map(({ startDateTime, endDateTime }) =>
 						convertScheduleDataToFormValue({ startDateTime, endDateTime }),
-				);
+					),
+				];
 			})
 			// userGroup 업데이트 시
 			.addCase(inqueryUserGroup.fulfilled, (state, { payload }) => {
