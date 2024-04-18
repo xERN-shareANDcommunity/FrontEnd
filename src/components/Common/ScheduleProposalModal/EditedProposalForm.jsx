@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -48,6 +48,12 @@ const EditedProposalForm = ({ index, onSubmit }) => {
 	const [formValues, setFormValues] = useState(
 		recommendedScheduleProposals[index] || initialFormValues,
 	);
+
+	useEffect(() => {
+		prevFormValue.current =
+			recommendedScheduleProposals[index] || initialFormValues;
+		setFormValues(recommendedScheduleProposals[index] || initialFormValues);
+	}, [recommendedScheduleProposals, index]);
 
 	// handle date change
 	const handleDateValueChange = (date, id) => {

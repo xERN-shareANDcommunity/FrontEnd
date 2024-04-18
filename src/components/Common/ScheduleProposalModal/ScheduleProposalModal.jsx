@@ -211,14 +211,32 @@ const ScheduleProposalModal = () => {
 													index,
 												) !== -1 && <div />}
 											</button>
-											<span>
-												{getTimeString(
-													convertToUTC(proposal.startDate, proposal.startTime),
-													convertToUTC(proposal.endDate, proposal.endTime),
-												)}
-											</span>
+											<div>
+												<span>
+													{getTimeString(
+														convertToUTC(
+															proposal.startDate,
+															proposal.startTime,
+														),
+														convertToUTC(proposal.endDate, proposal.endTime),
+													)}
+												</span>
+												<span
+													className={`freqIndicator ${
+														proposal.freq !== "NONE" ? "active" : ""
+													}`}
+												>
+													반복
+												</span>
+											</div>
 										</div>
-										<button type="button">반복</button>
+										<button
+											type="button"
+											className="edit"
+											onClick={() => setEditiedProposalIndex(index)}
+										>
+											수정하기
+										</button>
 									</div>
 								))}
 								<button

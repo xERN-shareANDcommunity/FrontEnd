@@ -89,6 +89,23 @@ export const RecommendedProposalsDiv = styled.div`
 		align-items: center;
 		justify-content: space-between;
 
+		& > .edit {
+			height: 17px;
+			min-width: 55px;
+			border-radius: 5px;
+			background-color: ${({ theme: { colors } }) => colors.btn_01};
+			color: ${({ theme: { colors } }) => colors.white};
+			text-align: center;
+			line-height: 17px;
+			font-size: 10px;
+			font-weight: ${({
+				theme: {
+					typography: { weight },
+				},
+			}) => weight.medium};
+			cursor: pointer;
+		}
+
 		& > div {
 			display: flex;
 			gap: 26px;
@@ -111,30 +128,40 @@ export const RecommendedProposalsDiv = styled.div`
 				}
 			}
 
-			& > span {
-				line-height: 20px;
-				font-size: ${({
-					theme: {
-						typography: { size },
-					},
-				}) => size.s2};
-				font-weight: ${({
-					theme: {
-						typography: { weight },
-					},
-				}) => weight.medium};
-			}
-		}
+			& > div {
+				display: flex;
+				align-items: center;
+				gap: 4px;
 
-		& > button {
-			min-width: 38px;
-			height: 17px;
-			background-color: ${({ theme: { colors } }) => colors.primary};
-			border-radius: 10px;
-			color: ${({ theme: { colors } }) => colors.white};
-			text-align: center;
-			font-size: 10px;
-			line-height: 17px;
+				& > span:first-child {
+					line-height: 20px;
+					font-size: ${({
+						theme: {
+							typography: { size },
+						},
+					}) => size.s2};
+					font-weight: ${({
+						theme: {
+							typography: { weight },
+						},
+					}) => weight.medium};
+				}
+
+				& > span.freqIndicator {
+					min-width: 38px;
+					height: 17px;
+					background-color: ${({ theme: { colors } }) => colors.btn_02};
+					border-radius: 10px;
+					color: ${({ theme: { colors } }) => colors.white};
+					text-align: center;
+					font-size: 10px;
+					line-height: 17px;
+
+					&.active {
+						background-color: ${({ theme: { colors } }) => colors.primary};
+					}
+				}
+			}
 		}
 	}
 
