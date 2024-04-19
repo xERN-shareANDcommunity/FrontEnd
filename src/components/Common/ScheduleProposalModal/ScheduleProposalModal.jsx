@@ -215,6 +215,7 @@ const ScheduleProposalModal = () => {
 															proposal.startTime,
 														),
 														convertToUTC(proposal.endDate, proposal.endTime),
+														proposal.isAllDay,
 													)}
 												</span>
 												<span

@@ -105,14 +105,14 @@ export const getGroupColor = (groupId) => {
 	return SCHEDULE_COLORS[groupId % 20];
 };
 
-export const getTimeString = (start, end) => {
-	const isAllday = checkIsAlldaySchedule(start, end);
+export const getTimeString = (start, end, isAlldayValue) => {
+	const isAllday = checkIsAlldaySchedule(start, end) || isAlldayValue;
 	const startDate = new Date(start);
 	const endDate = new Date(end);
 	const startDateString = `${
 		startDate.getMonth() + 1
 	}월 ${startDate.getDate()}일`;
-
+	console.log(isAllday);
 	if (isAllday) {
 		return `${startDateString} 하루 종일`;
 	}
