@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import _ from "lodash";
 
 import {
 	SCHEDULE_PAGE_TYPE,
@@ -23,6 +24,34 @@ import {
 } from "./schedule-service.js";
 
 const initialOverlappedScheduleInfo = { title: "", schedules: [] };
+
+// lodash만으로 state 내 배열(Proxy(array))과 그냥 객체 내 배열 간의 비교가 안돼서 따로 작성함
+const checkTowFormsAreDifferent = (prevState, curr) => {
+	let isDifferent = false;
+	const keys = Object.keys(prevState);
+	for (let i = 0; i < keys.length; i += 1) {
+		const key = keys[i];
+		// byweekday가 아닐 때
+		if (key !== "byweekday") {
+			if (prevState[key] !== curr[key]) {
+				isDifferent = true;
+				break;
+			}
+		} else {
+			// byweekday일 때
+			const prevByweekday = [...prevState[key]];
+			const currByweekday = [...curr[key]];
+			// byweekday는 순서가 무작위이므로 정렬 후 비교
+			prevByweekday.sort();
+			currByweekday.sort();
+			if (!_.isEqual(prevByweekday, currByweekday)) {
+				isDifferent = true;
+				break;
+			}
+		}
+	}
+	return isDifferent;
+};
 
 const initialState = {
 	calendarSchedules: [],
@@ -79,7 +108,14 @@ const scheduleSlice = createSlice({
 			state.currentGroupScheduleId = payload;
 		},
 		changeRecommendedProposal: (state, { payload: { formValues, index } }) => {
-			state.recommendedScheduleProposals[index] = formValues;
+			// 왜 다른 걸 인식하지 못하니
+			state.recommendedScheduleProposals.splice(index, 1, formValues);
+
+			state.recommendedScheduleProposals =
+				state.recommendedScheduleProposals.filter(
+					(proposal, idx) =>
+						idx === index || checkTowFormsAreDifferent(proposal, formValues),
+				);
 		},
 		resetSchedule: () => {
 			return initialState;
@@ -230,12 +266,16 @@ const scheduleSlice = createSlice({
 				state.scheduleProposals = payload;
 			})
 			.addCase(getScheduleProposals.fulfilled, (state, { payload }) => {
-				state.recommendedScheduleProposals = [
-					...state.recommendedScheduleProposals,
-					...payload.proposals.map(({ startDateTime, endDateTime }) =>
-						convertScheduleDataToFormValue({ startDateTime, endDateTime }),
-					),
-				];
+				payload.proposals.forEach((proposal) => {
+					const proposalFormValue = convertScheduleDataToFormValue(proposal);
+					const sameProposalIndex =
+						state.recommendedScheduleProposals.findIndex((prevProposal) =>
+							checkTowFormsAreDifferent(prevProposal, proposalFormValue),
+						);
+					if (sameProposalIndex === -1) {
+						state.recommendedScheduleProposals.push(proposalFormValue);
+					}
+				});
 			})
 			// userGroup 업데이트 시
 			.addCase(inqueryUserGroup.fulfilled, (state, { payload }) => {
