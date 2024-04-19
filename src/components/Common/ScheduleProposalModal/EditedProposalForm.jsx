@@ -330,13 +330,37 @@ const EditedProposalForm = ({ index, onSubmit }) => {
 		return false;
 	};
 
+	const isUniqueProposalForm = () => {
+		const doesProposalAlreadyExist = recommendedScheduleProposals.some(
+			(proposal) => {
+				const copiedProposal = { ...proposal, byweekday: undefined };
+				const copiedFormValues = { ...formValues, byweekday: undefined };
+				const byweekday1 = [...proposal.byweekday];
+				const byweekday2 = [...formValues.byweekday];
+				byweekday1.sort();
+				byweekday2.sort();
+				return (
+					_.isEqual(copiedProposal, copiedFormValues) &&
+					_.isEqual(byweekday1, byweekday2)
+				);
+			},
+		);
+		if (doesProposalAlreadyExist) {
+			toast.error("이미 동일한 일정 후보가 존재합니다.");
+			return false;
+		}
+
+		return true;
+	};
+
 	const handleSubmit = () => {
 		// form 유효성 검사
 		if (
 			!checkTimeIsValid() ||
 			!checkIntervalIsValid() ||
 			!checkByweekdayIsValid() ||
-			!checkUntilIsValid()
+			!checkUntilIsValid() ||
+			!isUniqueProposalForm()
 		) {
 			return;
 		}

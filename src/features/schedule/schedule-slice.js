@@ -108,14 +108,8 @@ const scheduleSlice = createSlice({
 			state.currentGroupScheduleId = payload;
 		},
 		changeRecommendedProposal: (state, { payload: { formValues, index } }) => {
-			// 왜 다른 걸 인식하지 못하니
+			// 이를 dispatch하는 onSubmit handler에서 중복 검사함
 			state.recommendedScheduleProposals.splice(index, 1, formValues);
-
-			state.recommendedScheduleProposals =
-				state.recommendedScheduleProposals.filter(
-					(proposal, idx) =>
-						idx === index || checkTowFormsAreDifferent(proposal, formValues),
-				);
 		},
 		resetSchedule: () => {
 			return initialState;
