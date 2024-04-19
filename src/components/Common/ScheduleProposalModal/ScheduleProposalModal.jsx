@@ -46,6 +46,7 @@ const ScheduleProposalModal = () => {
 	const recommendedScheduleProposals = useSelector(
 		({ schedule }) => schedule.recommendedScheduleProposals,
 	);
+
 	const [formValues, setFormValues] = useState(initialFormValues);
 	const [prevProposalParams, setPrevProposalParams] = useState(
 		initialProposalParams,
@@ -196,12 +197,7 @@ const ScheduleProposalModal = () => {
 							</ProposalParamsWrapperDiv>
 							<RecommendedProposalsDiv>
 								{recommendedScheduleProposals.map((proposal, index) => (
-									<div
-										key={
-											convertToUTC(proposal.startDate, proposal.startTime) +
-											convertToUTC(proposal.endDate, proposal.endTime)
-										}
-									>
+									<div key={Object.values(proposal).join("")}>
 										<div>
 											<button
 												type="button"
