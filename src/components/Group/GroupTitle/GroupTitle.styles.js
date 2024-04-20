@@ -4,7 +4,7 @@ export const TitleDiv = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: -34px;
+	margin-top: 34px;
 	margin-bottom: 14px;
 
 	& > h2 {

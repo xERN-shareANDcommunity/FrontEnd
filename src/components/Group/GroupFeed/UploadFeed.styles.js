@@ -3,14 +3,12 @@ import styled from "styled-components";
 export const UploadSection = styled.section`
 	border-radius: 10px;
 	border: 1px solid ${({ theme: { colors } }) => colors.btn_02};
-	margin-bottom: 72px;
+	background-color: #fff;
 	padding: 24px 24px 18px 18px;
-	font-family: Inter;
 `;
 
 export const TopDiv = styled.div`
 	display: flex;
-	gap: 16px;
 	position: relative;
 
 	& > img {
@@ -18,10 +16,6 @@ export const TopDiv = styled.div`
 		height: 58px;
 		border-radius: 50%;
 		object-fit: cover;
-	}
-
-	& > input {
-		display: none;
 	}
 
 	& > textarea {
@@ -36,6 +30,7 @@ export const TopDiv = styled.div`
 		background-color: ${({ theme: { colors } }) => colors.bg_01};
 		box-sizing: border-box;
 		font-size: 14px;
+		margin-left: 14px;
 
 		&::placeholder {
 			color: ${({ theme: { colors } }) => colors.disabled_text};
@@ -44,24 +39,66 @@ export const TopDiv = styled.div`
 	}
 `;
 
+export const BottomDiv = styled.div`
+	display: flex;
+	flex-direction: column;
+	padding-left: 72px;
+	margin-top: 12px;
+`;
+
+export const ImgButtonDiv = styled.div`
+	& > input {
+		display: none;
+	}
+`;
+
 export const ImgAddDiv = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 4px;
-	position: absolute;
-	left: 74px;
-	bottom: -24px;
 	cursor: pointer;
 
 	& > p {
 		font-size: 10px;
 		font-weight: ${({ theme: { typography } }) => typography.weight.medium};
+
+		& > span {
+			color: ${({ theme: { colors } }) => colors.disabled_text};
+		}
+	}
+`;
+
+export const ImgBoxDiv = styled.div`
+	display: flex;
+	justify-content: space-between;
+	margin-top: 12px;
+`;
+
+export const ImgPreviewDiv = styled.div`
+	display: flex;
+	gap: 20px;
+`;
+
+export const ImgDiv = styled.div`
+	width: 90px;
+	height: 60px;
+	position: relative;
+
+	& > img {
+		width: 100%;
+		height: 100%;
+	}
+
+	& > svg {
+		position: absolute;
+		top: -6px;
+		right: -6px;
+		cursor: pointer;
 	}
 `;
 
 export const UploadButton = styled.button`
-	margin-top: 12px;
-	float: right;
+	align-self: flex-end;
 	width: 132px;
 	height: 40px;
 	text-align: center;
