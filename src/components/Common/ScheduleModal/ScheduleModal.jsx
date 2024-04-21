@@ -500,11 +500,7 @@ const ScheduleModal = () => {
 						onIntervalChange={handleIntervalValueChange}
 					/>
 				</RepeatContainerDiv>
-				<FooterDiv
-					isAllDayCheckboxDisplayed={
-						formValues.startDate && !formValues.endDate
-					}
-				>
+				<FooterDiv>
 					{isViewMode || (
 						<SubmitButton
 							onClick={handleSubmit}
