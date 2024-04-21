@@ -394,5 +394,11 @@ export const WeeklyDatePickerDiv = styled.div`
 
 export const FooterDiv = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	align-items: flex-end;
+
+	& > button {
+		cursor: pointer;
+	}
 `;

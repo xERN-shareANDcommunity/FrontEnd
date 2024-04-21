@@ -1,3 +1,4 @@
+import BackArrowIcon from "@/assets/icon/ic-back-arrow.svg";
 import CloseIcon from "@/assets/icon/ic-close.svg";
 import CrownIcon from "@/assets/icon/ic-crown.svg";
 import DeleteScheduleIcon from "@/assets/icon/ic-delete-schedule.svg";
@@ -54,4 +55,5 @@ export {
 	DottedCalendarIcon,
 	WhitePlusIcon,
 	ExtraMembersDropdownIcon,
+	BackArrowIcon,
 };
