@@ -2,6 +2,7 @@ import AccessArrowIcon from "@/assets/icon/ic-access-arrow.svg";
 import InfoIcon from "@/assets/icon/ic-access-info-circle.svg";
 import AccessInfoIcon from "@/assets/icon/ic-access-info.svg";
 import AdminIcon from "@/assets/icon/ic-admin.svg";
+import BackArrowIcon from "@/assets/icon/ic-back-arrow.svg";
 import CloseIcon from "@/assets/icon/ic-close.svg";
 import CommentListIcon from "@/assets/icon/ic-comment-list.svg";
 import CrownIcon from "@/assets/icon/ic-crown.svg";
@@ -90,4 +91,5 @@ export {
 	DottedCalendarIcon,
 	WhitePlusIcon,
 	ExtraMembersDropdownIcon,
+	BackArrowIcon,
 };

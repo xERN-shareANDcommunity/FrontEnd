@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 import moment from "moment";
 
+import { BackArrowIcon } from "@/constants/iconConstants";
 import { changeRecommendedProposal } from "@/features/schedule/schedule-slice";
 import {
 	calculateIsAllDay,
@@ -36,7 +37,7 @@ const initialFormValues = {
 	until: "",
 };
 
-const EditedProposalForm = ({ index, onSubmit }) => {
+const EditedProposalForm = ({ index, onClose }) => {
 	const dispatch = useDispatch();
 	const recommendedScheduleProposals = useSelector(
 		({ schedule }) => schedule.recommendedScheduleProposals,
@@ -372,7 +373,14 @@ const EditedProposalForm = ({ index, onSubmit }) => {
 		setFormValues(initialFormValues);
 
 		// 메뉴 닫기
-		onSubmit();
+		onClose();
+	};
+
+	const handleCancelClick = () => {
+		onClose();
+		// reset
+		prevFormValue.current = initialFormValues;
+		setFormValues(initialFormValues);
 	};
 
 	return (
@@ -424,17 +432,16 @@ const EditedProposalForm = ({ index, onSubmit }) => {
 						onIntervalChange={handleIntervalValueChange}
 					/>
 				</RepeatContainerDiv>
-				<FooterDiv
-					isAllDayCheckboxDisplayed={
-						formValues.startDate && !formValues.endDate
-					}
-				>
+				<FooterDiv>
 					<SubmitButton
 						onClick={handleSubmit}
 						disabled={!checkFormIsFilledOrChanged()}
 					>
 						저장하기
 					</SubmitButton>
+					<button type="button" onClick={handleCancelClick}>
+						<BackArrowIcon />
+					</button>
 				</FooterDiv>
 			</div>
 		</div>

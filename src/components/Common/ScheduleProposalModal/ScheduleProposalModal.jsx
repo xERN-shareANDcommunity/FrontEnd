@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 import moment from "moment";
 
+import { FooterDiv } from "@/components/Common/ScheduleModal/ScheduleModal.styles";
 import EditedProposalForm from "@/components/Common/ScheduleProposalModal/EditedProposalForm";
 import { getScheduleProposals } from "@/features/schedule/schedule-service";
 import { getTimeString } from "@/utils/calendarUtils";
@@ -248,13 +249,15 @@ const ScheduleProposalModal = () => {
 									직접 만들기
 								</button>
 							</RecommendedProposalsDiv>
-							<SubmitButton onClick={() => {}} disabled={true}>
-								저장하기
-							</SubmitButton>
+							<FooterDiv>
+								<SubmitButton onClick={() => {}} disabled={true}>
+									저장하기
+								</SubmitButton>
+							</FooterDiv>
 						</div>
 						<EditedProposalForm
 							index={editiedProposalIndex}
-							onSubmit={() => setEditiedProposalIndex(-1)}
+							onClose={() => setEditiedProposalIndex(-1)}
 						/>
 					</div>
 				</SliderWrapperDiv>
