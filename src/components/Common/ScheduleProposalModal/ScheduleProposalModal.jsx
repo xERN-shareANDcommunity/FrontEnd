@@ -56,6 +56,9 @@ const ScheduleProposalModal = () => {
 
 	const [editiedProposalIndex, setEditiedProposalIndex] = useState(null); // 수정하는 건 뭔가, 새로 만들기의 경우 어떻게 해야 할까? null, -1, 그 외 인덱스
 
+	const isSlideOnEditForm =
+		editiedProposalIndex !== -1 && editiedProposalIndex !== null;
+
 	const handleDateValueChange = (date, id) => {
 		const value = moment(date).format("YYYY-MM-DD");
 
@@ -141,14 +144,9 @@ const ScheduleProposalModal = () => {
 	};
 
 	return (
-		<FormModal
-			isEmpty={checkIsEmpty()}
-			isCloseButtonHidden={
-				editiedProposalIndex !== -1 && editiedProposalIndex !== null
-			}
-		>
+		<FormModal isEmpty={checkIsEmpty()} isCloseButtonHidden={isSlideOnEditForm}>
 			<ScheduleModalLayoutDiv data-testid="ScheduleProposalModal">
-				<h2>일정 후보 등록</h2>
+				<h2>{isSlideOnEditForm ? "일정 후보 수정" : "일정 후보 등록"}</h2>
 				<TitleInput
 					onChange={(e) =>
 						setFormValues((prev) => ({ ...prev, title: e.target.value }))
@@ -256,7 +254,7 @@ const ScheduleProposalModal = () => {
 							</RecommendedProposalsDiv>
 							<FooterDiv>
 								<SubmitButton onClick={() => {}} disabled={true}>
-									저장하기
+									등록하기
 								</SubmitButton>
 							</FooterDiv>
 						</div>
