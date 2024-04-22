@@ -141,7 +141,12 @@ const ScheduleProposalModal = () => {
 	};
 
 	return (
-		<FormModal isEmpty={checkIsEmpty()}>
+		<FormModal
+			isEmpty={checkIsEmpty()}
+			isCloseButtonHidden={
+				editiedProposalIndex !== -1 && editiedProposalIndex !== null
+			}
+		>
 			<ScheduleModalLayoutDiv data-testid="ScheduleProposalModal">
 				<h2>일정 후보 등록</h2>
 				<TitleInput
