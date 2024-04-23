@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -8,6 +8,7 @@ import moment from "moment";
 import { FooterDiv } from "@/components/Common/ScheduleModal/ScheduleModal.styles";
 import EditedProposalForm from "@/components/Common/ScheduleProposalModal/EditedProposalForm";
 import { getScheduleProposals } from "@/features/schedule/schedule-service";
+import { resetRecommendedScheduleProposals } from "@/features/schedule/schedule-slice";
 import { getTimeString } from "@/utils/calendarUtils";
 import convertToUTC from "@/utils/convertToUTC";
 
@@ -142,6 +143,12 @@ const ScheduleProposalModal = () => {
 			};
 		});
 	};
+
+	useEffect(() => {
+		return () => {
+			dispatch(resetRecommendedScheduleProposals());
+		};
+	}, []);
 
 	return (
 		<FormModal isEmpty={checkIsEmpty()} isCloseButtonHidden={isSlideOnEditForm}>

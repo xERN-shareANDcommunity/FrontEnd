@@ -111,6 +111,9 @@ const scheduleSlice = createSlice({
 			// 이를 dispatch하는 onSubmit handler에서 중복 검사함
 			state.recommendedScheduleProposals.splice(index, 1, formValues);
 		},
+		resetRecommendedScheduleProposals: (state) => {
+			state.recommendedScheduleProposals = [];
+		},
 		resetSchedule: () => {
 			return initialState;
 		},
@@ -337,6 +340,7 @@ export const {
 	changeSchedulePage,
 	changeCurrentGroupId,
 	changeRecommendedProposal,
+	resetRecommendedScheduleProposals,
 	resetSchedule,
 } = scheduleSlice.actions;
 
