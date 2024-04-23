@@ -147,6 +147,11 @@ const ScheduleProposalModal = () => {
 		});
 	};
 
+	const checkFormValuesAreAllFilled = () =>
+		formValues.title.trim().length > 0 &&
+		formValues.content.trim().length > 0 &&
+		formValues.selectedRecommendationIndexes.length > 0;
+
 	useEffect(() => {
 		return () => {
 			dispatch(resetRecommendedScheduleProposals());
@@ -263,7 +268,10 @@ const ScheduleProposalModal = () => {
 								</button>
 							</RecommendedProposalsDiv>
 							<FooterDiv>
-								<SubmitButton onClick={() => {}} disabled={true}>
+								<SubmitButton
+									onClick={() => {}}
+									disabled={!checkFormValuesAreAllFilled()}
+								>
 									등록하기
 								</SubmitButton>
 							</FooterDiv>
