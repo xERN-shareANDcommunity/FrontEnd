@@ -264,10 +264,18 @@ const scheduleSlice = createSlice({
 			})
 			.addCase(getScheduleProposals.fulfilled, (state, { payload }) => {
 				payload.proposals.forEach((proposal) => {
-					const proposalFormValue = convertScheduleDataToFormValue(proposal);
+					const proposalFormValue = {
+						...convertScheduleDataToFormValue(proposal),
+					};
+					delete proposalFormValue.id;
+					delete proposalFormValue.userId;
+					delete proposalFormValue.title;
+					delete proposalFormValue.content;
+
 					const sameProposalIndex =
-						state.recommendedScheduleProposals.findIndex((prevProposal) =>
-							checkTowFormsAreDifferent(prevProposal, proposalFormValue),
+						state.recommendedScheduleProposals.findIndex(
+							(prevProposal) =>
+								!checkTowFormsAreDifferent(prevProposal, proposalFormValue),
 						);
 					if (sameProposalIndex === -1) {
 						state.recommendedScheduleProposals.push(proposalFormValue);
