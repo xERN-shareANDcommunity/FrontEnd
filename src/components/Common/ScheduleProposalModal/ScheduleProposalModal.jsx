@@ -127,7 +127,10 @@ const ScheduleProposalModal = () => {
 			title: formValues.title.trim(),
 			content: formValues.content.trim(),
 		};
-		return _.isEqual(trimmedFormValues, prevFormValue.current);
+		return (
+			_.isEqual(trimmedFormValues, prevFormValue.current) &&
+			recommendedScheduleProposals.length === 0
+		);
 	};
 
 	const handleSelectRecommendation = (index) => {
