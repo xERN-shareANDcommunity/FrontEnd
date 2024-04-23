@@ -112,7 +112,6 @@ export const getTimeString = (start, end, isAlldayValue) => {
 	const startDateString = `${
 		startDate.getMonth() + 1
 	}월 ${startDate.getDate()}일`;
-	console.log(isAllday);
 	if (isAllday) {
 		return `${startDateString} 하루 종일`;
 	}
