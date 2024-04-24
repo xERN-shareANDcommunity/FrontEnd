@@ -3,6 +3,7 @@ import moment from "moment";
 
 import { SCHEDULE_PAGE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
 import commonThunk from "@/features/commonThunk";
+import { closeModal } from "@/features/ui/ui-slice";
 import { getFirstDateOfWeek } from "@/utils/calendarUtils";
 import { convertScheduleFormValueToData } from "@/utils/convertSchedule";
 import convertToUTC from "@/utils/convertToUTC";
@@ -308,5 +309,50 @@ export const getScheduleProposals = createAsyncThunk(
 		);
 
 		return data;
+	},
+);
+
+export const enrollScheudleProposals = createAsyncThunk(
+	"schedule/enrollScheudleProposals",
+	async ({ title, content, selectedRecommendationIndexes }, thunkAPI) => {
+		const { currentGroupScheduleId: groupId, recommendedScheduleProposals } =
+			thunkAPI.getState().schedule;
+
+		if (
+			!title ||
+			!content ||
+			selectedRecommendationIndexes.length === 0 ||
+			!groupId
+		) {
+			return thunkAPI.rejectWithValue("잘못된 데이터 형식입니다.");
+		}
+
+		try {
+			const promises = selectedRecommendationIndexes.map(
+				async (proposalIndex) => {
+					const body = convertScheduleFormValueToData({
+						title,
+						content,
+						...recommendedScheduleProposals[proposalIndex],
+					});
+					delete body.requestStartDateTime;
+					delete body.requestEndDateTime;
+					return commonThunk(
+						{
+							method: "POST",
+							url: `/api/group/${groupId}/proposal`,
+							data: body,
+							successCode: 200,
+						},
+						thunkAPI,
+					);
+				},
+			);
+			const result = await Promise.all(promises);
+			thunkAPI.dispatch(closeModal());
+			return result;
+		} catch (error) {
+			return thunkAPI.rejectWithValue("일정 후보 등록 실패");
+		}
 	},
 );

@@ -7,7 +7,10 @@ import moment from "moment";
 
 import { FooterDiv } from "@/components/Common/ScheduleModal/ScheduleModal.styles";
 import EditedProposalForm from "@/components/Common/ScheduleProposalModal/EditedProposalForm";
-import { getScheduleProposals } from "@/features/schedule/schedule-service";
+import {
+	enrollScheudleProposals,
+	getScheduleProposals,
+} from "@/features/schedule/schedule-service";
 import { resetRecommendedScheduleProposals } from "@/features/schedule/schedule-slice";
 import { getTimeString } from "@/utils/calendarUtils";
 import convertToUTC from "@/utils/convertToUTC";
@@ -45,8 +48,8 @@ const initialProposalParams = {
 const ScheduleProposalModal = () => {
 	const prevFormValue = useRef(initialFormValues);
 	const dispatch = useDispatch();
-	const recommendedScheduleProposals = useSelector(
-		({ schedule }) => schedule.recommendedScheduleProposals,
+	const { recommendedScheduleProposals, isLoading } = useSelector(
+		({ schedule }) => schedule,
 	);
 
 	const [formValues, setFormValues] = useState(initialFormValues);
@@ -151,6 +154,14 @@ const ScheduleProposalModal = () => {
 		formValues.title.trim().length > 0 &&
 		formValues.content.trim().length > 0 &&
 		formValues.selectedRecommendationIndexes.length > 0;
+
+	const handleProposalSubmit = () => {
+		if (!checkFormValuesAreAllFilled()) {
+			toast.error("등록에 필요한 모든 값을 입력해주세요");
+		} else {
+			dispatch(enrollScheudleProposals({ ...formValues }));
+		}
+	};
 
 	useEffect(() => {
 		return () => {
@@ -269,8 +280,9 @@ const ScheduleProposalModal = () => {
 							</RecommendedProposalsDiv>
 							<FooterDiv>
 								<SubmitButton
-									onClick={() => {}}
-									disabled={!checkFormValuesAreAllFilled()}
+									type="submit"
+									onClick={handleProposalSubmit}
+									disabled={!checkFormValuesAreAllFilled() || isLoading}
 								>
 									등록하기
 								</SubmitButton>
