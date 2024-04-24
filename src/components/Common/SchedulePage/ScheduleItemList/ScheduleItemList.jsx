@@ -234,6 +234,10 @@ const ScheduleItemList = () => {
 							? todaySchedules
 							: schedulesForTheWeek
 						).map((schedule) => {
+							if (isProposalTab)
+								return (
+									<ScheduleItem key={schedule.voteId} schedule={schedule} />
+								);
 							return (
 								<ScheduleItem
 									key={

@@ -21,6 +21,7 @@ import {
 	getOverlappedSchedules,
 	getGroupScheduleProposal,
 	getScheduleProposals,
+	enrollScheudleProposals,
 } from "./schedule-service.js";
 
 const initialOverlappedScheduleInfo = { title: "", schedules: [] };
@@ -288,6 +289,12 @@ const scheduleSlice = createSlice({
 					state.currentGroupScheduleId = payload[0].groupId;
 				}
 			})
+			.addCase(enrollScheudleProposals.fulfilled, (state, { payload }) => {
+				state.scheduleProposals.push(...payload);
+			})
+			.addCase(enrollScheudleProposals.rejected, () => {
+				toast.error("일정 후보 등록에 실패했습니다.");
+			})
 			.addMatcher(
 				isAnyOf(
 					createSchedule.pending,
@@ -299,6 +306,7 @@ const scheduleSlice = createSlice({
 					getOverlappedSchedules.pending,
 					getGroupScheduleProposal.pending,
 					getScheduleProposals.pending,
+					enrollScheudleProposals.pending,
 				),
 				(state) => {
 					state.isLoading = true;
@@ -315,6 +323,7 @@ const scheduleSlice = createSlice({
 					getOverlappedSchedules.fulfilled,
 					getGroupScheduleProposal.fulfilled,
 					getScheduleProposals.fulfilled,
+					enrollScheudleProposals.fulfilled,
 				),
 				(state) => {
 					state.isLoading = false;
@@ -331,6 +340,7 @@ const scheduleSlice = createSlice({
 					getOverlappedSchedules.rejected,
 					getGroupScheduleProposal.rejected,
 					getScheduleProposals.rejected,
+					enrollScheudleProposals.rejected,
 				),
 				(state) => {
 					state.isLoading = false;
