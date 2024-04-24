@@ -66,7 +66,7 @@ const ScheduleProposalModal = () => {
 	const handleDateValueChange = (date, id) => {
 		const value = moment(date).format("YYYY-MM-DD");
 
-		if (id === "strtDate") {
+		if (id === "startDate") {
 			setProposalParams((prev) => ({ ...prev, startDateStr: value }));
 		} else if (id === "endDate") {
 			setProposalParams((prev) => ({
