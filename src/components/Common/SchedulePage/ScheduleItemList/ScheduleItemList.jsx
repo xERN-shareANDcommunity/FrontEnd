@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ScheduleItem from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleItem/ScheduleItem";
+import ScheduleVoteItem from "@/components/Common/SchedulePage/ScheduleItemList/ScheduleVoteItem/ScheduleVoteItem";
 import { SCHEDULE_PAGE_TYPE } from "@/constants/calendarConstants";
 import { DottedCalendarIcon, ScheduleAddIcon } from "@/constants/iconConstants";
 import { UI_TYPE } from "@/constants/uiConstants";
@@ -236,7 +237,7 @@ const ScheduleItemList = () => {
 						).map((schedule) => {
 							if (isProposalTab)
 								return (
-									<ScheduleItem key={schedule.voteId} schedule={schedule} />
+									<ScheduleVoteItem key={schedule.voteId} schedule={schedule} />
 								);
 							return (
 								<ScheduleItem
