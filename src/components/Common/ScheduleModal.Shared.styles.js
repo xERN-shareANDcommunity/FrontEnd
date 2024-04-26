@@ -45,6 +45,10 @@ export const TitleInput = styled.input`
 	height: 35px;
 	margin-bottom: 24px;
 	border-bottom: 1px solid ${({ theme }) => theme.colors.text_01};
+
+	&:disabled {
+		cursor: not-allowed;
+	}
 `;
 
 export const DetailTextarea = styled.textarea`
@@ -59,6 +63,10 @@ export const DetailTextarea = styled.textarea`
 	margin-bottom: ${({ theme }) => theme.spacing.padding.medium}px;
 	&::placeholder {
 		color: ${({ theme }) => theme.colors.disabled_text};
+	}
+
+	&:disabled {
+		cursor: not-allowed;
 	}
 `;
 

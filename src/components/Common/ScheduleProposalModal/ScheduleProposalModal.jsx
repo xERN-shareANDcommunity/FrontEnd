@@ -175,13 +175,21 @@ const ScheduleProposalModal = () => {
 				<h2>{isSlideOnEditForm ? "일정 후보 수정" : "일정 후보 등록"}</h2>
 				<TitleInput
 					onChange={(e) =>
-						setFormValues((prev) => ({ ...prev, title: e.target.value }))
+						setFormValues((prev) =>
+							isSlideOnEditForm ? prev : { ...prev, title: e.target.value },
+						)
 					}
+					value={formValues.title}
+					disabled={isSlideOnEditForm}
 				/>
 				<DetailTextarea
 					onChange={(e) =>
-						setFormValues((prev) => ({ ...prev, content: e.target.value }))
+						setFormValues((prev) =>
+							isSlideOnEditForm ? prev : { ...prev, content: e.target.value },
+						)
 					}
+					value={formValues.content}
+					disabled={isSlideOnEditForm}
 				/>
 				<SliderWrapperDiv>
 					<div
