@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
-import SampleImg from "@/assets/img/bg_02.png";
+import imageCompression from "browser-image-compression";
+
 import { FeedImgIcon, FeedImgCloseIcon } from "@/constants/iconConstants";
 import { createPost } from "@/features/post/post-service";
 
@@ -23,7 +25,8 @@ const UploadFeed = ({ groupId }) => {
 	const { user } = useSelector((state) => state.auth);
 
 	const [content, setContent] = useState("");
-	const [profileImg, setProfileImg] = useState("");
+	const [profileImg, setProfileImg] = useState([]);
+	const [previewImgList, setPreviewImgList] = useState([]);
 
 	const textareaRef = useRef(null);
 
@@ -39,13 +42,54 @@ const UploadFeed = ({ groupId }) => {
 		}
 	};
 
-	const handleChangeImg = (e) => {
-		const file = e.target.files[0];
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onloadend = () => {
-			setProfileImg(file);
-		};
+	const handleCompressImage = async (fileList) => {
+		const imageFileList = [];
+
+		try {
+			await Promise.all(
+				[...fileList].map(async (file) => {
+					const compressImageFile = await imageCompression(file, 1);
+
+					const fileName = file.name;
+					const fileType = compressImageFile.type;
+					const convertedFile = new File([compressImageFile], fileName, {
+						type: fileType,
+					});
+
+					imageFileList.push(convertedFile);
+				}),
+			);
+		} catch (e) {
+			imageFileList.push(...fileList);
+		}
+
+		return imageFileList;
+	};
+
+	const handleChangeImg = async (e) => {
+		const fileList = e.target.files;
+
+		if (fileList.length > 3) {
+			toast.error("이미지는 3개까지 등록 가능합니다.");
+
+			return;
+		}
+
+		const imageUrlList = [...previewImgList];
+
+		Array.from(fileList).forEach((file) => {
+			imageUrlList.push(URL.createObjectURL(file));
+		});
+
+		setPreviewImgList(imageUrlList);
+
+		const compressedImages = await handleCompressImage(fileList);
+
+		setProfileImg(compressedImages);
+	};
+
+	const handleImgClose = (imgIndex) => {
+		console.log(previewImgList[imgIndex]);
 	};
 
 	const handleSubmit = (e) => {
@@ -59,12 +103,17 @@ const UploadFeed = ({ groupId }) => {
 
 		formData.append("data", JSON.stringify(data));
 
-		formData.append("image1", profileImg);
+		formData.append("image1", profileImg[0]);
+		formData.append("image2", profileImg[1]);
+		formData.append("image3", profileImg[2]);
 
 		dispatch(createPost({ groupId, formData }));
 		setContent("");
 		setProfileImg("");
 	};
+
+	// console.log(previewImgList);
+	// console.log(profileImg);
 
 	return (
 		<UploadSection>
@@ -92,18 +141,12 @@ const UploadFeed = ({ groupId }) => {
 
 				<ImgBoxDiv>
 					<ImgPreviewDiv>
-						<ImgDiv>
-							<img src={SampleImg} alt="sampleImg" />
-							<FeedImgCloseIcon />
-						</ImgDiv>
-						<ImgDiv>
-							<img src={SampleImg} alt="sampleImg" />
-							<FeedImgCloseIcon />
-						</ImgDiv>
-						<ImgDiv>
-							<img src={SampleImg} alt="sampleImg" />
-							<FeedImgCloseIcon />
-						</ImgDiv>
+						{previewImgList.map((img, index) => (
+							<ImgDiv>
+								<img src={img} alt={`feedImg${index}`} />
+								<FeedImgCloseIcon onClick={() => handleImgClose(index)} />
+							</ImgDiv>
+						))}
 					</ImgPreviewDiv>
 					<UploadButton
 						type="submit"
