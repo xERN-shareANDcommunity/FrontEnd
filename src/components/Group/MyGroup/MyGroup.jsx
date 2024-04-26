@@ -96,7 +96,10 @@ const MyGroup = () => {
 			<h3>내 그룹</h3>
 			{userGroupList.length === 0 ? (
 				<EmptyGroupDiv>
-					<EmptyMyGroupIcon onClick={() => dispatch(openCreateGroupModal())} />
+					<EmptyMyGroupIcon
+						onClick={() => dispatch(openCreateGroupModal())}
+						data-testid="group-add-button"
+					/>
 					<h4>그룹 추가하기</h4>
 				</EmptyGroupDiv>
 			) : (

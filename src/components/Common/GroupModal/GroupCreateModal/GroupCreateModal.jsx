@@ -68,7 +68,12 @@ const GroupCreateModal = () => {
 						<label htmlFor="profileImg">
 							<GroupImgAddIcon />
 						</label>
-						<input type="file" id="profileImg" onChange={handleChangeImg} />
+						<input
+							type="file"
+							id="profileImg"
+							onChange={handleChangeImg}
+							data-testid="group-img-input"
+						/>
 					</>
 				)}
 			</TopDiv>
@@ -80,6 +85,7 @@ const GroupCreateModal = () => {
 				onChange={(e) => setName(e.target.value)}
 				value={name}
 				maxLength={20}
+				placeholder="그룹 이름"
 			/>
 			<GroupDescriptionLabel htmlFor="description">
 				그룹 소개<span>{description.length}/100자</span>
@@ -89,6 +95,7 @@ const GroupCreateModal = () => {
 				onChange={(e) => setDescription(e.target.value)}
 				value={description}
 				maxLength={100}
+				placeholder="그룹 상세 소개"
 			/>
 			<ButtonWrapDiv>
 				<GroupCreateButton

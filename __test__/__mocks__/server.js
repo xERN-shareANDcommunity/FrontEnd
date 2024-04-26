@@ -8,6 +8,7 @@ import {
 	getScheduleProposalsList,
 	// getSingleGroupSchedule,
 } from "./handlers/group/calendar";
+import { getMyGroupList, postGroup } from "./handlers/group/group";
 import { getInviteLink, postInviteLink } from "./handlers/group/inviteLink";
 import { getGroupMembers } from "./handlers/group/members";
 import {
@@ -67,6 +68,8 @@ export const handlers = [
 		getRecommendedProposals,
 	),
 	rest.post(`${BASE_URL}/api/group/:group_id/proposal`, enrollScheduleProposal),
+	rest.get(`${BASE_URL}/api/user/group`, getMyGroupList),
+	rest.post(`${BASE_URL}/api/group`, postGroup),
 ];
 
 export const server = setupServer(...handlers);
