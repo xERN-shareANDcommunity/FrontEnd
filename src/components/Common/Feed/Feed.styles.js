@@ -94,11 +94,20 @@ export const ContentDiv = styled.div`
 		font-size: ${({ theme: { typography } }) => typography.size.s1};
 		line-height: normal;
 	}
+`;
+
+export const ImgDiv = styled.div`
+	width: 500px;
+	height: 250px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: ${({ theme: { colors } }) => colors.disabled_text};
 
 	& > img {
-		width: 90%;
-		height: 90%;
-		object-fit: cover;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
 	}
 `;
 

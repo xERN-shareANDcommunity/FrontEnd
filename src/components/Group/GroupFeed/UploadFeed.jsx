@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -25,7 +25,7 @@ const UploadFeed = ({ groupId }) => {
 	const { user } = useSelector((state) => state.auth);
 
 	const [content, setContent] = useState("");
-	const [profileImg, setProfileImg] = useState([]);
+	const [imgList, setImgList] = useState([]);
 	const [previewImgList, setPreviewImgList] = useState([]);
 
 	const textareaRef = useRef(null);
@@ -85,11 +85,17 @@ const UploadFeed = ({ groupId }) => {
 
 		const compressedImages = await handleCompressImage(fileList);
 
-		setProfileImg(compressedImages);
+		setImgList(compressedImages);
 	};
 
-	const handleImgClose = (imgIndex) => {
-		console.log(previewImgList[imgIndex]);
+	const handleImgClose = (selectImg, index) => {
+		setPreviewImgList((prevPreviewImgList) =>
+			prevPreviewImgList.filter((prevImg) => prevImg !== selectImg),
+		);
+
+		setImgList((prevImgList) =>
+			prevImgList.filter((img) => img !== imgList[index]),
+		);
 	};
 
 	const handleSubmit = (e) => {
@@ -103,17 +109,18 @@ const UploadFeed = ({ groupId }) => {
 
 		formData.append("data", JSON.stringify(data));
 
-		formData.append("image1", profileImg[0]);
-		formData.append("image2", profileImg[1]);
-		formData.append("image3", profileImg[2]);
+		imgList.forEach((img, index) => formData.append(`image${index + 1}`, img));
 
 		dispatch(createPost({ groupId, formData }));
 		setContent("");
-		setProfileImg("");
+		setImgList("");
 	};
 
-	// console.log(previewImgList);
-	// console.log(profileImg);
+	useEffect(() => {
+		return () => {
+			previewImgList.forEach((imgUrl) => URL.revokeObjectURL(imgUrl));
+		};
+	}, []);
 
 	return (
 		<UploadSection>
@@ -142,9 +149,9 @@ const UploadFeed = ({ groupId }) => {
 				<ImgBoxDiv>
 					<ImgPreviewDiv>
 						{previewImgList.map((img, index) => (
-							<ImgDiv>
+							<ImgDiv key={img}>
 								<img src={img} alt={`feedImg${index}`} />
-								<FeedImgCloseIcon onClick={() => handleImgClose(index)} />
+								<FeedImgCloseIcon onClick={() => handleImgClose(img, index)} />
 							</ImgDiv>
 						))}
 					</ImgPreviewDiv>

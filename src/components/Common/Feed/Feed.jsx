@@ -23,6 +23,7 @@ import {
 	InfoDiv,
 	BottomDiv,
 	ContentDiv,
+	ImgDiv,
 	IconDiv,
 	IconItemButton,
 } from "./Feed.styles";
@@ -113,8 +114,14 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 			<BottomDiv>
 				<ContentDiv>
 					<p>{post.content}</p>
-					{post.image && <img src={post.image} alt="postImg" />}
 				</ContentDiv>
+
+				{post.image && (
+					<ImgDiv>
+						<img src={post.image} alt="postImg" />
+					</ImgDiv>
+				)}
+
 				<IconDiv>
 					<IconItemButton onClick={handleLikeClick}>
 						{isPostLiked ? <FillHeartIcon /> : <EmptyHeartIcon />}
