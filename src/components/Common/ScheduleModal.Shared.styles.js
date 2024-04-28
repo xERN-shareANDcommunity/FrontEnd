@@ -48,6 +48,7 @@ export const TitleInput = styled.input`
 
 	&:disabled {
 		cursor: not-allowed;
+		opacity: 0.5;
 	}
 `;
 
@@ -61,12 +62,14 @@ export const DetailTextarea = styled.textarea`
 	font-size: 16px;
 	padding: 14px;
 	margin-bottom: ${({ theme }) => theme.spacing.padding.medium}px;
+
 	&::placeholder {
 		color: ${({ theme }) => theme.colors.disabled_text};
 	}
 
 	&:disabled {
 		cursor: not-allowed;
+		opacity: 0.5;
 	}
 `;
 
