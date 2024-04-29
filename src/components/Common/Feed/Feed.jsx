@@ -2,12 +2,17 @@ import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import SampleImg from "@/assets/img/p_00.png";
+import SampleImg2 from "@/assets/img/p_01.png";
+import SampleImg3 from "@/assets/img/p_02.png";
 import FeedOption from "@/components/Common/Feed/FeedOption";
 import {
 	CrownIcon,
 	CommentIcon,
 	EmptyHeartIcon,
 	FillHeartIcon,
+	LeftArrowIcon,
+	RightArrowIcon,
 } from "@/constants/iconConstants";
 import {
 	cancelLikeGroupPost,
@@ -23,10 +28,19 @@ import {
 	InfoDiv,
 	BottomDiv,
 	ContentDiv,
-	ImgDiv,
+	CarouselDiv,
+	CarouselBoxDiv,
+	CarouselItemDiv,
+	ArrowButton,
 	IconDiv,
 	IconItemButton,
 } from "./Feed.styles";
+
+const imgMockData = [
+	{ img: SampleImg },
+	{ img: SampleImg2 },
+	{ img: SampleImg3 },
+];
 
 const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 	const dispatch = useDispatch();
@@ -38,6 +52,8 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
 
 	const optionMenuRef = useRef();
+	const listRef = useRef(null);
+	const itemRef = useRef(null);
 
 	const navigate = useNavigate();
 
@@ -79,6 +95,24 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 		}
 	};
 
+	const handleLeftClick = () => {
+		const wrap = itemRef.current;
+
+		wrap.scrollBy({
+			left: -500,
+			behavior: "smooth",
+		});
+	};
+
+	const handleRightClick = () => {
+		const wrap = itemRef.current;
+
+		wrap.scrollBy({
+			left: 500,
+			behavior: "smooth",
+		});
+	};
+
 	return (
 		<FeedArticle
 			onClick={() =>
@@ -117,9 +151,23 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 				</ContentDiv>
 
 				{post.image && (
-					<ImgDiv>
-						<img src={post.image} alt="postImg" />
-					</ImgDiv>
+					<CarouselDiv ref={listRef}>
+						<CarouselBoxDiv ref={itemRef}>
+							{imgMockData.map((data) => (
+								<CarouselItemDiv key={data.img}>
+									<img src={data.img} alt="postImg" />
+								</CarouselItemDiv>
+							))}
+						</CarouselBoxDiv>
+
+						<ArrowButton onClick={handleLeftClick} className="prevButton">
+							<LeftArrowIcon />
+						</ArrowButton>
+
+						<ArrowButton onClick={handleRightClick} className="nextButton">
+							<RightArrowIcon />
+						</ArrowButton>
+					</CarouselDiv>
 				)}
 
 				<IconDiv>

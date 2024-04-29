@@ -91,23 +91,52 @@ export const BottomDiv = styled.div`
 export const ContentDiv = styled.div`
 	& > p {
 		color: ${({ theme: { colors } }) => colors.text_03};
-		font-size: ${({ theme: { typography } }) => typography.size.s1};
+		font-size: 15px;
 		line-height: normal;
 	}
 `;
 
-export const ImgDiv = styled.div`
+export const CarouselDiv = styled.div`
 	width: 500px;
 	height: 250px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-color: ${({ theme: { colors } }) => colors.disabled_text};
+	overflow: hidden;
+	position: relative;
+`;
+
+export const CarouselBoxDiv = styled.div`
+	display: flex;
+	overflow: hidden;
+`;
+
+export const CarouselItemDiv = styled.div`
+	display: flex;
 
 	& > img {
-		width: 100%;
-		height: 100%;
+		width: 500px;
+		height: 250px;
 		object-fit: contain;
+	}
+`;
+
+export const ArrowButton = styled.button`
+	position: absolute;
+	top: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transform: translateY(-50%);
+
+	&.prevButton {
+		left: 0;
+	}
+
+	&.nextButton {
+		right: 0;
 	}
 `;
 
