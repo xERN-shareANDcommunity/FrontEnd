@@ -114,6 +114,7 @@ const UploadFeed = ({ groupId }) => {
 		dispatch(createPost({ groupId, formData }));
 		setContent("");
 		setImgList("");
+		setPreviewImgList([]);
 	};
 
 	useEffect(() => {
