@@ -180,6 +180,7 @@ const ScheduleProposalModal = () => {
 						)
 					}
 					value={formValues.title}
+					placeholder="일정 후보 제목"
 					disabled={isSlideOnEditForm}
 				/>
 				<DetailTextarea
@@ -189,6 +190,7 @@ const ScheduleProposalModal = () => {
 						)
 					}
 					value={formValues.content}
+					placeholder="상세 내용"
 					disabled={isSlideOnEditForm}
 				/>
 				<SliderWrapperDiv>
