@@ -18,7 +18,11 @@ const Backdrop = ({ onClick }) => (
 const Modal = ({ children, onCloseButtonClick, isCloseButtonHidden }) => (
 	<ModalDiv>
 		{isCloseButtonHidden || (
-			<IconButton onClick={onCloseButtonClick} aria-label="close">
+			<IconButton
+				onClick={onCloseButtonClick}
+				aria-label="close"
+				data-testid="modal-closeButton"
+			>
 				<CloseIcon />
 			</IconButton>
 		)}

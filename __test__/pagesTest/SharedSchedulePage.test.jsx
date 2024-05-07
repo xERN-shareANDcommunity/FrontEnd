@@ -191,6 +191,70 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 
 		expect(screen.getByTestId("ScheduleProposalModal")).toBeInTheDocument();
 
+		// x button
+		expect(screen.getByTestId("modal-closeButton")).toBeInTheDocument();
+
+		// title
+		expect(
+			screen.getByRole("heading", { name: "일정 후보 등록" }),
+		).toBeInTheDocument();
+		// input, textarea
+		expect(screen.getByPlaceholderText("일정 후보 제목")).toBeInTheDocument();
+		expect(screen.getByPlaceholderText("상세 내용")).toBeInTheDocument();
+
+		// 일정 추천
+		expect(
+			screen.getByRole("heading", { name: "일정 추천" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("heading", { name: "일정 검색 범위" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("heading", { name: "일정 최소 구간" }),
+		).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "1시간" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "추천받기" })).toBeDisabled();
+		expect(screen.getByRole("button", { name: "직접 만들기" })).toBeEnabled();
+		expect(screen.getByRole("button", { name: "등록하기" })).toBeDisabled();
+	});
+	it("toggle proposalEditForm in ScheduleProposalModal", () => {
+		render(<SharedSchedulePage />, {
+			preloadedState: {
+				auth: { user: { userId: 1 } },
+			},
+		});
+
+		userEvent.click(screen.getByRole("button", { name: "후보 추가" }));
+
+		userEvent.click(screen.getByRole("button", { name: "직접 만들기" }));
+
+		// x button
+		expect(screen.queryByTestId("modal-closeButton")).toBeNull();
+
+		// title
+		expect(
+			screen.getByRole("heading", { name: "일정 후보 수정" }),
+		).toBeInTheDocument();
+		// input, textarea
+		expect(screen.getByPlaceholderText("일정 후보 제목")).toBeDisabled();
+		expect(screen.getByPlaceholderText("상세 내용")).toBeDisabled();
+
+		// allday checkbox
+		expect(screen.getByLabelText("하루 종일")).not.toBeChecked();
+
+		// repeat
+		expect(
+			screen.getByRole("heading", { name: "반복 여부" }),
+		).toBeInTheDocument();
+		expect(screen.getByText("반복 안함")).toBeInTheDocument();
+
+		// footer buttons
+		const backButton = screen.getByTestId("editProposalForm-backButton");
+		expect(backButton).toBeEnabled();
+		expect(screen.getByRole("button", { name: "저장하기" })).toBeDisabled();
+
+		userEvent.click(backButton);
+
 		// title
 		expect(
 			screen.getByRole("heading", { name: "일정 후보 등록" }),
