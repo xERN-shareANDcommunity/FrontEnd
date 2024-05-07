@@ -360,4 +360,45 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 
 		unmount();
 	});
+	it("add proposal myself", () => {
+		const { unmount } = render(<SharedSchedulePage />, {
+			preloadedState: {
+				auth: { user: { userId: 1 } },
+			},
+		});
+
+		userEvent.click(screen.getByRole("button", { name: "후보 추가" }));
+
+		// 하루 종일
+		userEvent.click(screen.getByRole("button", { name: "직접 만들기" }));
+		userEvent.click(screen.getByLabelText("하루 종일"));
+		userEvent.click(screen.getByRole("button", { name: "저장하기" }));
+		expect(
+			screen.getByText(
+				`${new Date().getMonth() + 1}월 ${new Date().getDate()}일 하루 종일`,
+			),
+		).toBeInTheDocument();
+		expect(screen.getByText("반복")).toHaveStyle({
+			backgroundColor: lightTheme.colors.btn_02,
+			color: lightTheme.colors.white,
+		});
+
+		// 반복 + 하루 종일
+		userEvent.click(screen.getByRole("button", { name: "직접 만들기" }));
+		userEvent.click(screen.getByLabelText("하루 종일"));
+		userEvent.click(screen.getByRole("button", { name: /반복 안함/i }));
+		userEvent.click(screen.getByRole("button", { name: "매일" }));
+		userEvent.click(screen.getByRole("button", { name: "저장하기" }));
+		expect(
+			screen.getAllByText(
+				`${new Date().getMonth() + 1}월 ${new Date().getDate()}일 하루 종일`,
+			),
+		).toHaveLength(2);
+		expect(screen.getAllByText("반복")[1]).toHaveStyle({
+			backgroundColor: lightTheme.colors.primary,
+			color: lightTheme.colors.white,
+		});
+
+		unmount();
+	});
 });
