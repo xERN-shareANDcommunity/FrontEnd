@@ -21,7 +21,24 @@ describe("SharedSchedulePage without modal", () => {
 		expect(
 			screen.getByText(`${today.getFullYear()}년 ${today.getMonth() + 1}월`),
 		).toBeInTheDocument();
+
+		// title 렌더링
+		expect(screen.getByRole("button", { name: "월별" })).toHaveStyle({
+			color: lightTheme.colors.text_01,
+		});
+		expect(screen.getByRole("button", { name: "리스트" })).toHaveStyle({
+			color: lightTheme.colors.disabled_text,
+		});
+		expect(
+			screen.getByRole("option", {
+				name: `${new Date().getFullYear()}년 ${new Date().getMonth() + 1}월`,
+			}),
+		).toBeInTheDocument();
+
+		// 달력 렌더링
 		expect(screen.getByTestId("calendar-container")).toBeInTheDocument();
+
+		// 활성화된 tab 확인
 		expect(screen.getByRole("button", { name: "일정 후보" })).toHaveStyle({
 			backgroundColor: lightTheme.colors.primary,
 			color: lightTheme.colors.white,
