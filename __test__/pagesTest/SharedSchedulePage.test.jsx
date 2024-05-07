@@ -196,7 +196,8 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 			screen.getByRole("heading", { name: "일정 후보 등록" }),
 		).toBeInTheDocument();
 		// input, textarea
-		expect(screen.getAllByDisplayValue("")).toHaveLength(2);
+		expect(screen.getByPlaceholderText("일정 후보 제목")).toBeInTheDocument();
+		expect(screen.getByPlaceholderText("상세 내용")).toBeInTheDocument();
 
 		// 일정 추천
 		expect(
