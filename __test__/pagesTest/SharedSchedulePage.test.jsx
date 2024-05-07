@@ -5,11 +5,31 @@ import { userEvent } from "@storybook/testing-library";
 
 import SharedSchedulePage from "@/pages/SharedSchedulePage.jsx";
 import lightTheme from "@/styles/theme.js";
+import { getTimeString } from "@/utils/calendarUtils";
 
 import { render, screen, waitFor } from "../../jest.setup";
 
 const calendarScheduleSelector = "a.fc-event";
 const EXTRA_MEMBER_DROPDOWN_COUNT = 1;
+const WEEK_STR = {
+	0: "일",
+	1: "월",
+	2: "화",
+	3: "수",
+	4: "목",
+	5: "금",
+	6: "토",
+};
+
+const getDatePickerString = (obj) => {
+	const year = obj.getFullYear();
+	const month = obj.getMonth() + 1;
+	const date = obj.getDate();
+
+	return `${year}년 ${month < 10 ? 0 : ""}${month}월 ${
+		date < 10 ? 0 : ""
+	}${date}일`;
+};
 
 describe("SharedSchedulePage without modal", () => {
 	it("initially render same component as PersonalPage", () => {
@@ -183,7 +203,7 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 		window.scrollTo = jest.fn();
 	});
 	it("trigger opening ScheduleProposalModal", () => {
-		render(<SharedSchedulePage />, {
+		const { unmount } = render(<SharedSchedulePage />, {
 			preloadedState: { auth: { user: { userId: 1 } } },
 		});
 
@@ -216,9 +236,11 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 		expect(screen.getByRole("button", { name: "추천받기" })).toBeDisabled();
 		expect(screen.getByRole("button", { name: "직접 만들기" })).toBeEnabled();
 		expect(screen.getByRole("button", { name: "등록하기" })).toBeDisabled();
+
+		unmount();
 	});
 	it("toggle proposalEditForm in ScheduleProposalModal", () => {
-		render(<SharedSchedulePage />, {
+		const { unmount } = render(<SharedSchedulePage />, {
 			preloadedState: {
 				auth: { user: { userId: 1 } },
 			},
@@ -277,5 +299,65 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 		expect(screen.getByRole("button", { name: "추천받기" })).toBeDisabled();
 		expect(screen.getByRole("button", { name: "직접 만들기" })).toBeEnabled();
 		expect(screen.getByRole("button", { name: "등록하기" })).toBeDisabled();
+
+		unmount();
+	});
+	it("get recommended proposals", async () => {
+		const { unmount } = render(<SharedSchedulePage />, {
+			preloadedState: {
+				auth: { user: { userId: 1 } },
+				schedule: {
+					currentGroupScheduleId: null,
+					calendarSchedules: [],
+					overlappedScheduleInfo: { title: "", schedules: [] },
+					scheduleProposals: [],
+					recommendedScheduleProposals: [],
+				},
+			},
+		});
+
+		// set schedule.currentGroupScheduleId to 1
+		await screen.findByRole("button", { name: /내 그룹 1/i });
+
+		userEvent.click(screen.getByRole("button", { name: "후보 추가" }));
+
+		userEvent.click(
+			screen.getAllByRole("button", {
+				name: getDatePickerString(new Date()),
+			})[1],
+		);
+
+		// endDate를 한 달 후로 변경하여 추천 받기 버튼 활성화
+		userEvent.click(screen.getByLabelText("Next Month"));
+		const startDate = new Date();
+		const endDate = new Date();
+		endDate.setMonth(endDate.getMonth() + 1);
+		userEvent.click(
+			screen.getByLabelText(
+				`Choose ${endDate.getFullYear()}년 ${
+					endDate.getMonth() + 1
+				}월 ${endDate.getDate()}일 ${WEEK_STR[endDate.getDay()]}요일`,
+			),
+		);
+		userEvent.click(screen.getByRole("button", { name: "확인" }));
+
+		expect(screen.getByText(getDatePickerString(endDate))).toBeInTheDocument();
+
+		// 추천 받기
+		userEvent.click(screen.getByRole("button", { name: "추천받기" }));
+
+		const expectedTimeString = getTimeString(
+			startDate.toUTCString(),
+			endDate.toUTCString(),
+		);
+
+		expect(await screen.findByText(expectedTimeString)).toBeInTheDocument();
+		expect(screen.getByText("반복")).toHaveStyle({
+			backgroundColor: lightTheme.colors.btn_02,
+			color: lightTheme.colors.white,
+		});
+		expect(screen.getByRole("button", { name: "수정하기" })).toBeEnabled();
+
+		unmount();
 	});
 });
