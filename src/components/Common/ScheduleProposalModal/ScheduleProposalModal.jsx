@@ -85,7 +85,7 @@ const ScheduleProposalModal = () => {
 				endTimeStr:
 					prev.startDateStr === prev.endDateStr && value >= prev.endTimeStr
 						? value
-						: prev.endTime,
+						: prev.endTimeStr,
 			}));
 		} else if (id === "endTime") {
 			setProposalParams((prev) => ({
