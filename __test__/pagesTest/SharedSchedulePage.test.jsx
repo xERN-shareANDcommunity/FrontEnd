@@ -91,7 +91,7 @@ describe("SharedSchedulePage without modal", () => {
 		// calendarSchedules
 		expect(container.querySelectorAll(calendarScheduleSelector).length).toBe(2);
 
-		// proposal list(미완)
+		// proposal list(미완): 일정 후보 수정에서 구현 예정
 
 		unmount();
 	});
@@ -191,6 +191,13 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 
 		expect(screen.getByTestId("ScheduleProposalModal")).toBeInTheDocument();
 
+		// title
+		expect(
+			screen.getByRole("heading", { name: "일정 후보 등록" }),
+		).toBeInTheDocument();
+		// input, textarea
+		expect(screen.getAllByDisplayValue("")).toHaveLength(2);
+
 		// 일정 추천
 		expect(
 			screen.getByRole("heading", { name: "일정 추천" }),
@@ -201,7 +208,9 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 		expect(
 			screen.getByRole("heading", { name: "일정 최소 구간" }),
 		).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "1시간" })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "추천받기" })).toBeDisabled();
 		expect(screen.getByRole("button", { name: "직접 만들기" })).toBeEnabled();
+		expect(screen.getByRole("button", { name: "등록하기" })).toBeDisabled();
 	});
 });
