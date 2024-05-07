@@ -296,7 +296,7 @@ export const getScheduleProposals = createAsyncThunk(
 		const data = await commonThunk(
 			{
 				method: "GET",
-				url: `/api/group/2/proposals?startDateTime=${convertToUTC(
+				url: `/api/group/${groupId}/proposals?startDateTime=${convertToUTC(
 					startDateStr,
 					startTimeStr,
 				)}&endDateTime=${convertToUTC(
