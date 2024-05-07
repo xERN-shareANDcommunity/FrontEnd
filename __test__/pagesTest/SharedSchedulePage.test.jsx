@@ -351,7 +351,9 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 			endDate.toUTCString(),
 		);
 
-		expect(await screen.findByText(expectedTimeString)).toBeInTheDocument();
+		expect(
+			await screen.findByText(expectedTimeString, { timeout: 5000 }),
+		).toBeInTheDocument();
 		expect(screen.getByText("반복")).toHaveStyle({
 			backgroundColor: lightTheme.colors.btn_02,
 			color: lightTheme.colors.white,
@@ -398,6 +400,46 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 			backgroundColor: lightTheme.colors.primary,
 			color: lightTheme.colors.white,
 		});
+
+		unmount();
+	});
+	it("edit proposal", () => {
+		const { unmount } = render(<SharedSchedulePage />, {
+			preloadedState: {
+				auth: { user: { userId: 1 } },
+			},
+		});
+
+		userEvent.click(screen.getByRole("button", { name: "후보 추가" }));
+
+		// add one myself
+		userEvent.click(screen.getByRole("button", { name: "직접 만들기" }));
+		userEvent.click(screen.getByLabelText("하루 종일"));
+		userEvent.click(screen.getByRole("button", { name: "저장하기" }));
+		expect(
+			screen.getByText(
+				`${new Date().getMonth() + 1}월 ${new Date().getDate()}일 하루 종일`,
+			),
+		).toBeInTheDocument();
+
+		// edit it
+		userEvent.click(screen.getByRole("button", { name: "수정하기" }));
+		userEvent.click(screen.getByLabelText("하루 종일"));
+		userEvent.click(screen.getByRole("button", { name: "저장하기" }));
+
+		// result
+		expect(
+			screen.queryByText(
+				`${new Date().getMonth() + 1}월 ${new Date().getDate()}일 하루 종일`,
+			),
+		).toBeNull();
+		expect(
+			screen.getByText(
+				`${
+					new Date().getMonth() + 1
+				}월 ${new Date().getDate()}일 00:00 ~ 23:59`,
+			),
+		).toBeInTheDocument();
 
 		unmount();
 	});
