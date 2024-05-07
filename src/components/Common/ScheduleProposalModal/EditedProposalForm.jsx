@@ -439,7 +439,11 @@ const EditedProposalForm = ({ index, onClose }) => {
 					>
 						저장하기
 					</SubmitButton>
-					<button type="button" onClick={handleCancelClick}>
+					<button
+						type="button"
+						onClick={handleCancelClick}
+						data-testid="editProposalForm-backButton"
+					>
 						<BackArrowIcon />
 					</button>
 				</FooterDiv>
