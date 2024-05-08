@@ -9,6 +9,13 @@ import { getTimeString } from "@/utils/calendarUtils";
 
 import { render, screen, waitFor } from "../../jest.setup";
 
+const startDate = new Date();
+const endDate = new Date();
+endDate.setMonth(endDate.getMonth() + 1);
+const expectedTimeString = getTimeString(
+	startDate.toUTCString(),
+	endDate.toUTCString(),
+);
 const calendarScheduleSelector = "a.fc-event";
 const EXTRA_MEMBER_DROPDOWN_COUNT = 1;
 const WEEK_STR = {
@@ -329,9 +336,6 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 
 		// endDate를 한 달 후로 변경하여 추천 받기 버튼 활성화
 		userEvent.click(screen.getByLabelText("Next Month"));
-		const startDate = new Date();
-		const endDate = new Date();
-		endDate.setMonth(endDate.getMonth() + 1);
 		userEvent.click(
 			screen.getByLabelText(
 				`Choose ${endDate.getFullYear()}년 ${
@@ -345,11 +349,6 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 
 		// 추천 받기
 		userEvent.click(screen.getByRole("button", { name: "추천받기" }));
-
-		const expectedTimeString = getTimeString(
-			startDate.toUTCString(),
-			endDate.toUTCString(),
-		);
 
 		expect(
 			await screen.findByText(expectedTimeString, { timeout: 5000 }),
