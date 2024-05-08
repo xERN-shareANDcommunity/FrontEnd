@@ -12,7 +12,10 @@ import {
 	getScheduleProposals,
 } from "@/features/schedule/schedule-service";
 import { resetRecommendedScheduleProposals } from "@/features/schedule/schedule-slice";
-import { getTimeString } from "@/utils/calendarUtils";
+import {
+	getInitializeEndTimeAfterChangeStartTime,
+	getTimeString,
+} from "@/utils/calendarUtils";
 import convertToUTC from "@/utils/convertToUTC";
 
 import DurationPicker from "./DurationPicker/DurationPicker";
@@ -82,10 +85,12 @@ const ScheduleProposalModal = () => {
 			setProposalParams((prev) => ({
 				...prev,
 				startTimeStr: value,
-				endTimeStr:
-					prev.startDateStr === prev.endDateStr && value >= prev.endTimeStr
-						? value
-						: prev.endTimeStr,
+				endTimeStr: getInitializeEndTimeAfterChangeStartTime(
+					prev.startDateStr,
+					prev.endDateStr,
+					value,
+					prev.endTimeStr,
+				),
 			}));
 		} else if (id === "endTime") {
 			setProposalParams((prev) => ({

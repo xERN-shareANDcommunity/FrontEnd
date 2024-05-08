@@ -203,3 +203,23 @@ export const setByweekday = (weekNum, prev, checked) => {
 
 export const calculateIsAllDay = (startDate, startTime, endDate, endTime) =>
 	startDate === endDate && startTime === "00:00" && endTime === "23:59";
+
+export const getInitializeEndTimeAfterChangeStartTime = (
+	startDate,
+	endDate,
+	newStartTime,
+	prevEndTime,
+) => {
+	if (
+		typeof startDate !== "string" ||
+		typeof endDate !== "string" ||
+		typeof newStartTime !== "string" ||
+		typeof prevEndTime !== "string"
+	)
+		throw Error("잘못된 파라미터 형식입니다.");
+	else {
+		return startDate === endDate && newStartTime >= prevEndTime
+			? newStartTime
+			: prevEndTime;
+	}
+};

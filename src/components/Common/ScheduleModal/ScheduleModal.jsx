@@ -15,6 +15,7 @@ import { closeModal, setIsLoading } from "@/features/ui/ui-slice";
 import {
 	calculateIsAllDay,
 	calculateMinUntilDateString,
+	getInitializeEndTimeAfterChangeStartTime,
 	getSchedule,
 	setByweekday,
 } from "@/utils/calendarUtils";
@@ -137,10 +138,12 @@ const ScheduleModal = () => {
 			setFormValues((prev) => ({
 				...prev,
 				startTime: value,
-				endTime:
-					prev.startDate === prev.endDate && value >= prev.endTime
-						? value
-						: prev.endTime,
+				endTime: getInitializeEndTimeAfterChangeStartTime(
+					prev.startDate,
+					prev.endDate,
+					value,
+					prev.endTime,
+				),
 				isAllDay: calculateIsAllDay(
 					prev.startDate,
 					value,
