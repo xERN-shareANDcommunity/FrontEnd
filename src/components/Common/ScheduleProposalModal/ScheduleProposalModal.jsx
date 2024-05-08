@@ -240,6 +240,7 @@ const ScheduleProposalModal = () => {
 									<div key={Object.values(proposal).join("")}>
 										<div>
 											<button
+												aria-label={`checkbox-recommendedProposal-${index}`}
 												type="button"
 												onClick={() => handleSelectRecommendation(index)}
 											>

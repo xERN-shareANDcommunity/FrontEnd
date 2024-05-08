@@ -443,4 +443,55 @@ describe("ScheduleProposalModal in SharedSchedulePage", () => {
 
 		unmount();
 	});
+	it("POST: enroll proposals made by myself", async () => {
+		const { unmount } = render(<SharedSchedulePage />, {
+			preloadedState: {
+				auth: { user: { userId: 1 } },
+				schedule: {
+					currentGroupScheduleId: null,
+					calendarSchedules: [],
+					overlappedScheduleInfo: { title: "", schedules: [] },
+					scheduleProposals: [],
+					recommendedScheduleProposals: [],
+				},
+			},
+		});
+
+		// set schedule.currentGroupScheduleId to 1
+		await screen.findByRole("button", { name: /내 그룹 1/i });
+
+		userEvent.click(screen.getByRole("button", { name: "후보 추가" }));
+
+		// add one myself
+		userEvent.click(screen.getByRole("button", { name: "직접 만들기" }));
+		userEvent.click(screen.getByLabelText("하루 종일"));
+		userEvent.click(screen.getByRole("button", { name: "저장하기" }));
+		expect(
+			screen.getByText(
+				`${new Date().getMonth() + 1}월 ${new Date().getDate()}일 하루 종일`,
+			),
+		).toBeInTheDocument();
+
+		// type body
+		userEvent.type(
+			screen.getByPlaceholderText("일정 후보 제목"),
+			"일정 후보 이름 1",
+		);
+		userEvent.type(
+			screen.getByPlaceholderText("상세 내용"),
+			"일정 후보 이름 설명",
+		);
+		screen
+			.getAllByLabelText(/checkbox-recommendedProposal/i)
+			.forEach((el) => userEvent.click(el));
+
+		// submit
+		expect(screen.getByRole("button", { name: "등록하기" })).toBeEnabled();
+		await userEvent.click(screen.getByRole("button", { name: "등록하기" }));
+
+		// 이후 다른 브랜치에서 레이아웃 작업할 예정
+		expect(await screen.findAllByText("ScheduleVoteItem")).toHaveLength(1);
+
+		unmount();
+	});
 });
