@@ -10,6 +10,7 @@ import { changeRecommendedProposal } from "@/features/schedule/schedule-slice";
 import {
 	calculateIsAllDay,
 	calculateMinUntilDateString,
+	getInitializeEndTimeAfterChangeStartTime,
 	setByweekday,
 } from "@/utils/calendarUtils";
 
@@ -120,10 +121,12 @@ const EditedProposalForm = ({ index, onClose }) => {
 			setFormValues((prev) => ({
 				...prev,
 				startTime: value,
-				endTime:
-					prev.startDate === prev.endDate && value >= prev.endTime
-						? value
-						: prev.endTime,
+				endTime: getInitializeEndTimeAfterChangeStartTime(
+					prev.startDate,
+					prev.endDate,
+					value,
+					prev.endTime,
+				),
 				isAllDay: calculateIsAllDay(
 					prev.startDate,
 					value,
