@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 
 import moment from "moment";
 
+import { getRecurringString } from "@/components/Common/ScheduleModal/RepeatDetail/RepeatDetail";
 import customFetch from "@/components/UI/BaseAxios";
 import { SCHEDULE_COLORS } from "@/constants/calendarConstants";
 import convertToUTC from "@/utils/convertToUTC";
@@ -253,5 +254,92 @@ export const validateDateTimeIsValid = (
 	}
 
 	toast.error("종료 날짜는 시작 날짜보다 동일하거나 빠를 수 없습니다.");
+	return false;
+};
+
+export const validateInterval = ({
+	freq,
+	interval,
+	startDate,
+	startTime,
+	endDate,
+	endTime,
+}) => {
+	if (
+		typeof freq !== "string" ||
+		(typeof interval !== "string" && typeof interval !== "number") ||
+		typeof startDate !== "string" ||
+		typeof startTime !== "string" ||
+		typeof endDate !== "string" ||
+		typeof endTime !== "string"
+	)
+		throw Error("잘못된 파라미터 형식입니다.");
+	if (
+		freq !== "NONE" &&
+		(!Number.isInteger(Number(interval)) || Number(interval) <= 0)
+	) {
+		toast.error("반복 간격은 0보다 큰 자연수여야 합니다");
+		return false;
+	}
+	if (startDate === endDate) {
+		if (startTime < endTime) {
+			return true;
+		}
+		toast.error(
+			"반복 요일은 무조건 일정 시작 날짜에 해당하는 요일을 포함해야 합니다.",
+		);
+		return false;
+	}
+	return true;
+};
+
+export const validateByweekday = ({ freq, byweekday, startDate }) => {
+	if (
+		typeof freq !== "string" ||
+		!(byweekday instanceof Array) ||
+		typeof startDate !== "string"
+	)
+		throw Error("잘못된 파라미터 형식입니다.");
+
+	if (!freq.startsWith("WEEKLY")) {
+		return true;
+	}
+
+	if (byweekday.indexOf(new Date(startDate).getDay()) === -1) {
+		toast.error(
+			"반복 요일은 무조건 일정 시작 날짜에 해당하는 요일을 포함해야 합니다.",
+		);
+		return false;
+	}
+
+	return true;
+};
+
+export const validateUntil = ({ until, startDate, freq, interval }) => {
+	if (
+		typeof until !== "string" ||
+		typeof startDate !== "string" ||
+		typeof freq !== "string" ||
+		(typeof interval !== "string" && typeof interval !== "number")
+	)
+		throw Error("잘못된 파라미터 형식입니다.");
+
+	if (until && startDate >= until) {
+		toast.error("반복 종료 일자는 일정 시작 날짜보다 커야 합니다.");
+		return false;
+	}
+
+	if (
+		!until ||
+		until >= calculateMinUntilDateString(startDate, freq, interval)
+	) {
+		return true;
+	}
+
+	toast.error(
+		`반복 종료 일자는 최소 ${interval}${getRecurringString(
+			freq,
+		)} 이후여야 합니다.`,
+	);
 	return false;
 };
