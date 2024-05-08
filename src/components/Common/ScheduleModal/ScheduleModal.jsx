@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 import _ from "lodash";
 import moment from "moment";
@@ -18,13 +17,16 @@ import {
 	getInitializeEndTimeAfterChangeStartTime,
 	getSchedule,
 	setByweekday,
+	validateByweekday,
 	validateDateTimeIsValid,
+	validateInterval,
+	validateUntil,
 } from "@/utils/calendarUtils";
 import { convertScheduleDataToFormValue } from "@/utils/convertSchedule";
 
 import DateAndTime from "./DateAndTime";
 import Repeat from "./Repeat/Repeat";
-import RepeatDetail, { getRecurringString } from "./RepeatDetail/RepeatDetail";
+import RepeatDetail from "./RepeatDetail/RepeatDetail";
 import {
 	AllDayCheckBoxDiv,
 	RepeatContainerDiv,
@@ -274,73 +276,6 @@ const ScheduleModal = () => {
 		);
 	};
 
-	// validate form values when submit event occurs
-	// validate interval
-	const checkIntervalIsValid = () => {
-		if (
-			formValues.freq !== "NONE" &&
-			(!Number.isInteger(Number(formValues.interval)) ||
-				Number(formValues.interval) <= 0)
-		) {
-			toast.error("반복 간격은 0보다 큰 자연수여야 합니다");
-			return false;
-		}
-		if (formValues.startDate === formValues.endDate) {
-			if (formValues.startTime < formValues.endTime) {
-				return true;
-			}
-			toast.error(
-				"반복 요일은 무조건 일정 시작 날짜에 해당하는 요일을 포함해야 합니다.",
-			);
-			return false;
-		}
-		return true;
-	};
-	// validate byweekday
-	const checkByweekdayIsValid = () => {
-		if (!formValues.freq.startsWith("WEEKLY")) {
-			return true;
-		}
-
-		if (
-			formValues.byweekday.indexOf(new Date(formValues.startDate).getDay()) ===
-			-1
-		) {
-			toast.error(
-				"반복 요일은 무조건 일정 시작 날짜에 해당하는 요일을 포함해야 합니다.",
-			);
-			return false;
-		}
-
-		return true;
-	};
-	// validate until
-	const checkUntilIsValid = () => {
-		if (formValues.until && formValues.startDate >= formValues.until) {
-			toast.error("반복 종료 일자는 일정 시작 날짜보다 커야 합니다.");
-			return false;
-		}
-
-		if (
-			!formValues.until ||
-			formValues.until >=
-				calculateMinUntilDateString(
-					formValues.startDate,
-					formValues.freq,
-					formValues.interval,
-				)
-		) {
-			return true;
-		}
-
-		toast.error(
-			`반복 종료 일자는 최소 ${formValues.interval}${getRecurringString(
-				formValues.freq,
-			)} 이후여야 합니다.`,
-		);
-		return false;
-	};
-
 	const handleSubmit = () => {
 		// form 유효성 검사
 		if (
@@ -350,9 +285,9 @@ const ScheduleModal = () => {
 				formValues.endDate,
 				formValues.endTime,
 			) ||
-			!checkIntervalIsValid() ||
-			!checkByweekdayIsValid() ||
-			!checkUntilIsValid() ||
+			!validateInterval(formValues) ||
+			!validateByweekday(formValues) ||
+			!validateUntil(formValues) ||
 			isViewMode
 		) {
 			return;
