@@ -18,6 +18,7 @@ import {
 	getInitializeEndTimeAfterChangeStartTime,
 	getSchedule,
 	setByweekday,
+	validateDateTimeIsValid,
 } from "@/utils/calendarUtils";
 import { convertScheduleDataToFormValue } from "@/utils/convertSchedule";
 
@@ -274,24 +275,6 @@ const ScheduleModal = () => {
 	};
 
 	// validate form values when submit event occurs
-	// validate Date and Time
-	const checkTimeIsValid = () => {
-		if (formValues.startDate < formValues.endDate) {
-			return true;
-		}
-
-		if (formValues.startDate === formValues.endDate) {
-			if (formValues.startTime < formValues.endTime) {
-				return true;
-			}
-
-			toast.error("시작 시간은 종료 시간보다 빨라야 합니다.");
-			return false;
-		}
-
-		toast.error("종료 날짜는 시작 날짜보다 동일하거나 빠를 수 없습니다.");
-		return false;
-	};
 	// validate interval
 	const checkIntervalIsValid = () => {
 		if (
@@ -361,7 +344,12 @@ const ScheduleModal = () => {
 	const handleSubmit = () => {
 		// form 유효성 검사
 		if (
-			!checkTimeIsValid() ||
+			!validateDateTimeIsValid(
+				formValues.startDate,
+				formValues.startTime,
+				formValues.endDate,
+				formValues.endTime,
+			) ||
 			!checkIntervalIsValid() ||
 			!checkByweekdayIsValid() ||
 			!checkUntilIsValid() ||
