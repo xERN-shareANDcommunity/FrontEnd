@@ -12,11 +12,8 @@ import GroupSelect from "./GroupSelect/GroupSelect";
 
 const GroupMenu = () => {
 	const userId = useSelector((state) => state.auth.user.userId);
-	const isUserGroupFetching = useSelector(
-		(state) => state.user.isUserGroupFetching,
-	);
-	const currentGroupScheduleId = useSelector(
-		(state) => state.schedule.currentGroupScheduleId,
+	const { isUserGroupFetching, currentGroupScheduleId } = useSelector(
+		(state) => state.schedule,
 	);
 	const [groupMembers, setGroupMembers] = useState([]);
 
