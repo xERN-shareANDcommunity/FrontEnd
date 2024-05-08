@@ -15,6 +15,7 @@ import { resetRecommendedScheduleProposals } from "@/features/schedule/schedule-
 import {
 	getInitializeEndTimeAfterChangeStartTime,
 	getTimeString,
+	validateDateTimeIsValid,
 } from "@/utils/calendarUtils";
 import convertToUTC from "@/utils/convertToUTC";
 
@@ -101,25 +102,15 @@ const ScheduleProposalModal = () => {
 	};
 
 	const handleGettingProposal = async () => {
-		const checkTimeIsValid = () => {
-			if (proposalParams.startDateStr < proposalParams.endDateStr) {
-				return true;
-			}
-
-			if (proposalParams.startDateStr === proposalParams.endDateStr) {
-				if (proposalParams.startTimeStr < proposalParams.endTimeStr) {
-					return true;
-				}
-
-				toast.error("시작 시간은 종료 시간보다 빨라야 합니다.");
-				return false;
-			}
-
-			toast.error("종료 날짜는 시작 날짜보다 동일하거나 빠를 수 없습니다.");
-			return false;
-		};
-
-		if (checkTimeIsValid() && !_.isEqual(prevProposalParams, proposalParams)) {
+		if (
+			validateDateTimeIsValid(
+				proposalParams.startDateStr,
+				proposalParams.startTimeStr,
+				proposalParams.endDateStr,
+				proposalParams.endTimeStr,
+			) &&
+			!_.isEqual(prevProposalParams, proposalParams)
+		) {
 			try {
 				await dispatch(getScheduleProposals(proposalParams)).unwrap();
 				setPrevProposalParams(proposalParams);

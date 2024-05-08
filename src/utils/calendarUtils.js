@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 import moment from "moment";
 
 import customFetch from "@/components/UI/BaseAxios";
@@ -222,4 +224,34 @@ export const getInitializeEndTimeAfterChangeStartTime = (
 			? newStartTime
 			: prevEndTime;
 	}
+};
+
+export const validateDateTimeIsValid = (
+	startDate,
+	startTime,
+	endDate,
+	endTime,
+) => {
+	if (
+		typeof startDate !== "string" ||
+		typeof startTime !== "string" ||
+		typeof endDate !== "string" ||
+		typeof endTime !== "string"
+	)
+		throw Error("잘못된 파라미터 형식입니다.");
+	if (startDate < endDate) {
+		return true;
+	}
+
+	if (startDate === endDate) {
+		if (startTime < endTime) {
+			return true;
+		}
+
+		toast.error("시작 시간은 종료 시간보다 빨라야 합니다.");
+		return false;
+	}
+
+	toast.error("종료 날짜는 시작 날짜보다 동일하거나 빠를 수 없습니다.");
+	return false;
 };
