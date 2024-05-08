@@ -47,7 +47,7 @@ export const ProposalParamsWrapperDiv = styled.div`
 		display: flex;
 		justify-content: space-between;
 		& > button {
-			width: 184px;
+			width: 132px;
 			height: 33px;
 			border-radius: 5px;
 			background-color: ${({ theme: { colors } }) => colors.primary_light};
