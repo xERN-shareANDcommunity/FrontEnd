@@ -32,6 +32,9 @@ const postSlice = createSlice({
 			state.allGroupPostslastRecordId = 0;
 			state.allGroupPostsIsEnd = false;
 		},
+		resetPostInfo: (state) => {
+			state.postInfo = null;
+		},
 	},
 	extraReducers: (bulider) => {
 		bulider
@@ -61,9 +64,13 @@ const postSlice = createSlice({
 				}
 			})
 			.addCase(likeGroupPost.fulfilled, (state) => {
+				state.postInfo.post.likesCount += 1;
+				state.postInfo.post.isLiked = true;
 				state.isLoading = false;
 			})
 			.addCase(cancelLikeGroupPost.fulfilled, (state) => {
+				state.postInfo.post.likesCount -= 1;
+				state.postInfo.post.isLiked = false;
 				state.isLoading = false;
 			})
 			.addCase(deleteGroupPost.fulfilled, (state, { meta: { arg: id } }) => {
@@ -105,6 +112,6 @@ const postSlice = createSlice({
 	},
 });
 
-export const { resetPostStateForGroupPage } = postSlice.actions;
+export const { resetPostStateForGroupPage, resetPostInfo } = postSlice.actions;
 
 export default postSlice.reducer;

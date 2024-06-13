@@ -9,7 +9,7 @@ import { getGroupAllPosts } from "@/features/post/post-service";
 
 import { FeedSection } from "./GroupFeed.styles";
 
-const GroupFeed = ({ groupId, leaderName }) => {
+const GroupFeed = ({ groupId, leaderId }) => {
 	const dispatch = useDispatch();
 
 	const { allGroupPosts, allGroupPostsIsEnd } = useSelector(
@@ -45,8 +45,9 @@ const GroupFeed = ({ groupId, leaderName }) => {
 				<Feed
 					key={post.postId}
 					post={post}
-					leaderName={leaderName}
+					leaderId={leaderId}
 					groupId={groupId}
+					isGroupPage
 				/>
 			))}
 			<ScrollBottom onView={handleOnView} />

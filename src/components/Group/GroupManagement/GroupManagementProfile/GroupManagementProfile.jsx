@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import GroupDeleteModal from "@/components/Common/GroupModal/GroupDeleteModal/GroupDeleteModal";
-import GroupExitModal from "@/components/Common/GroupModal/GroupExitModal/GroupExitModal";
 import ToggleButton from "@/components/Common/ToggleButton/ToggleButton";
-import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	changeGroupPublicOption,
 	updateGroupProfile,
@@ -29,8 +26,6 @@ import {
 
 const GroupManagementProfile = ({ groupInfo }) => {
 	const dispatch = useDispatch();
-
-	const { openedModal } = useSelector((state) => state.ui);
 
 	const { groupId, isPublicGroup } = groupInfo.information.group;
 	const memberLength = groupInfo.information.memberInfo.length;
@@ -133,7 +128,7 @@ const GroupManagementProfile = ({ groupInfo }) => {
 			</SaveButtonDiv>
 			<DividerHr />
 			<BottomButtonDiv>
-				{memberLength > 1 && (
+				{memberLength < 2 && (
 					<ExitButton onClick={() => dispatch(openExitGroupModal())}>
 						그룹 나가기
 					</ExitButton>
@@ -142,10 +137,6 @@ const GroupManagementProfile = ({ groupInfo }) => {
 					그룹 삭제
 				</DeleteButton>
 			</BottomButtonDiv>
-			{openedModal === UI_TYPE.EXIT_GROUP && <GroupExitModal />}
-			{openedModal === UI_TYPE.DELETE_GROUP && (
-				<GroupDeleteModal groupInfo={groupInfo} />
-			)}
 		</>
 	);
 };

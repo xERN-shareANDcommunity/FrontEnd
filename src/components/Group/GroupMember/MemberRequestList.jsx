@@ -1,8 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { RequestCheckIcon, RequestCloseIcon } from "@/constants/iconConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	approveGroupJoin,
 	rejectGroupJoin,
@@ -17,12 +16,9 @@ import {
 	MemberUl,
 } from "./GroupMember.Shared.styles";
 import { ButtonDiv, ButtonInnerDiv } from "./GroupMember.styles";
-import MemberRequestModal from "./MemberModal/MemberRequestModal";
 
 const MemberRequestList = ({ groupId, groupRequestMemberList }) => {
 	const dispatch = useDispatch();
-
-	const { openedModal } = useSelector((state) => state.ui);
 
 	const approveRequest = (userId) => {
 		dispatch(approveGroupJoin({ groupId, userId }));
@@ -73,13 +69,6 @@ const MemberRequestList = ({ groupId, groupRequestMemberList }) => {
 						</li>
 					))}
 				</MemberUl>
-
-				{openedModal === UI_TYPE.MEMBER_REQUEST_MODAL && (
-					<MemberRequestModal
-						requestMemberList={groupRequestMemberList}
-						groupId={groupId}
-					/>
-				)}
 			</MemberInnerDiv>
 			<hr />
 		</>

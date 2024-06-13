@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import FeedOption from "@/components/Common/Feed/FeedOption";
 import {
@@ -12,6 +13,7 @@ import {
 	cancelLikeGroupPost,
 	likeGroupPost,
 } from "@/features/post/post-service";
+import { openFeedDetailModal } from "@/features/ui/ui-slice";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { useTimeStamp } from "@/hooks/useTimeStamp";
 
@@ -20,11 +22,12 @@ import {
 	TopDiv,
 	InfoDiv,
 	BottomDiv,
+	ContentDiv,
 	IconDiv,
 	IconItemButton,
 } from "./Feed.styles";
 
-const Feed = ({ post, groupId, leaderName }) => {
+const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 	const dispatch = useDispatch();
 
 	const { user } = useSelector((state) => state.auth);
@@ -34,6 +37,8 @@ const Feed = ({ post, groupId, leaderName }) => {
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
 
 	const optionMenuRef = useRef();
+
+	const navigate = useNavigate();
 
 	useOutsideClick(optionMenuRef, () => setIsOptionOpen(false));
 
@@ -59,7 +64,9 @@ const Feed = ({ post, groupId, leaderName }) => {
 		}
 	};
 
-	const handleLikeClick = () => {
+	const handleLikeClick = (e) => {
+		e.stopPropagation();
+
 		if (!isPostLiked) {
 			setIsPostLiked(true);
 			setPostLikesCount((prev) => prev + 1);
@@ -72,14 +79,23 @@ const Feed = ({ post, groupId, leaderName }) => {
 	};
 
 	return (
-		<FeedArticle key={post.postId}>
+		<FeedArticle
+			onClick={() =>
+				isGroupPage
+					? dispatch(openFeedDetailModal(post.postId))
+					: navigate(`/group/${groupId}`)
+			}
+		>
 			{user.nickname === post.author && (
 				<FeedOption
 					postId={post.postId}
 					groupId={groupId}
 					optionMenuRef={optionMenuRef}
 					isOptionOpen={isOptionOpen}
-					handleOptionClick={() => setIsOptionOpen((prev) => !prev)}
+					handleOptionClick={(e) => {
+						e.stopPropagation();
+						setIsOptionOpen((prev) => !prev);
+					}}
 				/>
 			)}
 			<TopDiv>
@@ -87,13 +103,18 @@ const Feed = ({ post, groupId, leaderName }) => {
 				<InfoDiv>
 					<h3>
 						{post.author}
-						{post.author === leaderName && <CrownIcon />}
+
+						{/* 게시글 작성자 id 비교 필요 */}
+						{post.author === leaderId && <CrownIcon />}
 					</h3>
 					<h4>{useTimeStamp(post.createdAt)}</h4>
 				</InfoDiv>
 			</TopDiv>
 			<BottomDiv>
-				<p>{post.content}</p>
+				<ContentDiv>
+					<p>{post.content}</p>
+				</ContentDiv>
+
 				<IconDiv>
 					<IconItemButton onClick={handleLikeClick}>
 						{isPostLiked ? <FillHeartIcon /> : <EmptyHeartIcon />}

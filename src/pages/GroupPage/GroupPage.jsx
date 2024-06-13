@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 
-import GroupJoinModal from "@/components/Common/GroupModal/GroupJoinModal/GroupJoinModal";
+import GroupModalTrigger from "@/components/Common/GroupModal/GroupModalTrigger/GroupModalTrigger";
 import GroupFeed from "@/components/Group/GroupFeed/GroupFeed";
 import SecretFeed from "@/components/Group/GroupFeed/SecretFeed";
 import UploadFeed from "@/components/Group/GroupFeed/UploadFeed";
@@ -11,7 +11,6 @@ import GroupMember from "@/components/Group/GroupMember/GroupMember";
 import GroupProfile from "@/components/Group/GroupProfile/GroupProfile";
 import GroupTitle from "@/components/Group/GroupTitle/GroupTitle";
 import { TAB_KEY, TAB_PARAM } from "@/constants/tabConstants";
-import { UI_TYPE } from "@/constants/uiConstants";
 import {
 	getGroupInfo,
 	getGroupMemberList,
@@ -31,8 +30,6 @@ const GroupPage = () => {
 		(state) => state.group,
 	);
 
-	const { openedModal } = useSelector((state) => state.ui);
-
 	const [isLoading, setIsLoading] = useState(true);
 	const [isManaging, setIsManaging] = useState(false);
 
@@ -41,8 +38,6 @@ const GroupPage = () => {
 	const [searchParams] = useSearchParams();
 
 	const groupId = Number(param.id);
-
-	const inviteLink = searchParams.get("invite");
 
 	useEffect(() => {
 		dispatch(getGroupMemberList(groupId));
@@ -81,7 +76,6 @@ const GroupPage = () => {
 
 	const { isPublicGroup } = groupInfo.information.group;
 	const leaderId = groupInfo.information.leaderInfo.userId;
-	const leaderName = groupInfo.information.leaderInfo.nickname;
 	const isGroupLeader = groupInfo.accessLevel === "owner";
 	const isGroupMember = groupInfo.accessLevel !== null;
 	const isGroupRequest =
@@ -113,19 +107,23 @@ const GroupPage = () => {
 						<FeedDiv>
 							{isGroupMember && <UploadFeed />}
 							<GroupTitle />
-							<GroupFeed groupId={groupId} leaderName={leaderName} />
+							<GroupFeed groupId={groupId} leaderId={leaderId} />
 						</FeedDiv>
 					)}
 
 					{isGroupMember && (
 						<GroupMember groupId={groupId} leaderId={leaderId} />
 					)}
-
-					{openedModal === UI_TYPE.JOIN_GROUP && (
-						<GroupJoinModal inviteLink={inviteLink} />
-					)}
 				</>
 			)}
+
+			<GroupModalTrigger
+				groupId={groupId}
+				leaderId={leaderId}
+				groupInfo={groupInfo}
+				groupMemberList={groupMemberList}
+				groupRequestMemberList={groupRequestMemberList}
+			/>
 		</GroupMain>
 	);
 };

@@ -4,6 +4,7 @@ import { SCHEDULE_MODAL_TYPE, UI_TYPE } from "@/constants/uiConstants";
 
 const initialState = {
 	openedModal: null,
+	feedDetailModalId: null,
 	scheduleModalMode: SCHEDULE_MODAL_TYPE.CREATE,
 	scheduleModalId: null,
 	isLoading: true,
@@ -94,6 +95,10 @@ const uiSlice = createSlice({
 			state.warningModalUserInfo = payload;
 			state.openedModal = UI_TYPE.DELETE_MEMBER_WARNING_MODAL;
 		},
+		openFeedDetailModal: (state, { payload }) => {
+			state.feedDetailModalId = payload;
+			state.openedModal = UI_TYPE.FEED_DETAIL_MODAL;
+		},
 		closeModal: () => {
 			return initialState;
 		},
@@ -124,6 +129,7 @@ export const {
 	openMemberModal,
 	openMemberRequestModal,
 	openDeleteMemberWarningModal,
+	openFeedDetailModal,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

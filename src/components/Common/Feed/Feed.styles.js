@@ -7,6 +7,7 @@ export const FeedArticle = styled.article`
 	border: 1px solid ${({ theme: { colors } }) => colors.btn_02};
 	padding: 24px 18px;
 	position: relative;
+	cursor: pointer;
 `;
 
 export const OptionDiv = styled.div`
@@ -19,6 +20,7 @@ export const OptionDiv = styled.div`
 export const OptionMenuDiv = styled.div`
 	position: absolute;
 	z-index: 2;
+	right: 0;
 
 	& > ul > li {
 		width: 60px;
@@ -34,6 +36,12 @@ export const OptionMenuDiv = styled.div`
 		&:first-of-type {
 			border-bottom: none;
 			color: ${({ theme: { colors } }) => colors.text_01};
+		}
+
+		& > button {
+			width: 100%;
+			height: 100%;
+			text-align: center;
 		}
 	}
 `;
@@ -78,7 +86,9 @@ export const BottomDiv = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+`;
 
+export const ContentDiv = styled.div`
 	& > p {
 		color: ${({ theme: { colors } }) => colors.text_03};
 		font-size: ${({ theme: { typography } }) => typography.size.s1};

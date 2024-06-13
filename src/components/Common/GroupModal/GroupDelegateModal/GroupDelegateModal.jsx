@@ -25,7 +25,7 @@ const SelectBox = ({ name, isSelected, onClick }) => (
 	</SelectBoxLi>
 );
 
-const GroupDelegateModal = ({ groupInfo, groupMembers }) => {
+const GroupDelegateModal = ({ groupInfo }) => {
 	const dispatch = useDispatch();
 
 	const navigate = useNavigate();
@@ -33,6 +33,7 @@ const GroupDelegateModal = ({ groupInfo, groupMembers }) => {
 	const [selectedMemberId, setSelectedMemberId] = useState(null);
 
 	const groupDetailInfo = groupInfo.information.group;
+	const groupMembers = groupInfo.information.memberInfo;
 
 	const memberList = groupMembers.filter(
 		(info) => info.userId !== groupDetailInfo.leader,
