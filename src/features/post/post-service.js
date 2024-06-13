@@ -2,6 +2,23 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import commonThunk from "../commonThunk";
 
+export const createPost = createAsyncThunk(
+	"post/createPost",
+	async ({ groupId, formData }, thunkAPI) => {
+		const data = await commonThunk(
+			{
+				method: "POST",
+				url: `/api/group/${groupId}/post`,
+				data: formData,
+				headers: { "Content-Type": "multipart/form-data" },
+				successCode: 201,
+			},
+			thunkAPI,
+		);
+		return data;
+	},
+);
+
 export const getGroupAllPosts = createAsyncThunk(
 	"post/getGroupAllPosts",
 	async (groupId, thunkAPI) => {

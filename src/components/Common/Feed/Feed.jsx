@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,8 @@ import {
 	CommentIcon,
 	EmptyHeartIcon,
 	FillHeartIcon,
+	LeftArrowIcon,
+	RightArrowIcon,
 } from "@/constants/iconConstants";
 import {
 	cancelLikeGroupPost,
@@ -23,11 +25,15 @@ import {
 	InfoDiv,
 	BottomDiv,
 	ContentDiv,
+	CarouselDiv,
+	CarouselBoxDiv,
+	CarouselItemDiv,
+	ArrowButton,
 	IconDiv,
 	IconItemButton,
 } from "./Feed.styles";
 
-const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
+const Feed = ({ post, groupId, isGroupPage, leaderId }) => {
 	const dispatch = useDispatch();
 
 	const { user } = useSelector((state) => state.auth);
@@ -36,7 +42,13 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 	const [postLikesCount, setPostLikesCount] = useState(post.likesCount);
 	const [isOptionOpen, setIsOptionOpen] = useState(false);
 
+	const [isPrevButtonDisplayed, setIsPrevButtonDisplayed] = useState(false);
+	const [isNextButtonDisplayed, setIsNextButtonDisplayed] = useState(false);
+	const [currentWidth, setCurrentWidth] = useState(0);
+
 	const optionMenuRef = useRef();
+	const listRef = useRef(null);
+	const itemRef = useRef(null);
 
 	const navigate = useNavigate();
 
@@ -78,6 +90,49 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 		}
 	};
 
+	const handleLeftClick = () => {
+		const wrap = itemRef.current;
+
+		wrap.scrollBy({
+			left: -500,
+			behavior: "smooth",
+		});
+
+		setCurrentWidth((prev) => prev - 500);
+	};
+
+	const handleRightClick = () => {
+		const wrap = itemRef.current;
+
+		wrap.scrollBy({
+			left: 500,
+			behavior: "smooth",
+		});
+
+		setCurrentWidth((prev) => prev + 500);
+	};
+
+	useEffect(() => {
+		if (!post.image) {
+			return;
+		}
+
+		if (
+			currentWidth !== 0 &&
+			currentWidth < post.image.split(",").length * 500
+		) {
+			setIsPrevButtonDisplayed(true);
+		} else {
+			setIsPrevButtonDisplayed(false);
+		}
+
+		if (currentWidth === post.image.split(",").length * 500 - 500) {
+			setIsNextButtonDisplayed(false);
+		} else {
+			setIsNextButtonDisplayed(true);
+		}
+	}, [currentWidth]);
+
 	return (
 		<FeedArticle
 			onClick={() =>
@@ -114,6 +169,36 @@ const Feed = ({ post, groupId, leaderId, isGroupPage }) => {
 				<ContentDiv>
 					<p>{post.content}</p>
 				</ContentDiv>
+
+				{post.image && (
+					<CarouselDiv ref={listRef}>
+						<CarouselBoxDiv ref={itemRef}>
+							{post.image.split(",").map((img) => (
+								<CarouselItemDiv key={img}>
+									<img src={img} alt="postImg" />
+								</CarouselItemDiv>
+							))}
+						</CarouselBoxDiv>
+						{post.image.split(",").length > 1 && (
+							<>
+								{isPrevButtonDisplayed && (
+									<ArrowButton onClick={handleLeftClick} className="prevButton">
+										<LeftArrowIcon />
+									</ArrowButton>
+								)}
+
+								{isNextButtonDisplayed && (
+									<ArrowButton
+										onClick={handleRightClick}
+										className="nextButton"
+									>
+										<RightArrowIcon />
+									</ArrowButton>
+								)}
+							</>
+						)}
+					</CarouselDiv>
+				)}
 
 				<IconDiv>
 					<IconItemButton onClick={handleLikeClick}>

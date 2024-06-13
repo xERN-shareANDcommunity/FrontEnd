@@ -9,6 +9,7 @@ import {
 	likeGroupPost,
 	cancelLikeGroupPost,
 	deleteGroupPost,
+	createPost,
 } from "./post-service";
 
 const initialState = {
@@ -38,6 +39,11 @@ const postSlice = createSlice({
 	},
 	extraReducers: (bulider) => {
 		bulider
+			.addCase(createPost.fulfilled, (state, { payload }) => {
+				state.isLoading = false;
+				state.allGroupPosts = [payload, ...state.allGroupPosts];
+				toast.success("피드 작성 완료.");
+			})
 			.addCase(getGroupAllPosts.fulfilled, (state, { payload }) => {
 				state.isLoading = false;
 

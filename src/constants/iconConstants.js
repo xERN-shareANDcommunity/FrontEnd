@@ -16,10 +16,12 @@ import EmptyMyGroupIcon from "@/assets/icon/ic-empty-my-group.svg";
 import CommentIcon from "@/assets/icon/ic-feed-comment.svg";
 import EmptyHeartIcon from "@/assets/icon/ic-feed-heart-empty.svg";
 import FillHeartIcon from "@/assets/icon/ic-feed-heart-fill.svg";
+import FeedImgIcon from "@/assets/icon/ic-feed-img-upload.svg";
 import OptionThreeDotIcon from "@/assets/icon/ic-feed-option.svg";
 import GoogleLogoIcon from "@/assets/icon/ic-google-logo.svg";
 import AddIcon from "@/assets/icon/ic-group-add.svg";
 import GroupImgAddIcon from "@/assets/icon/ic-group-img-add.svg";
+import FeedImgCloseIcon from "@/assets/icon/ic-img-close-icon.svg";
 import IntroductionEditIcon from "@/assets/icon/ic-introduction-edit.svg";
 import LeftArrowIcon from "@/assets/icon/ic-left-arrow.svg";
 import NextIcon from "@/assets/icon/ic-next.svg";
@@ -80,4 +82,6 @@ export {
 	EmptyMyGroupIcon,
 	EmptySearchResultIcon,
 	EmptyGroupListIcon,
+	FeedImgIcon,
+	FeedImgCloseIcon,
 };
