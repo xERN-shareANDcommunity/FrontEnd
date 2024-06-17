@@ -1,47 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import _ from "lodash";
 import moment from "moment";
 
-import FormModal from "@/components/Common/Modal/FormModal/FormModal";
-import { SCHEDULE_MODAL_TYPE } from "@/constants/uiConstants";
-import {
-	createSchedule,
-	updateSchedule,
-} from "@/features/schedule/schedule-service.js";
-import { closeModal, setIsLoading } from "@/features/ui/ui-slice";
+import { BackArrowIcon } from "@/constants/iconConstants";
+import { changeRecommendedProposal } from "@/features/schedule/schedule-slice";
 import {
 	calculateIsAllDay,
 	calculateMinUntilDateString,
 	getInitializeEndTimeAfterChangeStartTime,
-	getSchedule,
 	setByweekday,
 	validateByweekday,
 	validateDateTimeIsValid,
 	validateInterval,
 	validateUntil,
 } from "@/utils/calendarUtils";
-import { convertScheduleDataToFormValue } from "@/utils/convertSchedule";
 
-import DateAndTime from "./DateAndTime";
-import Repeat from "./Repeat/Repeat";
-import RepeatDetail from "./RepeatDetail/RepeatDetail";
+import DateAndTime from "../ScheduleModal/DateAndTime";
+import Repeat from "../ScheduleModal/Repeat/Repeat";
+import RepeatDetail from "../ScheduleModal/RepeatDetail/RepeatDetail";
 import {
 	AllDayCheckBoxDiv,
-	RepeatContainerDiv,
 	FooterDiv,
-} from "./ScheduleModal.styles";
-import {
-	DetailTextarea,
-	ScheduleModalLayoutDiv,
-	TitleInput,
-	SubmitButton,
-} from "../ScheduleModal.Shared.styles";
+	RepeatContainerDiv,
+} from "../ScheduleModal/ScheduleModal.styles";
+import { SubmitButton } from "../ScheduleModal.Shared.styles";
 
 const initialFormValues = {
-	title: "",
-	content: "",
 	startDate: moment().format("YYYY-MM-DD"),
 	startTime: moment().format("HH:mm"),
 	endDate: moment().format("YYYY-MM-DD"),
@@ -53,29 +40,24 @@ const initialFormValues = {
 	until: "",
 };
 
-const ScheduleModal = () => {
+const EditedProposalForm = ({ index, onClose }) => {
 	const dispatch = useDispatch();
-	// previous form value to compare
-	const prevFormValue = useRef(initialFormValues);
-	// state
-	const { scheduleModalMode, scheduleModalId, isLoading } = useSelector(
-		(state) => state.ui,
+	const recommendedScheduleProposals = useSelector(
+		({ schedule }) => schedule.recommendedScheduleProposals,
 	);
-	const [formValues, setFormValues] = useState(initialFormValues);
-	// value
-	const isCreateMode = scheduleModalMode === SCHEDULE_MODAL_TYPE.CREATE;
-	const isEditMode = scheduleModalMode === SCHEDULE_MODAL_TYPE.EDIT;
-	const isViewMode = scheduleModalMode === SCHEDULE_MODAL_TYPE.VIEW;
+	const prevFormValue = useRef(
+		recommendedScheduleProposals[index] || initialFormValues,
+	);
 
-	const getModalTitle = () => {
-		if (isCreateMode) return "일정 추가";
+	const [formValues, setFormValues] = useState(
+		recommendedScheduleProposals[index] || initialFormValues,
+	);
 
-		if (isEditMode) return "일정 수정";
-
-		if (isViewMode) return "일정 정보";
-
-		return new Error("올바르지 않은 모달 타입입니다.");
-	};
+	useEffect(() => {
+		prevFormValue.current =
+			recommendedScheduleProposals[index] || initialFormValues;
+		setFormValues(recommendedScheduleProposals[index] || initialFormValues);
+	}, [recommendedScheduleProposals, index]);
 
 	// handle date change
 	const handleDateValueChange = (date, id) => {
@@ -251,12 +233,7 @@ const ScheduleModal = () => {
 	};
 
 	const checkIsEmpty = () => {
-		const trimmedFormValues = {
-			...formValues,
-			title: formValues.title.trim(),
-			content: formValues.content.trim(),
-		};
-		return _.isEqual(trimmedFormValues, prevFormValue.current);
+		return _.isEqual(formValues, prevFormValue.current);
 	};
 	// valdate when change event occurs
 	const checkFormIsFilledOrChanged = () => {
@@ -265,8 +242,6 @@ const ScheduleModal = () => {
 		}
 
 		return (
-			formValues.title.trim() !== "" &&
-			formValues.content.trim() !== "" &&
 			formValues.startDate !== "" &&
 			formValues.startTime !== "" &&
 			formValues.endDate !== "" &&
@@ -274,6 +249,29 @@ const ScheduleModal = () => {
 			(formValues.freq === "NONE" || formValues.interval > 0) &&
 			(formValues.freq === "WEEKLY" ? formValues.byweekday.length > 0 : true)
 		);
+	};
+
+	const isUniqueProposalForm = () => {
+		const doesProposalAlreadyExist = recommendedScheduleProposals.some(
+			(proposal) => {
+				const copiedProposal = { ...proposal, byweekday: undefined };
+				const copiedFormValues = { ...formValues, byweekday: undefined };
+				const byweekday1 = [...proposal.byweekday];
+				const byweekday2 = [...formValues.byweekday];
+				byweekday1.sort();
+				byweekday2.sort();
+				return (
+					_.isEqual(copiedProposal, copiedFormValues) &&
+					_.isEqual(byweekday1, byweekday2)
+				);
+			},
+		);
+		if (doesProposalAlreadyExist) {
+			toast.error("이미 동일한 일정 후보가 존재합니다.");
+			return false;
+		}
+
+		return true;
 	};
 
 	const handleSubmit = () => {
@@ -288,97 +286,31 @@ const ScheduleModal = () => {
 			!validateInterval(formValues) ||
 			!validateByweekday(formValues) ||
 			!validateUntil(formValues) ||
-			isViewMode
+			!isUniqueProposalForm()
 		) {
 			return;
 		}
 
 		// 일정 저장 로직
-		if (isCreateMode) {
-			dispatch(createSchedule(formValues));
-		} else {
-			dispatch(updateSchedule({ schedule: formValues, id: scheduleModalId }));
-		}
+		dispatch(changeRecommendedProposal({ formValues, index }));
 
 		// 폼 초기화
 		setFormValues(initialFormValues);
 
 		// 메뉴 닫기
-		dispatch(closeModal());
+		onClose();
 	};
 
-	useEffect(() => {
-		if (!isCreateMode) {
-			getSchedule(scheduleModalId, (schedule) => {
-				dispatch(setIsLoading(false));
-				setFormValues(convertScheduleDataToFormValue(schedule));
-				prevFormValue.current = convertScheduleDataToFormValue(schedule);
-			});
-		} else {
-			dispatch(setIsLoading(false));
-		}
-
-		return () => {
-			dispatch(closeModal());
-		};
-	}, [isCreateMode, scheduleModalId]);
-
-	useEffect(() => {
-		// set byweekday
-		if (
-			!(formValues.freq === "WEEKLY" || formValues.freq === "WEEKLY_N") ||
-			!formValues.startDate
-		) {
-			return;
-		}
-		const weekNum = new Date(formValues.startDate).getDay();
-		setFormValues((prev) => ({
-			...prev,
-			byweekday:
-				prev.byweekday.indexOf(weekNum) === -1 ? [weekNum] : prev.byweekday,
-		}));
-	}, [formValues.startDate, formValues.freq]);
-
-	useEffect(() => {
-		if (isEditMode) {
-			getSchedule(scheduleModalId, (schedule) => {
-				dispatch(setIsLoading(false));
-				setFormValues(convertScheduleDataToFormValue(schedule));
-				prevFormValue.current = convertScheduleDataToFormValue(schedule);
-			});
-		} else {
-			dispatch(setIsLoading(false));
-		}
-
-		return () => {
-			dispatch(closeModal());
-		};
-	}, [isEditMode, scheduleModalId]);
+	const handleCancelClick = () => {
+		onClose();
+		// reset
+		prevFormValue.current = initialFormValues;
+		setFormValues(initialFormValues);
+	};
 
 	return (
-		<FormModal isEmpty={checkIsEmpty()}>
-			<ScheduleModalLayoutDiv>
-				<h2>{getModalTitle()}</h2>
-				<TitleInput
-					id="title"
-					type="text"
-					placeholder="일정 제목"
-					value={formValues.title}
-					onChange={(e) =>
-						setFormValues((prev) => ({ ...prev, title: e.target.value }))
-					}
-					disabled={isLoading || isViewMode}
-				/>
-				<DetailTextarea
-					id="content"
-					rows="5"
-					placeholder="상세 내용"
-					value={formValues.content}
-					onChange={(e) =>
-						setFormValues((prev) => ({ ...prev, content: e.target.value }))
-					}
-					disabled={isLoading || isViewMode}
-				/>
+		<div>
+			<div>
 				<DateAndTime
 					isProposal={false}
 					startDate={formValues.startDate}
@@ -395,7 +327,6 @@ const ScheduleModal = () => {
 								type="checkbox"
 								onChange={handleIsAllDayValueChange}
 								checked={formValues.isAllDay}
-								disabled={isLoading || isViewMode}
 							/>
 							하루 종일
 						</label>
@@ -427,18 +358,23 @@ const ScheduleModal = () => {
 					/>
 				</RepeatContainerDiv>
 				<FooterDiv>
-					{isViewMode || (
-						<SubmitButton
-							onClick={handleSubmit}
-							disabled={!checkFormIsFilledOrChanged() || isLoading}
-						>
-							{isEditMode ? "수정하기" : "저장하기"}
-						</SubmitButton>
-					)}
+					<SubmitButton
+						onClick={handleSubmit}
+						disabled={!checkFormIsFilledOrChanged()}
+					>
+						저장하기
+					</SubmitButton>
+					<button
+						type="button"
+						onClick={handleCancelClick}
+						data-testid="editProposalForm-backButton"
+					>
+						<BackArrowIcon />
+					</button>
 				</FooterDiv>
-			</ScheduleModalLayoutDiv>
-		</FormModal>
+			</div>
+		</div>
 	);
 };
 
-export default ScheduleModal;
+export default EditedProposalForm;

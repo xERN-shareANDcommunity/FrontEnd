@@ -1,9 +1,15 @@
 import { toast } from "react-toastify";
 
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import _ from "lodash";
 
-import { VIEW_TYPE } from "@/constants/calendarConstants.js";
+import {
+	SCHEDULE_PAGE_TYPE,
+	VIEW_TYPE,
+} from "@/constants/calendarConstants.js";
+import { inqueryUserGroup } from "@/features/user/user-service.js";
 import { getCurrentWeek } from "@/utils/calendarUtils.js";
+import { convertScheduleDataToFormValue } from "@/utils/convertSchedule.js";
 
 import {
 	createSchedule,
@@ -13,12 +19,46 @@ import {
 	updateSchedule,
 	deleteSchedule,
 	getOverlappedSchedules,
+	getGroupScheduleProposal,
+	getScheduleProposals,
+	enrollScheudleProposals,
 } from "./schedule-service.js";
 
 const initialOverlappedScheduleInfo = { title: "", schedules: [] };
 
+// lodash만으로 state 내 배열(Proxy(array))과 그냥 객체 내 배열 간의 비교가 안돼서 따로 작성함
+const checkTowFormsAreDifferent = (prevState, curr) => {
+	let isDifferent = false;
+	const keys = Object.keys(prevState);
+	for (let i = 0; i < keys.length; i += 1) {
+		const key = keys[i];
+		// byweekday가 아닐 때
+		if (key !== "byweekday") {
+			if (prevState[key] !== curr[key]) {
+				isDifferent = true;
+				break;
+			}
+		} else {
+			// byweekday일 때
+			const prevByweekday = [...prevState[key]];
+			const currByweekday = [...curr[key]];
+			// byweekday는 순서가 무작위이므로 정렬 후 비교
+			prevByweekday.sort();
+			currByweekday.sort();
+			if (!_.isEqual(prevByweekday, currByweekday)) {
+				isDifferent = true;
+				break;
+			}
+		}
+	}
+	return isDifferent;
+};
+
 const initialState = {
 	calendarSchedules: [],
+	currentGroupScheduleId: null,
+	scheduleProposals: [],
+	recommendedScheduleProposals: [],
 	todaySchedules: [],
 	schedulesForTheWeek: [],
 	overlappedScheduleInfo: initialOverlappedScheduleInfo,
@@ -27,6 +67,7 @@ const initialState = {
 	currentWeek: getCurrentWeek(),
 	isLoading: false,
 	currentCalendarView: VIEW_TYPE.DAY_GRID_MONTH,
+	currentPageType: SCHEDULE_PAGE_TYPE.PERSONAL,
 };
 
 const scheduleSlice = createSlice({
@@ -42,11 +83,6 @@ const scheduleSlice = createSlice({
 		setCurrentWeek: (state, { payload }) => {
 			state.currentWeek = payload;
 		},
-		resetCurrentDate: (state) => {
-			state.currentYear = new Date().getFullYear();
-			state.currentMonth = new Date().getMonth() + 1;
-			state.currentWeek = getCurrentWeek();
-		},
 		setCurrentCalenderView: (state, { payload }) => {
 			if (
 				payload !== VIEW_TYPE.DAY_GRID_MONTH &&
@@ -59,6 +95,28 @@ const scheduleSlice = createSlice({
 		},
 		resetOverlappedSchedules: (state) => {
 			state.overlappedScheduleInfo = initialOverlappedScheduleInfo;
+		},
+		changeSchedulePage: (state, { payload }) => {
+			if (
+				payload !== SCHEDULE_PAGE_TYPE.PERSONAL &&
+				payload !== SCHEDULE_PAGE_TYPE.SHARED
+			) {
+				throw new Error("잘못된 페이지 타입입니다.");
+			}
+			state.currentPageType = payload;
+		},
+		changeCurrentGroupId: (state, { payload }) => {
+			state.currentGroupScheduleId = payload;
+		},
+		changeRecommendedProposal: (state, { payload: { formValues, index } }) => {
+			// 이를 dispatch하는 onSubmit handler에서 중복 검사함
+			state.recommendedScheduleProposals.splice(index, 1, formValues);
+		},
+		resetRecommendedScheduleProposals: (state) => {
+			state.recommendedScheduleProposals = [];
+		},
+		resetSchedule: () => {
+			return initialState;
 		},
 	},
 
@@ -202,6 +260,41 @@ const scheduleSlice = createSlice({
 			.addCase(getOverlappedSchedules.rejected, (state) => {
 				state.overlappedScheduleInfo = initialOverlappedScheduleInfo;
 			})
+			.addCase(getGroupScheduleProposal.fulfilled, (state, { payload }) => {
+				state.scheduleProposals = payload;
+			})
+			.addCase(getScheduleProposals.fulfilled, (state, { payload }) => {
+				payload.proposals.forEach((proposal) => {
+					const proposalFormValue = {
+						...convertScheduleDataToFormValue(proposal),
+					};
+					delete proposalFormValue.id;
+					delete proposalFormValue.userId;
+					delete proposalFormValue.title;
+					delete proposalFormValue.content;
+
+					const sameProposalIndex =
+						state.recommendedScheduleProposals.findIndex(
+							(prevProposal) =>
+								!checkTowFormsAreDifferent(prevProposal, proposalFormValue),
+						);
+					if (sameProposalIndex === -1) {
+						state.recommendedScheduleProposals.push(proposalFormValue);
+					}
+				});
+			})
+			// userGroup 업데이트 시
+			.addCase(inqueryUserGroup.fulfilled, (state, { payload }) => {
+				if (payload.length > 0 && !state.currentGroupScheduleId) {
+					state.currentGroupScheduleId = payload[0].groupId;
+				}
+			})
+			.addCase(enrollScheudleProposals.fulfilled, (state, { payload }) => {
+				state.scheduleProposals.push(...payload);
+			})
+			.addCase(enrollScheudleProposals.rejected, () => {
+				toast.error("일정 후보 등록에 실패했습니다.");
+			})
 			.addMatcher(
 				isAnyOf(
 					createSchedule.pending,
@@ -211,6 +304,9 @@ const scheduleSlice = createSlice({
 					updateSchedule.pending,
 					deleteSchedule.pending,
 					getOverlappedSchedules.pending,
+					getGroupScheduleProposal.pending,
+					getScheduleProposals.pending,
+					enrollScheudleProposals.pending,
 				),
 				(state) => {
 					state.isLoading = true;
@@ -225,6 +321,9 @@ const scheduleSlice = createSlice({
 					updateSchedule.fulfilled,
 					deleteSchedule.fulfilled,
 					getOverlappedSchedules.fulfilled,
+					getGroupScheduleProposal.fulfilled,
+					getScheduleProposals.fulfilled,
+					enrollScheudleProposals.fulfilled,
 				),
 				(state) => {
 					state.isLoading = false;
@@ -239,6 +338,9 @@ const scheduleSlice = createSlice({
 					updateSchedule.rejected,
 					deleteSchedule.rejected,
 					getOverlappedSchedules.rejected,
+					getGroupScheduleProposal.rejected,
+					getScheduleProposals.rejected,
+					enrollScheudleProposals.rejected,
 				),
 				(state) => {
 					state.isLoading = false;
@@ -251,9 +353,13 @@ export const {
 	setCurrentYear,
 	setCurrentMonth,
 	setCurrentWeek,
-	resetCurrentDate,
 	setCurrentCalenderView,
 	resetOverlappedSchedules,
+	changeSchedulePage,
+	changeCurrentGroupId,
+	changeRecommendedProposal,
+	resetRecommendedScheduleProposals,
+	resetSchedule,
 } = scheduleSlice.actions;
 
 export default scheduleSlice.reducer;

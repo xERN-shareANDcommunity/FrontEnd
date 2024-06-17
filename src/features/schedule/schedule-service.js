@@ -1,14 +1,54 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import moment from "moment";
 
-import { VIEW_TYPE } from "@/constants/calendarConstants";
+import { SCHEDULE_PAGE_TYPE, VIEW_TYPE } from "@/constants/calendarConstants";
 import commonThunk from "@/features/commonThunk";
+import { closeModal } from "@/features/ui/ui-slice";
 import { getFirstDateOfWeek } from "@/utils/calendarUtils";
 import { convertScheduleFormValueToData } from "@/utils/convertSchedule";
+import convertToUTC from "@/utils/convertToUTC";
+
+export const getGroupScheduleProposal = createAsyncThunk(
+	"schedule/getGroupScheduleProposal",
+	async (_, thunkAPI) => {
+		const {
+			schedule: { currentGroupScheduleId, currentPageType },
+		} = thunkAPI.getState();
+
+		if (
+			currentPageType !== SCHEDULE_PAGE_TYPE.SHARED ||
+			!currentGroupScheduleId
+		) {
+			return thunkAPI.rejectWithValue("잘못된 일정 후보 요청 형식입니다.");
+		}
+
+		const data = await commonThunk(
+			{
+				method: "GET",
+				url: `/api/group/${currentGroupScheduleId}/proposal/list`,
+				successCode: 200,
+			},
+			thunkAPI,
+		);
+
+		return data;
+	},
+);
 
 export const getTodaySchedules = createAsyncThunk(
 	"schedule/getTodaySchedules",
 	async (_, thunkAPI) => {
+		const {
+			schedule: { currentGroupScheduleId, currentPageType },
+		} = thunkAPI.getState();
+
+		if (
+			currentPageType === SCHEDULE_PAGE_TYPE.SHARED &&
+			!currentGroupScheduleId
+		) {
+			return thunkAPI.rejectWithValue("잘못된 오늘 일정 요청 형식입니다.");
+		}
+
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 		const startDateTime = today.toISOString();
@@ -19,7 +59,11 @@ export const getTodaySchedules = createAsyncThunk(
 		const data = await commonThunk(
 			{
 				method: "GET",
-				url: "/api/user/calendar",
+				url: `/api/${
+					currentPageType === SCHEDULE_PAGE_TYPE.PERSONAL
+						? "user"
+						: `group/${currentGroupScheduleId}`
+				}/calendar`,
 				params: {
 					startDateTime,
 					endDateTime,
@@ -35,6 +79,17 @@ export const getTodaySchedules = createAsyncThunk(
 export const getSchedulesForTheWeek = createAsyncThunk(
 	"schedule/getSchedulesForTheWeek",
 	async (_, thunkAPI) => {
+		const {
+			schedule: { currentGroupScheduleId, currentPageType },
+		} = thunkAPI.getState();
+
+		if (
+			currentPageType === SCHEDULE_PAGE_TYPE.SHARED &&
+			!currentGroupScheduleId
+		) {
+			return thunkAPI.rejectWithValue("잘못된 오늘 일정 요청 형식입니다.");
+		}
+
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 		const startDateTime = new Date(
@@ -47,7 +102,11 @@ export const getSchedulesForTheWeek = createAsyncThunk(
 		const data = await commonThunk(
 			{
 				method: "GET",
-				url: "/api/user/calendar",
+				url: `/api/${
+					currentPageType === SCHEDULE_PAGE_TYPE.PERSONAL
+						? "user"
+						: `group/${currentGroupScheduleId}`
+				}/calendar`,
 				params: {
 					startDateTime,
 					endDateTime,
@@ -62,7 +121,18 @@ export const getSchedulesForTheWeek = createAsyncThunk(
 
 export const getSchedulesSummary = createAsyncThunk(
 	"schedule/getSchedulesSummary",
-	async ({ isGroup, groupId }, thunkAPI) => {
+	async (_, thunkAPI) => {
+		const {
+			schedule: { currentGroupScheduleId, currentPageType },
+		} = thunkAPI.getState();
+
+		if (
+			currentPageType === SCHEDULE_PAGE_TYPE.SHARED &&
+			!currentGroupScheduleId
+		) {
+			return thunkAPI.rejectWithValue("잘못된 오늘 일정 요청 형식입니다.");
+		}
+
 		const state = thunkAPI.getState();
 		const { currentYear, currentMonth, currentWeek, currentCalendarView } =
 			state.schedule;
@@ -94,15 +164,14 @@ export const getSchedulesSummary = createAsyncThunk(
 				: firstDateOfWeek + 6,
 		).toISOString();
 
-		if ((isGroup && !groupId) || (!isGroup && groupId))
-			throw new Error(
-				"isGroup일 때는 groupId가 필수이며, isGroup이 아닐 때는 groupId가 필요 없습니다.",
-			);
-
 		const data = await commonThunk(
 			{
 				method: "GET",
-				url: `/api/${!isGroup ? "user" : `group/${groupId}`}/calendar/summary`,
+				url: `/api/${
+					currentPageType === SCHEDULE_PAGE_TYPE.PERSONAL
+						? "user"
+						: `group/${currentGroupScheduleId}`
+				}/calendar/summary`,
 				params: {
 					startDateTime,
 					endDateTime,
@@ -209,5 +278,81 @@ export const getOverlappedSchedules = createAsyncThunk(
 ${moment(end).format(`${yearFormat}MM월 DD일 HH시 mm분`)}`;
 
 		return { schedules: data.schedules, title };
+	},
+);
+
+export const getScheduleProposals = createAsyncThunk(
+	"schedule/getScheduleProposals",
+	async (
+		{ startDateStr, endDateStr, startTimeStr, endTimeStr, minDuration },
+		thunkAPI,
+	) => {
+		const groupId = thunkAPI.getState().schedule.currentGroupScheduleId;
+
+		if (!startDateStr || !endDateStr || !minDuration || !groupId) {
+			return thunkAPI.rejectWithValue("잘못된 데이터 형식입니다.");
+		}
+
+		const data = await commonThunk(
+			{
+				method: "GET",
+				url: `/api/group/${groupId}/proposals?startDateTime=${convertToUTC(
+					startDateStr,
+					startTimeStr,
+				)}&endDateTime=${convertToUTC(
+					endDateStr,
+					endTimeStr,
+				)}&duration=${minDuration}`,
+				successCode: 200,
+			},
+			thunkAPI,
+		);
+
+		return data;
+	},
+);
+
+export const enrollScheudleProposals = createAsyncThunk(
+	"schedule/enrollScheudleProposals",
+	async ({ title, content, selectedRecommendationIndexes }, thunkAPI) => {
+		const { currentGroupScheduleId: groupId, recommendedScheduleProposals } =
+			thunkAPI.getState().schedule;
+
+		if (
+			!title ||
+			!content ||
+			selectedRecommendationIndexes.length === 0 ||
+			!groupId
+		) {
+			return thunkAPI.rejectWithValue("잘못된 데이터 형식입니다.");
+		}
+
+		try {
+			const promises = selectedRecommendationIndexes.map(
+				async (proposalIndex) => {
+					const body = convertScheduleFormValueToData({
+						title,
+						content,
+						...recommendedScheduleProposals[proposalIndex],
+					});
+					delete body.requestStartDateTime;
+					delete body.requestEndDateTime;
+					return commonThunk(
+						{
+							method: "POST",
+							url: `/api/group/${groupId}/proposal`,
+							data: body,
+							successCode: 200,
+						},
+						thunkAPI,
+					);
+				},
+			);
+			const result = await Promise.all(promises);
+			thunkAPI.dispatch(closeModal());
+			return result;
+		} catch (error) {
+			return thunkAPI.rejectWithValue("일정 후보 등록 실패");
+		}
 	},
 );

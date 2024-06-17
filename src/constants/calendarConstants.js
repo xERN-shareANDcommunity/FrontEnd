@@ -1,33 +1,36 @@
-export const SCHEDULE_TYPE = {
-	SHARED: "SHARE_SCHEDULE",
-	PERSONAL: "PERSONAL_SCHEDULE",
-};
-
 export const VIEW_TYPE = {
 	// DAY_GRID_WEEK: "dayGridWeek",
 	DAY_GRID_WEEK: "timeGridWeek",
 	DAY_GRID_MONTH: "dayGridMonth",
 };
 
-export const CALENDAR_USER_COLORS = [
-	"#669900",
-	"#99cc33",
-	"#ccee66",
-	"#006699",
-	"#3399cc",
-	"#990066",
-	"#cc3399",
-	"#ff6600",
-	"#ff9900",
-	"#ffcc00",
-	"#d00000",
-	"#ffba08",
-	"#cbff8c",
-	"#8fe388",
+export const SCHEDULE_PAGE_TYPE = {
+	PERSONAL: "personal",
+	SHARED: "shared",
+};
+
+export const SCHEDULE_COLORS = [
 	"#1b998b",
-	"#3185fc",
-	"#5d2e8c",
 	"#46237a",
-	"#ff7b9c",
-	"#ff9b85",
+	"#ff9a84",
+	"#caff8b",
+	"#3186fd",
+
+	"#980065",
+	"#ff9900",
+	"#669900",
+	"#3398cc",
+	"#ccee66",
+
+	"#fe7b9b",
+	"#sd2e8c",
+	"#8fe489",
+	"#f2a007",
+	"#d90404",
+
+	"#bf349a",
+	"#3498bf",
+	"#92bf30",
+	"#f2b705",
+	"#f25c05",
 ];

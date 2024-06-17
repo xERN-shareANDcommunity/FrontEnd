@@ -61,6 +61,11 @@ const uiSlice = createSlice({
 			state.scheduleModalMode = SCHEDULE_MODAL_TYPE.VIEW;
 			state.scheduleModalId = id;
 		},
+		openScheduleProposalModal: (state) => {
+			state.openedModal = UI_TYPE.SHARE_SCHEDULE;
+			state.scheduleModalMode = SCHEDULE_MODAL_TYPE.PROPOSAL;
+			state.isLoading = false;
+		},
 		openCreateGroupModal: (state) => {
 			state.openedModal = UI_TYPE.CREATE_GROUP;
 		},
@@ -99,6 +104,9 @@ const uiSlice = createSlice({
 			state.feedDetailModalId = payload;
 			state.openedModal = UI_TYPE.FEED_DETAIL_MODAL;
 		},
+		openEmptyGroupNotificationModal: (state) => {
+			state.openedModal = UI_TYPE.EMPTY_GROUP_NOTIFICATION;
+		},
 		closeModal: () => {
 			return initialState;
 		},
@@ -116,6 +124,7 @@ export const {
 	openScheduleCreateModal,
 	openScheduleEditModal,
 	openScheduleViewModal,
+	openScheduleProposalModal,
 	openCreateGroupModal,
 	closeModal,
 	setIsLoading,
@@ -130,6 +139,7 @@ export const {
 	openMemberRequestModal,
 	openDeleteMemberWarningModal,
 	openFeedDetailModal,
+	openEmptyGroupNotificationModal,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

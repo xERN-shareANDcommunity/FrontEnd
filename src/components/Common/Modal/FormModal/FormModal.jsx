@@ -15,16 +15,22 @@ const Backdrop = ({ onClick }) => (
 	<BackdropDiv className="backdrop" onClick={onClick} />
 );
 
-const Modal = ({ children, onCloseButtonClick }) => (
+const Modal = ({ children, onCloseButtonClick, isCloseButtonHidden }) => (
 	<ModalDiv>
-		<IconButton onClick={onCloseButtonClick} aria-label="close">
-			<CloseIcon />
-		</IconButton>
+		{isCloseButtonHidden || (
+			<IconButton
+				onClick={onCloseButtonClick}
+				aria-label="close"
+				data-testid="modal-closeButton"
+			>
+				<CloseIcon />
+			</IconButton>
+		)}
 		{children}
 	</ModalDiv>
 );
 
-const FormModal = ({ children, isEmpty }) => {
+const FormModal = ({ children, isEmpty, isCloseButtonHidden = false }) => {
 	const [isFormCancelWarningModalOn, setIsFormCancelWarningModalOn] =
 		useState(false);
 	const dispatch = useDispatch();
@@ -46,7 +52,12 @@ const FormModal = ({ children, isEmpty }) => {
 				document.getElementById("backdrop"),
 			)}
 			{ReactDOM.createPortal(
-				<Modal onCloseButtonClick={handleClose}>{children}</Modal>,
+				<Modal
+					onCloseButtonClick={handleClose}
+					isCloseButtonHidden={isCloseButtonHidden}
+				>
+					{children}
+				</Modal>,
 				document.getElementById("modal"),
 			)}
 			{isFormCancelWarningModalOn && (

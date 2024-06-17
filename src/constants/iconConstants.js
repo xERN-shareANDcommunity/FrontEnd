@@ -2,17 +2,20 @@ import AccessArrowIcon from "@/assets/icon/ic-access-arrow.svg";
 import InfoIcon from "@/assets/icon/ic-access-info-circle.svg";
 import AccessInfoIcon from "@/assets/icon/ic-access-info.svg";
 import AdminIcon from "@/assets/icon/ic-admin.svg";
+import BackArrowIcon from "@/assets/icon/ic-back-arrow.svg";
 import CloseIcon from "@/assets/icon/ic-close.svg";
 import CommentListIcon from "@/assets/icon/ic-comment-list.svg";
 import CrownIcon from "@/assets/icon/ic-crown.svg";
 import DeleteScheduleIcon from "@/assets/icon/ic-delete-schedule.svg";
 import DocumentIcon from "@/assets/icon/ic-document.svg";
+import DottedCalendarIcon from "@/assets/icon/ic-dotted-calendar.svg";
 import DownArrowIcon from "@/assets/icon/ic-down-arrow.svg";
 import EditScheduleIcon from "@/assets/icon/ic-edit-schedule.svg";
 import EmptyFeedIcon from "@/assets/icon/ic-empty-feed.svg";
 import EmptyGroupListIcon from "@/assets/icon/ic-empty-group-list.svg";
 import EmptyGroupMemberIcon from "@/assets/icon/ic-empty-group-member.svg";
 import EmptyMyGroupIcon from "@/assets/icon/ic-empty-my-group.svg";
+import ExtraMembersDropdownIcon from "@/assets/icon/ic-extraMembers-dropdown.svg";
 import CommentIcon from "@/assets/icon/ic-feed-comment.svg";
 import EmptyHeartIcon from "@/assets/icon/ic-feed-heart-empty.svg";
 import FillHeartIcon from "@/assets/icon/ic-feed-heart-fill.svg";
@@ -40,6 +43,7 @@ import SearchIcon from "@/assets/icon/ic-search.svg";
 import SecretIcon from "@/assets/icon/ic-secret.svg";
 import SelodyLogoIcon from "@/assets/icon/ic-selody-logo.svg";
 import ViewerIcon from "@/assets/icon/ic-viewer.svg";
+import WhitePlusIcon from "@/assets/icon/ic-white-plus.svg";
 
 export {
 	SearchIcon,
@@ -84,4 +88,8 @@ export {
 	EmptyGroupListIcon,
 	FeedImgIcon,
 	FeedImgCloseIcon,
+	DottedCalendarIcon,
+	WhitePlusIcon,
+	ExtraMembersDropdownIcon,
+	BackArrowIcon,
 };

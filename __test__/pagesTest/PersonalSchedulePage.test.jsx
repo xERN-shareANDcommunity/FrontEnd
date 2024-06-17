@@ -7,32 +7,12 @@ import ReactDOM from "react-dom";
 import { userEvent } from "@storybook/testing-library";
 import { screen } from "@testing-library/react";
 
-import "@testing-library/jest-dom";
-
 import ScheduleModal from "@/components/Common/ScheduleModal/ScheduleModal.jsx";
 import { SCHEDULE_MODAL_TYPE } from "@/constants/uiConstants";
-import PersonalSchedulePage from "@/pages/PersonalSchedulePage/PersonalSchedulePage.jsx";
+import PersonalSchedulePage from "@/pages/PersonalSchedulePage.jsx";
 import lightTheme from "@/styles/theme.js";
 
 import { render } from "../../jest.setup.js";
-
-// jest.mock("@fullcalendar/react", () => () => (
-// 	<div data-testid="mock-fullcalendar" />
-// ));
-// jest.mock("@fullcalendar/timegrid", () => ({}));
-// jest.mock("@fullcalendar/daygrid", () => ({}));
-// jest.mock("@fullcalendar/interaction", () => ({}));
-
-jest.mock(
-	"../../src/components/Common/CalendarContainer/CustomCalendar/CustomCalendar.jsx",
-	() => {
-		const { forwardRef } = jest.requireActual("react");
-		return {
-			__esModule: true,
-			default: forwardRef(() => <div data-testid="calendar-container" />),
-		};
-	},
-);
 
 const TITLE_TEXT = "일정 1";
 const CONTENT_TEXT = "일정 상세 정보";
@@ -46,6 +26,9 @@ const getInitialScheduleState = ({ recurrence, isAllDay, isMine }) => {
 	}
 	return {
 		schedule: {
+			calendarSchedules: [],
+			currentGroupScheduleId: null,
+			scheduleProposals: [],
 			todaySchedules: [
 				{
 					id: 0,
@@ -57,7 +40,6 @@ const getInitialScheduleState = ({ recurrence, isAllDay, isMine }) => {
 					recurrence,
 				},
 			],
-			calendarSchedules: [],
 			schedulesForTheWeek: [],
 			overlappedScheduleInfo: {
 				title: "",
@@ -605,12 +587,12 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 	});
 	describe("mutate schedule", () => {
 		it("POST new all day schedule", async () => {
-			render(<PersonalSchedulePage />, {
+			const { unmount } = render(<PersonalSchedulePage />, {
 				preloadedState: { auth: { user: { userId: 1 } } },
 			});
 
 			// open ScheduleModal as a create mode
-			userEvent.click(screen.getByRole("button", { name: "일정 추가" }));
+			await userEvent.click(screen.getByRole("button", { name: "일정 추가" }));
 
 			// action
 			const titleInput = screen.getByPlaceholderText("일정 제목");
@@ -623,16 +605,17 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 			userEvent.type(contentTextarea, CONTENT_TEXT);
 			userEvent.click(allDayCheckbox);
 			await userEvent.click(screen.getByRole("button", { name: "저장하기" }));
-
 			// assertion
 			expect(
 				await screen.findByRole("heading", {
 					name: TITLE_TEXT,
 				}),
 			).toBeInTheDocument();
+
+			unmount();
 		});
 		it("PUT all day schedule after changing title", async () => {
-			render(<PersonalSchedulePage />, {
+			const { unmount } = render(<PersonalSchedulePage />, {
 				preloadedState: { auth: { user: { userId: 1 } } },
 			});
 
@@ -661,10 +644,12 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 					name: "오늘오늘",
 				}),
 			).toBeNull();
+
+			unmount();
 		});
 
 		it("DELETE current all day schedule", async () => {
-			render(<PersonalSchedulePage />, {
+			const { unmount } = render(<PersonalSchedulePage />, {
 				preloadedState: { auth: { user: { userId: 1 } } },
 			});
 
@@ -690,6 +675,8 @@ describe("ScheduleModal in PersonalSchedulePage", () => {
 			});
 			expect(scheduleAddButton).toBeInTheDocument();
 			expect(scheduleItemHeadingToBeDeleted).toBeNull();
+
+			unmount();
 		});
 	});
 });
